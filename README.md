@@ -4,3 +4,4 @@ This project is the backend of the project GreenPi, it saves the historial and c
 ## Requirements:
 - Mongodb database
 ## Install:
+- npm install
