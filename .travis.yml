@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+- '8'
+dist: trusty
+os: linux
+install:
+- npm install
+script:
+- npm test
+branches:
+  only:
+  - master
+  - develop
+deploy:
+  provider: heroku
+  api_key:
+    secure: KFbpklobgMniHtqe4rolFcr1qdruAnpTqsRCPZTO99rovCR4GzUDQoi17Qguf9TzrV3cI2WnT7vPr8aLsU/kTIhVATb8KiCP7xq10WKOX9MUvLPqoXSOPXvUde08xqyR4HZ5ABXYWoZOrfjHMWk3bTBnACI5rAFu8Z73ZlHx9qJRCn6eDkcGPRB5yqRo7DO9oT/+lCY9lYxqxqIy2t+JN3LMSIT+b9dipbjwyYiLBLoKZn2hXx+8nDTaIPSqhM7xFjWNsTrIltE33wPnEr+b5j1zkAs0U6p/itdZaNYJ+DnjZ15gV+kv9rxjfdOkVZpVFsdslSr6+jhXNtg9bKie2eAbxh5ZO8woyf38BoubAk/doU8VN62ZdRYzX+sIKZobQ5aaO/2MnQLJuHBBtLMEXm1b3xu/SEFR3Fl1dUPJszWxjG0C3MCKQ/xu9jYZYjS8jmbcQkKoExLbtyF2fi/RKj2GTu09AVq4gd1U3U7avr28qzeZBY9dQ+PRd2FoP1w1uXVOaUq2Vm7aVJ2cnv7EYUmgbsaicsNuMwVyATUP6PTO2DO0rmm+tOS8drQMeqgqwWgQ8B1RO2JDRGrtwrdPNuPtK+Oni1nRvRfkXT/hGAMdE26sNy/iaLumifI75GDqzHcOOEJeuYzFJsPYezbWgJUgFu5fslsa0g22nCAkBO8=
+  app: greenpi-backend
+  on:
+    repo: nearlg/greenPi-backend
+    branch: develop
+  skip_cleanup: true

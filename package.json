@@ -1,0 +1,39 @@
+{
+  "name": "green-pi-backend",
+  "version": "0.0.0",
+  "description": "Save measures and configuration of greenPi project",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "tsc && mocha --recursive",
+    "start": "node ./src/index.js"
+  },
+  "author": "nearlg",
+  "homepage": "https://github.com/nearlg/greenPi-backend",
+  "bugs": {
+    "url": "https://github.com/nearlg/greenPi-backend/issues",
+    "email": "nearlg@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:nearlg/greenPi-backend.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mongoose": "^4.11.3",
+    "restify": "^5.0.1",
+    "restify-errors": "^4.3.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.1",
+    "@types/chai-as-promised": "0.0.31",
+    "@types/mocha": "^2.2.41",
+    "@types/mongoose": "^4.7.19",
+    "@types/restify": "^5.0.1",
+    "@types/restify-errors": "^4.3.1",
+    "chai": "^4.1.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^3.4.2",
+    "mockgoose": "^7.3.3",
+    "typescript": "^2.4.2"
+  }
+}

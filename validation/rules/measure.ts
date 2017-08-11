@@ -1,0 +1,1 @@
+export const ValueRegex: RegExp = /^(\+|-)?[0-9,\.]+$/;
