@@ -18,7 +18,7 @@ export function validateValue(value: number): Promise<number>  {
 
 export function validateSensor(sensor: ISensor | string): Promise<ISensor | string> {
     if(sensor) {
-        if('object' === typeof sensor){
+        if('object' === typeof sensor) {
             return Promise.resolve(sensor);
         }
         return sensorIdValidator(sensor);

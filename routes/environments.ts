@@ -12,14 +12,14 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath, (req, res, next)=>{
+    server.patch(mainPath, (req, res, next)=>{
         environmentValidator.validate(req.body, true)
         .then(environment => Middleware.updateEnvironment(environment))
         .then(environment => handleJsonData(environment, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath + '/:id', (req, res, next)=>{
+    server.patch(mainPath + '/:id', (req, res, next)=>{
         environmentValidator.validate(req.body)
         .then(environment => Middleware.updateEnvironmentById(req.params.id, environment))
         .then(environment => handleJsonData(environment, res, next))

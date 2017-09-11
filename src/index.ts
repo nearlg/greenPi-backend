@@ -3,12 +3,12 @@ import * as restify from "restify";
 
 import mongoose = require("mongoose");
 
-import * as MeasureRoutes from "../routes/measure";
-import * as SensorRoutes from "../routes/sensor";
-import * as SensorTypeRoutes from "../routes/sensor-type";
-import * as EnvironmentRoutes from "../routes/environment";
-import * as PumpRoutes from "../routes/pump";
-import * as PumpHistorialRoutes from "../routes/pump-historial";
+import * as MeasuresRoutes from "../routes/measures";
+import * as SensorsRoutes from "../routes/sensors";
+import * as SensorTypesRoutes from "../routes/sensor-types";
+import * as EnvironmentsRoutes from "../routes/environments";
+import * as PumpsRoutes from "../routes/pumps";
+import * as PumpsHistorialsRoutes from "../routes/pumps-historials";
 import { handleJsonData, addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
@@ -34,12 +34,14 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
 // Set routes
-MeasureRoutes.routes(server, '/measure');
-PumpRoutes.routes(server, '/pump');
-PumpHistorialRoutes.routes(server, '/pump-historial');
-EnvironmentRoutes.routes(server, '/environment');
-SensorRoutes.routes(server, '/sensor');
-SensorTypeRoutes.routes(server, '/sensor-type');
+let apiVersion = Config.Server.VERSION.split('.');
+let apiRoute = 'v' + apiVersion[0];
+MeasuresRoutes.routes(server, '/' + apiRoute + '/measures');
+PumpsRoutes.routes(server, '/' + apiRoute + '/pumps');
+PumpsHistorialsRoutes.routes(server, '/' + apiRoute + '/pumps-historials');
+EnvironmentsRoutes.routes(server, '/' + apiRoute + '/environments');
+SensorsRoutes.routes(server, '/' + apiRoute + '/sensors');
+SensorTypesRoutes.routes(server, '/' + apiRoute + '/sensor-types');
  
 server.listen(Config.Server.PORT, function () {
   console.log('%s listening at %s', server.name, server.url);
