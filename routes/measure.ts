@@ -75,14 +75,14 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath, (req, res, next)=>{
+    server.patch(mainPath, (req, res, next)=>{
         measureValidator.validate(req.body, true)
         .then(measure => Middleware.updateMeasure(measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath + '/:id', (req, res, next)=>{
+    server.patch(mainPath + '/:id', (req, res, next)=>{
         measureValidator.validate(req.body)
         .then(measure => Middleware.updateMeasureById(req.params.id, measure))
         .then(measure => handleJsonData(measure, res, next))

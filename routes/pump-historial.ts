@@ -76,14 +76,14 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath, (req, res, next)=>{
+    server.patch(mainPath, (req, res, next)=>{
         pumpHistorialValidator.validate(req.body, true)
         .then(pumpHistorial => Middleware.updatePumpHistorial(pumpHistorial))
         .then(pumpHistorial => handleJsonData(pumpHistorial, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath + '/:id', (req, res, next)=>{
+    server.patch(mainPath + '/:id', (req, res, next)=>{
         pumpHistorialValidator.validate(req.body)
         .then(pumpHistorial => Middleware.updatePumpHistorialById(req.params.id, pumpHistorial))
         .then(pumpHistorial => handleJsonData(pumpHistorial, res, next))
