@@ -4,37 +4,67 @@ import * as measureValidator from "../validation/measure";
 import * as sensorValidator from "../validation/sensor";
 import { ISensor } from "../models/interface/sensor";
 import { IEnvironment } from "../models/interface/environment";
-import { handleJsonData, handleErrors } from "../routes/helpers";
+import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
+import { IMeasure } from "../models/interface/measure";
 
-export function routes(server: restify.Server, mainPath: string = ''): void{
+export function routes(server: restify.Server, mainPath: string = ''): void {
 
-    server.get(mainPath + '/by-environment/:id', (req, res, next)=>{
-        let gte: Date = new Date(req.body.gte);
-        let lte: Date = new Date(req.body.lte);
-        let sortBy: string = req.body.sortBy;
-        let environmentId: string = req.params.id;
-        Middleware.fetchByEnvironmentId(environmentId, gte, lte, sortBy)
-        .then(measure => handleJsonData(measure, res, next))
-        .catch(err => handleErrors(err, next));
-    });
+    const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
-    server.get(mainPath + '/by-sensor/:id', (req, res, next)=>{
-        let gte: Date = new Date(req.body.gte);
-        let lte: Date = new Date(req.body.lte);
-        let sortBy: string = req.body.sortBy;
-        let sensorId: string = req.params.id;
-        Middleware.fetchBySensorId(sensorId, gte, lte, sortBy)
-        .then(measure => handleJsonData(measure, res, next))
-        .catch(err => handleErrors(err, next));
-    });
+    function byEnvironmentId(req: restify.Request, res: restify.Response,
+        next: restify.Next): Promise<IMeasure[]> {
+        let commQuery: string[] = commonQuery;
+        commQuery.push('byEnvironmentId');
+        return checkQuery(commQuery, req.query)
+        .then(() => {
+            let gte: Date = new Date(req.query.gte);
+            let lte: Date = new Date(req.query.lte);
+            let sortBy: string = req.query.sortBy;
+            let environmentId: string = req.query.id;
+            return Middleware
+                .fetchByEnvironmentId(environmentId, gte, lte, sortBy);
+        });
+    }
 
-    server.get(mainPath + '/by-sensor', (req, res, next)=>{
-        let gte: Date = new Date(req.body.gte);
-        let lte: Date = new Date(req.body.lte);
-        let sortBy: string = req.body.sortBy;
-        sensorValidator.validate(req.body.sensor, true)
-        .then(sensor => Middleware.fetchBySensor(sensor, gte, lte, sortBy))
-        .then(measure => handleJsonData(measure, res, next))
+    function bySensorId(req: restify.Request, res: restify.Response,
+    next: restify.Next): Promise<IMeasure[]> {
+        let commQuery: string[] = commonQuery;
+        commQuery.push('bySensorId');
+        return checkQuery(commQuery, req.query)
+        .then(() => {
+            let gte: Date = new Date(req.query.gte);
+            let lte: Date = new Date(req.query.lte);
+            let sortBy: string = req.query.sortBy;
+            let sensorId: string = req.query.id;
+            return Middleware.fetchBySensorId(sensorId, gte, lte, sortBy);
+        });
+    }
+
+    function bySensor(req: restify.Request, res: restify.Response,
+    next: restify.Next): Promise<IMeasure[]> {
+        let commQuery: string[] = commonQuery;
+        commQuery.push('bySensor');
+        return checkQuery(commQuery, req.query)
+        .then(() => {
+            let gte: Date = new Date(req.query.gte);
+            let lte: Date = new Date(req.query.lte);
+            let sortBy: string = req.query.sortBy;
+            return sensorValidator.validate(req.query.sensor, true)
+            .then(sensor => Middleware.fetchBySensor(sensor, gte, lte, sortBy));
+        });
+    }
+
+    server.get(mainPath + '/', (req, res, next) => {
+        let queryResult: Promise<IMeasure[]> = null;
+
+        if(req.query.byEnvironmentId){
+            queryResult = byEnvironmentId(req, res, next);
+        } else if(req.query.bySensoId){
+            queryResult = bySensorId(req, res, next);
+        } else {
+            queryResult = bySensor(req, res, next);
+        }
+        queryResult.then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
@@ -45,14 +75,14 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath, (req, res, next)=>{
+    server.patch(mainPath, (req, res, next)=>{
         measureValidator.validate(req.body, true)
         .then(measure => Middleware.updateMeasure(measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath + '/:id', (req, res, next)=>{
+    server.patch(mainPath + '/:id', (req, res, next)=>{
         measureValidator.validate(req.body)
         .then(measure => Middleware.updateMeasureById(req.params.id, measure))
         .then(measure => handleJsonData(measure, res, next))

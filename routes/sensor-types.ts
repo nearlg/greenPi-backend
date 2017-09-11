@@ -17,7 +17,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath, (req, res, next)=>{
+    server.patch(mainPath, (req, res, next)=>{
         req.body.unit = {
             name: req.body.unitName? req.body.unitName : null,
             description: req.body.unitDescription? req.body.unitDescription : null
@@ -28,7 +28,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         .catch(err => handleErrors(err, next));
     });
 
-    server.put(mainPath + '/:id', (req, res, next)=>{
+    server.patch(mainPath + '/:id', (req, res, next)=>{
         req.body.unit = {
             name: req.body.unitName? req.body.unitName : null,
             description: req.body.unitDescription? req.body.unitDescription : null
