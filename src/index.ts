@@ -35,13 +35,13 @@ server.use(restify.plugins.bodyParser());
 
 // Set routes
 let apiVersion = Config.Server.VERSION.split('.');
-let apiRoute = 'v' + apiVersion[0];
-MeasuresRoutes.routes(server, '/' + apiRoute + '/measures');
-PumpsRoutes.routes(server, '/' + apiRoute + '/pumps');
-PumpsHistorialsRoutes.routes(server, '/' + apiRoute + '/pumps-historials');
-EnvironmentsRoutes.routes(server, '/' + apiRoute + '/environments');
-SensorsRoutes.routes(server, '/' + apiRoute + '/sensors');
-SensorTypesRoutes.routes(server, '/' + apiRoute + '/sensor-types');
+let apiRoute = '/api/v' + apiVersion[0];
+MeasuresRoutes.routes(server, apiRoute + '/measures');
+PumpsRoutes.routes(server, apiRoute + '/pumps');
+PumpsHistorialsRoutes.routes(server, apiRoute + '/pumps-historials');
+EnvironmentsRoutes.routes(server, apiRoute + '/environments');
+SensorsRoutes.routes(server, apiRoute + '/sensors');
+SensorTypesRoutes.routes(server, apiRoute + '/sensor-types');
  
 server.listen(Config.Server.PORT, function () {
   console.log('%s listening at %s', server.name, server.url);
