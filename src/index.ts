@@ -34,10 +34,9 @@ const cors: corsMiddleware.CorsMiddleware = corsMiddleware({
   origins: ['*'],
   allowHeaders: ['API-Token'],
   exposeHeaders: ['API-Token-Expiry']
-})
-
-server.pre(cors.preflight)
-server.use(cors.actual)
+});
+server.pre(cors.preflight);
+server.use(cors.actual);
 
 // Set server plugings
 server.use(restify.plugins.acceptParser(server.acceptable));
