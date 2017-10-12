@@ -30,6 +30,7 @@
     "@types/mocha": "^2.2.43",
     "@types/mongoose": "^4.7.21",
     "@types/restify": "^5.0.2",
+    "@types/restify-cors-middleware": "^1.0.0",
     "@types/restify-errors": "^4.3.2",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
