@@ -1,6 +1,6 @@
 import * as Config from "../config/config";
 import * as restify from "restify";
-// import * as corsMiddleware from "restify-cors-middleware";
+import * as cm from "restify-cors-middleware";
 const corsMiddleware = require('restify-cors-middleware')
 
 import mongoose = require("mongoose");
@@ -31,7 +31,7 @@ addErrorHandler(DataErrorHandler);
 addErrorHandler(MongooseErrorHandler);
 
 // Allow CORS
-const cors = corsMiddleware({
+const cors = cm({
   preflightMaxAge: 5, //Optional
   origins: ['*'],
   allowHeaders: ['API-Token'],
