@@ -30,7 +30,7 @@ addErrorHandler(DataErrorHandler);
 addErrorHandler(MongooseErrorHandler);
 
 // Allow CORS
-const cors = new corsMiddleware({
+const cors = corsMiddleware({
   origins: ['*'],
   allowHeaders: ['API-Token'],
   exposeHeaders: ['API-Token-Expiry']
