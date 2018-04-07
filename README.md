@@ -4,4 +4,9 @@ This project is the backend of the project GreenPi, it saves the historial and c
 ## Requirements:
 - Mongodb database
 ## Install:
-- npm install
+```bash
+npm install
+```
+
+---
+[![Build Status](https://travis-ci.org/nearlg/greenPi-backend.svg?branch=master)](https://travis-ci.org/nearlg/greenPi-backend)
