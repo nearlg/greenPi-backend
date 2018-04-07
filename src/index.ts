@@ -1,5 +1,6 @@
 import * as Config from "../config/config";
 import * as restify from "restify";
+import * as corsMiddleware from "restify-cors-middleware";
 
 import mongoose = require("mongoose");
 
@@ -28,6 +29,16 @@ const server = restify.createServer({
 addErrorHandler(DataErrorHandler);
 addErrorHandler(MongooseErrorHandler);
 
+// Allow CORS
+const cors = corsMiddleware({
+  preflightMaxAge: 5, //Optional
+  origins: ['*'],
+  allowHeaders: ['API-Token'],
+  exposeHeaders: ['API-Token-Expiry']
+});
+server.pre(cors.preflight);
+server.use(cors.actual);
+
 // Set server plugings
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
@@ -35,13 +46,13 @@ server.use(restify.plugins.bodyParser());
 
 // Set routes
 let apiVersion = Config.Server.VERSION.split('.');
-let apiRoute = 'v' + apiVersion[0];
-MeasuresRoutes.routes(server, '/' + apiRoute + '/measures');
-PumpsRoutes.routes(server, '/' + apiRoute + '/pumps');
-PumpsHistorialsRoutes.routes(server, '/' + apiRoute + '/pumps-historials');
-EnvironmentsRoutes.routes(server, '/' + apiRoute + '/environments');
-SensorsRoutes.routes(server, '/' + apiRoute + '/sensors');
-SensorTypesRoutes.routes(server, '/' + apiRoute + '/sensor-types');
+let apiRoute = '/api/v' + apiVersion[0];
+MeasuresRoutes.routes(server, apiRoute + '/measures');
+PumpsRoutes.routes(server, apiRoute + '/pumps');
+PumpsHistorialsRoutes.routes(server, apiRoute + '/pumps-historials');
+EnvironmentsRoutes.routes(server, apiRoute + '/environments');
+SensorsRoutes.routes(server, apiRoute + '/sensors');
+SensorTypesRoutes.routes(server, apiRoute + '/sensor-types');
  
 server.listen(Config.Server.PORT, function () {
   console.log('%s listening at %s', server.name, server.url);
