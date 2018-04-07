@@ -9,4 +9,11 @@ npm install
 ```
 
 ---
+Master branch
+
 [![Build Status](https://travis-ci.org/nearlg/greenPi-backend.svg?branch=master)](https://travis-ci.org/nearlg/greenPi-backend)
+
+Develop branch
+
+[![Build Status](https://travis-ci.org/nearlg/greenPi-backend.svg?branch=develop)](https://travis-ci.org/nearlg/greenPi-backend)
+
