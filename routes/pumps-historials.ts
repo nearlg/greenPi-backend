@@ -2,8 +2,6 @@ import * as restify from "restify";
 import * as Middleware from "../middleware/pump-historial";
 import * as pumpHistorialValidator from "../validation/pump-historial";
 import * as pumpValidator from "../validation/pump";
-import { IPump } from "../models/interface/pump";
-import { IEnvironment } from "../models/interface/environment";
 import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
 import { IPumpHistorial } from "../models/interface/pump-historial";
 
@@ -20,7 +18,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
             let gte: Date = new Date(req.query.gte);
             let lte: Date = new Date(req.query.lte);
             let sortBy: string = req.query.sortBy;
-            let environmentId: string = req.query.id;
+            let environmentId: string = req.query.byEnvironmentId;
             return Middleware
                 .fetchByEnvironmentId(environmentId, gte, lte, sortBy);
         });
@@ -35,11 +33,11 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
             let gte: Date = new Date(req.query.gte);
             let lte: Date = new Date(req.query.lte);
             let sortBy: string = req.query.sortBy;
-            let pumpId: string = req.query.id;
+            let pumpId: string = req.query.byPumpId;
             return Middleware.fetchByPumpId(pumpId, gte, lte, sortBy);
         });
     }
-        
+
     function byPump(req: restify.Request, res: restify.Response,
     next: restify.Next): Promise<IPumpHistorial[]> {
         let commQuery: string[] = commonQuery;

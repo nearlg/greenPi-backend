@@ -2,8 +2,6 @@ import * as restify from "restify";
 import * as Middleware from "../middleware/measure";
 import * as measureValidator from "../validation/measure";
 import * as sensorValidator from "../validation/sensor";
-import { ISensor } from "../models/interface/sensor";
-import { IEnvironment } from "../models/interface/environment";
 import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
 import { IMeasure } from "../models/interface/measure";
 
@@ -20,7 +18,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
             let gte: Date = new Date(req.query.gte);
             let lte: Date = new Date(req.query.lte);
             let sortBy: string = req.query.sortBy;
-            let environmentId: string = req.query.id;
+            let environmentId: string = req.query.byEnvironmentId;
             return Middleware
                 .fetchByEnvironmentId(environmentId, gte, lte, sortBy);
         });
@@ -35,7 +33,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
             let gte: Date = new Date(req.query.gte);
             let lte: Date = new Date(req.query.lte);
             let sortBy: string = req.query.sortBy;
-            let sensorId: string = req.query.id;
+            let sensorId: string = req.query.bySensorId;
             return Middleware.fetchBySensorId(sensorId, gte, lte, sortBy);
         });
     }
