@@ -15,12 +15,12 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
         commQuery.push('byEnvironmentId');
         return checkQuery(commQuery, req.query)
         .then(() => {
-            let gte: Date = new Date(req.query.gte);
-            let lte: Date = new Date(req.query.lte);
+            let gte = req.query.gte? new Date(req.query.gte) : null;
+            let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             let environmentId: string = req.query.byEnvironmentId;
             return Middleware
-                .fetchByEnvironmentId(environmentId, gte, lte, sortBy);
+                .fetchByEnvironmentId(environmentId, sortBy, gte, lte);
         });
     }
 
@@ -30,11 +30,11 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
         commQuery.push('byPumpId');
         return checkQuery(commQuery, req.query)
         .then(() => {
-            let gte: Date = new Date(req.query.gte);
-            let lte: Date = new Date(req.query.lte);
+            let gte = req.query.gte? new Date(req.query.gte) : null;
+            let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             let pumpId: string = req.query.byPumpId;
-            return Middleware.fetchByPumpId(pumpId, gte, lte, sortBy);
+            return Middleware.fetchByPumpId(pumpId, sortBy, gte, lte);
         });
     }
 
@@ -44,14 +44,13 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
         commQuery.push('byPump');
         return checkQuery(commQuery, req.query)
         .then(() => {
-            let gte: Date = new Date(req.query.gte);
-            let lte: Date = new Date(req.query.lte);
+            let gte = req.query.gte? new Date(req.query.gte) : null;
+            let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             return pumpValidator.validate(req.query.pump, true)
-            .then(pump => Middleware.fetchByPump(pump, gte, lte, sortBy));
+            .then(pump => Middleware.fetchByPump(pump, sortBy, gte, lte));
         });
     }
-    //TODO
 
     server.get(mainPath + '/', (req, res, next) => {
         let queryResult: Promise<IPumpHistorial[]> = null;

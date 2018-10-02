@@ -1,9 +1,8 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, renameId, toObjectAll, renameIdAll } from "./helpers";
+import { rejectIfNull, toObject, renameId, toObjectAll, renameIdAll, getSearchingObject } from "./helpers";
 import { IPumpHistorialRepository } from "../../shared/pump-historial-repository";
 import { IPumpHistorial } from "../../../../interface/pump-historial";
 import { IPump } from "../../../../interface/pump";
-import { IEnvironment } from "../../../../interface/environment";
 
 export interface IPumpHistorialModel extends IPumpHistorial, mongoose.Document {
 }
@@ -29,32 +28,30 @@ const PumpHistorialModel = mongoose.model<IPumpHistorialModel>('PumpHistorial', 
 
 export class PumpHistorialRepository implements IPumpHistorialRepository {
 
-    findAllByPumpIds(pumpIds: string[], gte: Date, lte: Date, sortBy: string): Promise<IPumpHistorial[]> {
-        return PumpHistorialModel.find({
-            pump: { $in: pumpIds },
-            date: { $gte: gte, $lte: lte }
-        })
+    findAllByPumpIds(pumpIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorial[]> {
+        const searchingObject = getSearchingObject(gte, lte);
+        searchingObject['pump'] = { $in: pumpIds };
+        return PumpHistorialModel.find(searchingObject)
         .populate('pump')
         .sort(sortBy)
         .then(toObjectAll)
         .then(renameIdAll);
     }
-    findAllByPumps(pumps: IPump[], gte: Date, lte: Date, sortBy?: string): Promise<IPumpHistorial[]> {
+    findAllByPumps(pumps: IPump[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorial[]> {
         let pumpIds: string[] = pumps.map(pump => pump.id);
-        return this.findAllByPumpIds(pumpIds, gte, lte, sortBy);
+        return this.findAllByPumpIds(pumpIds, sortBy, gte, lte);
     }
-    findAllByPumpId(pumpId: string, gte: Date, lte: Date, sortBy: string = 'date'): Promise<null | IPumpHistorial[]> {
-        return PumpHistorialModel.find({
-            pump: pumpId,
-            date: { $gte: gte, $lte: lte }
-        })
+    findAllByPumpId(pumpId: string, sortBy: string = 'date', gte?: Date, lte?: Date): Promise<null | IPumpHistorial[]> {
+        const searchingObject = getSearchingObject(gte, lte);
+        searchingObject['pump'] = pumpId;
+        return PumpHistorialModel.find(searchingObject)
         .populate('pump')
         .sort(sortBy)
         .then(toObjectAll)
         .then(renameIdAll);
     }
-    findAllByPump(pump: IPump, gte: Date, lte: Date, sortBy?: string): Promise<null | IPumpHistorial[]> {
-        return this.findAllByPumpId(pump.id, gte, lte, sortBy);
+    findAllByPump(pump: IPump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorial[]> {
+        return this.findAllByPumpId(pump.id, sortBy, gte, lte);
     }
 
     create(document: IPumpHistorial): Promise<IPumpHistorial> {
