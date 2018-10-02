@@ -7,7 +7,7 @@ import { validateId as pumpIdValidator } from "./pump"
 
 export function validateDate(date: Date): Promise<Date>  {
      let dateString: string = date && typeof date.toISOString === 'function'?
-    date.toISOString() : null;
+    date.toISOString() : date + '';
     return regexValidation(dateString, DateRegex, 'The pump-historial must have a valid date')
     .then(() => Promise.resolve(date));
 }
