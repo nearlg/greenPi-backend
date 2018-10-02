@@ -1,6 +1,6 @@
 import { IEnvironment } from "../models/interface/environment";
 import { NameRegex, DescriptionRegex, IdRegex } from "./rules/common";
-import { regexValidation, createError } from "./helpers";
+import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { ISensor } from "../models/interface/sensor";
 import { IPump } from "../models/interface/pump";
 
@@ -12,7 +12,7 @@ export function validateDescription(description: string): Promise<string>  {
     if(!description){
         return Promise.resolve(null);
     }
-    return regexValidation(description, DescriptionRegex, 'The enironment must have a valid description');
+    return regexValidation(description, DescriptionRegex, 'The environment must have a valid description');
 }
 
 export function validateSensors(sensors: (ISensor|string)[]): Promise<(ISensor|string)[]> {
@@ -43,15 +43,16 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(enironment: IEnvironment, checkId: boolean = false): Promise<IEnvironment> {
-    return validateName(enironment.name)
-    .then(()=> validateDescription(enironment.description))
-    .then(()=> validateSensors(enironment.sensors))
-    .then(()=> validatePumps(enironment.pumps))
-    .then(() => checkId? validateId(enironment.id) : Promise.resolve(null))
-    .then(()=> Promise.resolve(enironment))
+export function validate(environment: IEnvironment, checkId: boolean = false): Promise<IEnvironment> {
+    return rejectIfNull(environment, 'Environment is null or undefined')
+    .then(() => validateName(environment.name))
+    .then(()=> validateDescription(environment.description))
+    .then(()=> validateSensors(environment.sensors))
+    .then(()=> validatePumps(environment.pumps))
+    .then(() => checkId? validateId(environment.id) : Promise.resolve(null))
+    .then(()=> Promise.resolve(environment))
     .catch(err => {
-        err.message = 'Invalid enironment: ' + err.message;
+        err.message = 'Invalid environment: ' + err.message;
         return Promise.reject(err);
     });
 }
