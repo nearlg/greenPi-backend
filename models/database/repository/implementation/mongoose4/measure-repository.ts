@@ -32,7 +32,9 @@ export class MeasureRepository implements IMeasureRepository {
             'sensor.type': { $in: sensorTypeIds },
             date: { $gte: gte, $lte: lte }
         })
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .sort(sortBy)
         .then(toObject)
         .then(normalizeFiledNames);
@@ -42,7 +44,9 @@ export class MeasureRepository implements IMeasureRepository {
             'sensor.type': sensorTypeId,
             date: { $gte: gte, $lte: lte }
         })
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .sort(sortBy)
         .then(toObject)
         .then(normalizeFiledNames);
@@ -53,7 +57,9 @@ export class MeasureRepository implements IMeasureRepository {
             sensor: { $in: sensorIds },
             date: { $gte: gte, $lte: lte }
         })
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .sort(sortBy)
         .then(toObject)
         .then(normalizeFiledNames);
@@ -67,7 +73,9 @@ export class MeasureRepository implements IMeasureRepository {
             sensor: sensorId,
             date: { $gte: gte, $lte: lte }
         })
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .sort(sortBy)
         .then(toObject)
         .then(normalizeFiledNames);
@@ -85,7 +93,9 @@ export class MeasureRepository implements IMeasureRepository {
 
     update(document: IMeasure): Promise<IMeasure> {
         return MeasureModel.findByIdAndUpdate(document.id, document, {'new': true})
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .exec()
         .then(rejectIfNull('Measure not found'))
         .then(toObject)
@@ -94,7 +104,9 @@ export class MeasureRepository implements IMeasureRepository {
 
     updateById(id: string, document: IMeasure): Promise<IMeasure>{
         return MeasureModel.findByIdAndUpdate(id, document)
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .exec();
     }
 
@@ -112,7 +124,9 @@ export class MeasureRepository implements IMeasureRepository {
 
     findAll(): Promise<IMeasure[]> {
         return MeasureModel.find()
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .exec()
         .then(toObject)
         .then(normalizeFiledNames);
@@ -120,7 +134,9 @@ export class MeasureRepository implements IMeasureRepository {
 
     findById(id: string): Promise<null|IMeasure> {
         return MeasureModel.findById(id)
-        .populate('sensor.type')
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
         .exec()
         .then(rejectIfNull('Measure not found'))
         .then(toObject)

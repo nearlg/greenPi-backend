@@ -35,7 +35,10 @@ export class EnvironmentRepository implements IEnvironmentRepository {
 
     update(document: IEnvironment): Promise<IEnvironment> {
         return EnvironmentModel.findByIdAndUpdate(document.id, document, {'new': true})
-        .populate('sensors.type pumps')
+        .populate('pumps')
+        .populate({path:'sensors', populate: {
+            path: 'type'
+        }})
         .exec()
         .then(rejectIfNull('Environment not found'))
         .then(toObject)
@@ -44,7 +47,10 @@ export class EnvironmentRepository implements IEnvironmentRepository {
 
     updateById(id: string, document: IEnvironment): Promise<IEnvironment>{
         return EnvironmentModel.findByIdAndUpdate(id, document)
-        .populate('sensors.type pumps')
+        .populate('pumps')
+        .populate({path:'sensors', populate: {
+            path: 'type'
+        }})
         .exec();
     }
 
@@ -62,7 +68,10 @@ export class EnvironmentRepository implements IEnvironmentRepository {
 
     findAll(): Promise<IEnvironment[]> {
         return EnvironmentModel.find()
-            .populate('sensors.type pumps')
+            .populate('pumps')
+            .populate({path:'sensors', populate: {
+                path: 'type'
+            }})
             .exec()
             .then(toObject)
             .then(normalizeFiledNames);
@@ -70,7 +79,10 @@ export class EnvironmentRepository implements IEnvironmentRepository {
 
     findById(id: string): Promise<null|IEnvironment> {
         return EnvironmentModel.findById(id)
-            .populate('sensors.type pumps')
+            .populate('pumps')
+            .populate({path:'sensors', populate: {
+                path: 'type'
+            }})
             .exec()
             .then(rejectIfNull('Environment not found'))
             .then(toObject)
