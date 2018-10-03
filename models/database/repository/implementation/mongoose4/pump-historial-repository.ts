@@ -1,9 +1,8 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, renameId, toObjectAll, renameIdAll } from "./helpers";
+import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
 import { IPumpHistorialRepository } from "../../shared/pump-historial-repository";
 import { IPumpHistorial } from "../../../../interface/pump-historial";
 import { IPump } from "../../../../interface/pump";
-import { IEnvironment } from "../../../../interface/environment";
 
 export interface IPumpHistorialModel extends IPumpHistorial, mongoose.Document {
 }
@@ -36,8 +35,8 @@ export class PumpHistorialRepository implements IPumpHistorialRepository {
         })
         .populate('pump')
         .sort(sortBy)
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
     findAllByPumps(pumps: IPump[], gte: Date, lte: Date, sortBy?: string): Promise<IPumpHistorial[]> {
         let pumpIds: string[] = pumps.map(pump => pump.id);
@@ -50,8 +49,8 @@ export class PumpHistorialRepository implements IPumpHistorialRepository {
         })
         .populate('pump')
         .sort(sortBy)
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
     findAllByPump(pump: IPump, gte: Date, lte: Date, sortBy?: string): Promise<null | IPumpHistorial[]> {
         return this.findAllByPumpId(pump.id, gte, lte, sortBy);
@@ -61,7 +60,7 @@ export class PumpHistorialRepository implements IPumpHistorialRepository {
         return PumpHistorialModel.create(document)
         .then(rejectIfNull('Pump historial not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     update(document: IPumpHistorial): Promise<IPumpHistorial> {
@@ -70,7 +69,7 @@ export class PumpHistorialRepository implements IPumpHistorialRepository {
         .exec()
         .then(rejectIfNull('Pump historial not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     updateById(id: string, document: IPumpHistorial): Promise<IPumpHistorial>{
@@ -95,8 +94,8 @@ export class PumpHistorialRepository implements IPumpHistorialRepository {
         return PumpHistorialModel.find()
         .populate('pump')
         .exec()
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     findById(id: string): Promise<null|IPumpHistorial> {
@@ -105,7 +104,7 @@ export class PumpHistorialRepository implements IPumpHistorialRepository {
         .exec()
         .then(rejectIfNull('Pump historial not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 }
 

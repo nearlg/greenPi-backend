@@ -1,9 +1,8 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, renameId, toObjectAll, renameIdAll } from "./helpers";
+import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
 import { IMeasureRepository } from "../../shared/measure-repository";
 import { IMeasure } from "../../../../interface/measure";
 import { ISensor } from "../../../../interface/sensor";
-import { IEnvironment } from "../../../../interface/environment";
 
 export interface IMeasureModel extends IMeasure, mongoose.Document {
 }
@@ -35,8 +34,8 @@ export class MeasureRepository implements IMeasureRepository {
         })
         .populate('sensor.type')
         .sort(sortBy)
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
     findAllByTypeId(sensorTypeId: string, gte: Date, lte: Date, sortBy: string): Promise<IMeasure[]> {
         return MeasureModel.find({
@@ -45,8 +44,8 @@ export class MeasureRepository implements IMeasureRepository {
         })
         .populate('sensor.type')
         .sort(sortBy)
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     findAllBySensorIds(sensorIds: string[], gte: Date, lte: Date, sortBy: string): Promise<IMeasure[]> {
@@ -56,8 +55,8 @@ export class MeasureRepository implements IMeasureRepository {
         })
         .populate('sensor.type')
         .sort(sortBy)
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
     findAllBySensors(sensors: ISensor[], gte: Date, lte: Date, sortBy?: string): Promise<IMeasure[]> {
         let sensorIds: string[] = sensors.map(sensor => sensor.id);
@@ -70,8 +69,8 @@ export class MeasureRepository implements IMeasureRepository {
         })
         .populate('sensor.type')
         .sort(sortBy)
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
     findAllBySensor(sensor: ISensor, gte: Date, lte: Date, sortBy?: string): Promise<null|IMeasure[]> {
         return this.findAllBySensorId(sensor.id, gte, lte, sortBy);
@@ -81,7 +80,7 @@ export class MeasureRepository implements IMeasureRepository {
         return MeasureModel.create(document)
         .then(rejectIfNull('Measure not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     update(document: IMeasure): Promise<IMeasure> {
@@ -90,7 +89,7 @@ export class MeasureRepository implements IMeasureRepository {
         .exec()
         .then(rejectIfNull('Measure not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     updateById(id: string, document: IMeasure): Promise<IMeasure>{
@@ -115,8 +114,8 @@ export class MeasureRepository implements IMeasureRepository {
         return MeasureModel.find()
         .populate('sensor.type')
         .exec()
-        .then(toObjectAll)
-        .then(renameIdAll);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     findById(id: string): Promise<null|IMeasure> {
@@ -125,7 +124,7 @@ export class MeasureRepository implements IMeasureRepository {
         .exec()
         .then(rejectIfNull('Measure not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 }
 

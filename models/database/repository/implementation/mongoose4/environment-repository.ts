@@ -1,8 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, renameId, toObjectAll, renameIdAll } from "./helpers";
+import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
 import { IEnvironmentRepository } from "../../shared/environment-repository";
 import { IEnvironment } from "../../../../interface/environment";
-import { IMeasure } from "../../../../interface/measure";
 
 export interface IEnvironmentModel extends IEnvironment, mongoose.Document {
 }
@@ -31,7 +30,7 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         return EnvironmentModel.create(document)
         .then(rejectIfNull('Environment not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     update(document: IEnvironment): Promise<IEnvironment> {
@@ -40,7 +39,7 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         .exec()
         .then(rejectIfNull('Environment not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     updateById(id: string, document: IEnvironment): Promise<IEnvironment>{
@@ -65,8 +64,8 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         return EnvironmentModel.find()
             .populate('sensors.type pumps')
             .exec()
-            .then(toObjectAll)
-            .then(renameIdAll);
+            .then(toObject)
+            .then(normalizeFiledNames);
     }
 
     findById(id: string): Promise<null|IEnvironment> {
@@ -75,7 +74,7 @@ export class EnvironmentRepository implements IEnvironmentRepository {
             .exec()
             .then(rejectIfNull('Environment not found'))
             .then(toObject)
-            .then(renameId);
+            .then(normalizeFiledNames);
     }
 }
 
