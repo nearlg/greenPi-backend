@@ -2,7 +2,7 @@ import { IPumpHistorial, State } from "../models/interface/pump-historial";
 import { IPump } from "../models/interface/pump";
 import { DateRegex, IdRegex } from "./rules/common";
 import { StateRegex } from "./rules/pump-historial";
-import { regexValidation, createError } from "./helpers";
+import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { validateId as pumpIdValidator } from "./pump"
 
 export function validateDate(date: Date): Promise<Date>  {
@@ -36,7 +36,8 @@ export function validateId(id: string): Promise<string> {
 }
 
 export function validate(pumpHistorial: IPumpHistorial, checkId: boolean = false): Promise<IPumpHistorial> {
-    return validateDate(pumpHistorial.date)
+    return rejectIfNull(pumpHistorial, 'Pump historical is null or undefined')
+    .then(() => validateDate(pumpHistorial.date))
     .then(()=> validateState(pumpHistorial.state))
     .then(()=> validatePump(pumpHistorial.pump))
     .then(() => checkId? validateId(pumpHistorial.id) : Promise.resolve(null))
