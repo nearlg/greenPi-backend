@@ -45,3 +45,17 @@ function normalizeDocument(document: any): any {
     }
     return document;
 }
+
+export function getSearchingObject(gte?: Date, lte?: Date): Object {
+    const searchingObject = {};
+    if (gte || lte) {
+        searchingObject['date'] = {};
+        if (gte) {
+            searchingObject['date']['$gte'] = gte;
+        }
+        if (lte) {
+            searchingObject['date']['$lte'] = lte;
+        }
+    }
+    return searchingObject;
+}
