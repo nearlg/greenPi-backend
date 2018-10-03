@@ -51,9 +51,9 @@ describe('Sensor type repository validation', () => {
         .catch(err => console.log(err));
     });*/
 
-    /*after(() => {
+    after(() => {
         return mongoose.disconnect();
-    });*/
+    });
 
     /*beforeEach((done) => {
 
