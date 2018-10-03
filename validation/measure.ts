@@ -7,7 +7,7 @@ import { validateId as sensorIdValidator} from "./sensor";
 
 export function validateDate(date: Date): Promise<Date>  {
     let dateString: string = date && typeof date.toISOString === 'function'?
-    date.toISOString() : null;
+    date.toISOString() : date + '';
     return regexValidation(dateString, DateRegex, 'The measure must have a valid date')
     .then(() => Promise.resolve(date));
 }
