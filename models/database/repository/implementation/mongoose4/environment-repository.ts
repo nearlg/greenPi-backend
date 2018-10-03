@@ -1,8 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, renameId, toObjectAll, renameIdAll } from "./helpers";
+import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
 import { IEnvironmentRepository } from "../../shared/environment-repository";
 import { IEnvironment } from "../../../../interface/environment";
-import { IMeasure } from "../../../../interface/measure";
 
 export interface IEnvironmentModel extends IEnvironment, mongoose.Document {
 }
@@ -31,21 +30,27 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         return EnvironmentModel.create(document)
         .then(rejectIfNull('Environment not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     update(document: IEnvironment): Promise<IEnvironment> {
         return EnvironmentModel.findByIdAndUpdate(document.id, document, {'new': true})
-        .populate('sensors.type pumps')
+        .populate('pumps')
+        .populate({path:'sensors', populate: {
+            path: 'type'
+        }})
         .exec()
         .then(rejectIfNull('Environment not found'))
         .then(toObject)
-        .then(renameId);
+        .then(normalizeFiledNames);
     }
 
     updateById(id: string, document: IEnvironment): Promise<IEnvironment>{
         return EnvironmentModel.findByIdAndUpdate(id, document)
-        .populate('sensors.type pumps')
+        .populate('pumps')
+        .populate({path:'sensors', populate: {
+            path: 'type'
+        }})
         .exec();
     }
 
@@ -63,19 +68,25 @@ export class EnvironmentRepository implements IEnvironmentRepository {
 
     findAll(): Promise<IEnvironment[]> {
         return EnvironmentModel.find()
-            .populate('sensors.type pumps')
+            .populate('pumps')
+            .populate({path:'sensors', populate: {
+                path: 'type'
+            }})
             .exec()
-            .then(toObjectAll)
-            .then(renameIdAll);
+            .then(toObject)
+            .then(normalizeFiledNames);
     }
 
     findById(id: string): Promise<null|IEnvironment> {
         return EnvironmentModel.findById(id)
-            .populate('sensors.type pumps')
+            .populate('pumps')
+            .populate({path:'sensors', populate: {
+                path: 'type'
+            }})
             .exec()
             .then(rejectIfNull('Environment not found'))
             .then(toObject)
-            .then(renameId);
+            .then(normalizeFiledNames);
     }
 }
 

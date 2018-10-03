@@ -57,7 +57,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
 
         if(req.query.byEnvironmentId){
             queryResult = byEnvironmentId(req, res, next);
-        } else if(req.query.bySensoId){
+        } else if(req.query.bySensorId){
             queryResult = bySensorId(req, res, next);
         } else {
             queryResult = bySensor(req, res, next);
