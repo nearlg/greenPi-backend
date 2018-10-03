@@ -6,7 +6,7 @@ export const enum State {
 };
 
 export interface IPumpHistorial {
-    id?: string,
+    id?: any,
     date: Date,
     pump: IPump | string,
     state: State
