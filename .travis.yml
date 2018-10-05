@@ -15,8 +15,7 @@ deploy:
   provider: heroku
   api_key:
     secure: PvrpsNpDXOn7oNwjolwWA9QPNOf+/kp8HN7s/aeUrHsBKOSDk4oWXlSjCHaikG584NwzTvXlZ15uhJY8GWrLnHaaAd0tlA5Al2YBbKGV3PsProWKfdiWSBH7WNUAEeZ/fQoife7FXNfjpRkmVmSlCb97v1L6X/tEjc6ChEobQwFKnN72NOu1X9BAfnBEoNilg7Y0FyUXqN6kQB2sLZhYFNW3dDxwLWHygDq1qqAKQIHdbz/QCzHOdNzeISe/BCI1u7mzN7+4KJ/p0ZeJJz/XxgDf+amBbIg9UIqykTVfiAJ83YCEo31XMVL6SAZBv5Fo2GAq4z0QtBERwu2EgKLGypHBAFl4jkJS9JGb8IqUGgde4ywwuDZGLR7HHgpkF31KUKLqKpw+4oSktdnmmPCfUUreohwyfEiOuRMK79/FcIOQIQCVItmZyYBAh9S0widfbN2zb6WU+KZDBl4hUDYnOlrSnF0EwXbaTGLqDfPeHC3NX4C+m7DyxMsZAcZehyXkk/AfzF4eOMe8uUaL8hD9d99DG21RguYZ8BUvlDXW3tCMo4e5WiSSB5RXAtTkb6TiflVLg9wOnw/jjHlAnMoDTJ89MSfe0u/M81upQA9VtvgEHoZDiL3vfItBQomZLf2sUJ8wrk5R7Hopg6b89bJYsmPeh8ts+K5/uHcvb3xYgPQ=
-  app: greenpi-backend
-  on:
-    repo: nearlg/greenPi-backend
-    branch: develop
+  app:
+    master: greenpi-backend
+    develop: greenpi-backend-dev
   skip_cleanup: true
