@@ -1,5 +1,5 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, renameId, toObjectAll, renameIdAll } from "./helpers";
+import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
 import { IPumpRepository } from "../../shared/pump-repository";
 import { IPump } from "../../../../interface/pump";
 
@@ -23,14 +23,14 @@ export class PumpRepository implements IPumpRepository {
         return PumpModel.create(document)
             .then(rejectIfNull('Pump not found'))
             .then(toObject)
-            .then(renameId);
+            .then(normalizeFiledNames);
     }
 
     update(document: IPump): Promise<IPump> {
         return PumpModel.findByIdAndUpdate(document.id, document, {'new': true}).exec()
             .then(rejectIfNull('Pump not found'))
             .then(toObject)
-            .then(renameId);
+            .then(normalizeFiledNames);
     }
 
     updateById(id: string, document: IPump): Promise<IPump>{
@@ -51,15 +51,15 @@ export class PumpRepository implements IPumpRepository {
 
     findAll(): Promise<IPump[]> {
         return PumpModel.find().exec()
-            .then(toObjectAll)
-            .then(renameIdAll);
+            .then(toObject)
+            .then(normalizeFiledNames);
     }
 
     findById(id: string): Promise<null|IPump> {
         return PumpModel.findById(id).exec()
             .then(rejectIfNull('Pump not found'))
             .then(toObject)
-            .then(renameId);
+            .then(normalizeFiledNames);
     }
 }
 

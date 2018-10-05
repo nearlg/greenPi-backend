@@ -1,6 +1,6 @@
 import { IPump } from "../models/interface/pump";
 import { NameRegex, DescriptionRegex, PortRegex, IdRegex } from "./rules/common";
-import { regexValidation, createError } from "./helpers";
+import { regexValidation, createError, rejectIfNull } from "./helpers";
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, NameRegex, 'The pump must have a valid name');
@@ -30,7 +30,8 @@ export function validateId(id: string): Promise<string> {
 }
 
 export function validate(pump: IPump, checkId: boolean = false): Promise<IPump> {
-    return validateName(pump.name)
+    return rejectIfNull(pump, 'Pump is null or undefined')
+    .then(() => validateName(pump.name))
     .then(()=> validateDescription(pump.description))
     .then(()=> validatePorts(pump.connectionPorts))
     .then(() => checkId? validateId(pump.id) : Promise.resolve(null))

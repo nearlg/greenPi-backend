@@ -3,17 +3,17 @@ import { pumpHistorialRepository } from "../models/database/repository/implement
 import { environmentRepository } from "../models/database/repository/implementation/mongoose4/environment-repository"
 import { IPump } from "../models/interface/pump";
 
-export function fetchByEnvironmentId(environmentId: string, gte: Date, lte: Date, sortBy?: string): Promise<null | IPumpHistorial[]> {
+export function fetchByEnvironmentId(environmentId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorial[]> {
     return environmentRepository.findById(environmentId)
-    .then(environment => pumpHistorialRepository.findAllByPumps(<Array<IPump>>environment.pumps, gte, lte, sortBy));
+    .then(environment => pumpHistorialRepository.findAllByPumps(<Array<IPump>>environment.pumps, sortBy, gte, lte));
 }
 
-export function fetchByPumpId(pumpId: string, gte: Date, lte: Date, sortBy: string): Promise<null | IPumpHistorial[]> {
-    return pumpHistorialRepository.findAllByPumpId(pumpId, gte, lte, sortBy);
+export function fetchByPumpId(pumpId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorial[]> {
+    return pumpHistorialRepository.findAllByPumpId(pumpId, sortBy, gte, lte);
 }
 
-export function fetchByPump(pump: IPump, gte: Date, lte: Date, sortBy?: string): Promise<null | IPumpHistorial[]> {
-    return pumpHistorialRepository.findAllByPump(pump, gte, lte, sortBy);
+export function fetchByPump(pump: IPump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorial[]> {
+    return pumpHistorialRepository.findAllByPump(pump, sortBy, gte, lte);
 }
 
 export function addPumpHistorial(pumpHistorial: IPumpHistorial): Promise<IPumpHistorial> {

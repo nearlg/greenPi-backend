@@ -21,10 +21,10 @@ describe('Sensor type repository validation', () => {
         const options    = {promiseLibrary: Promise};
         mockgoose = new Mockgoose(mongoose);
     mockgoose.prepareStorage().then(() => {
-            mongoose.connect(Config.Database.URI_TEST);
-            mongoose.connection.on('connected', () => {  
+            mongoose.connect(Config.Database.URI_TEST, { useMongoClient: true });
+            mongoose.connection.on('connected', () => {
             console.log('db connection is now open');
-            }); 
+            });
         });
 
     /*before(() => {
@@ -44,16 +44,16 @@ describe('Sensor type repository validation', () => {
 
         /*return mockgoose.prepareStorage().then(() => {
             mongoose.connect(Config.Database.URI_TEST);
-            mongoose.connection.on('connected', () => {  
+            mongoose.connection.on('connected', () => {
             console.log('db connection is now open');
             });
         })
         .catch(err => console.log(err));
     });*/
 
-    /*after(() => {
+    after(() => {
         return mongoose.disconnect();
-    });*/
+    });
 
     /*beforeEach((done) => {
 

@@ -1,6 +1,6 @@
 export function regexValidation<T>(param: T, regex: RegExp, errorMsg?: string): Promise<T> {
-    let paramType: string = typeof param;
-    let err: Error = createError(errorMsg);
+    const paramType: string = typeof param;
+    const err: Error = createError(errorMsg || 'Error');
     // If the type of param is not a string or number
     // return a reject
     if(!['string', 'number'].find(t => paramType === t)){
@@ -10,11 +10,19 @@ export function regexValidation<T>(param: T, regex: RegExp, errorMsg?: string): 
     return regex.test(toTest)? Promise.resolve(param) : Promise.reject(err);
 }
 
+export function rejectIfNull(document: any, errorMsg: string) {
+    if (!document) {
+        let err: Error = createError(errorMsg);
+        return Promise.reject(err);
+    }
+    return Promise.resolve(document);
+}
+
 /**
  * returns an error with the name already setted to 'DataValidationError'
  */
 export function createError(msg: string): Error {
-    let err: Error = new Error(msg);
+    const err: Error = new Error(msg);
     err.name = 'DataValidationError';
     return err;
 }

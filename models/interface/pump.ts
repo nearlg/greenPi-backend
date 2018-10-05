@@ -1,5 +1,5 @@
 export interface IPump {
-    id?: string;
+    id?: any;
     name: string;
     description: string;
     connectionPorts: number[];

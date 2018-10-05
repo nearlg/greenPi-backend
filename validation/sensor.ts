@@ -1,7 +1,7 @@
 import { ISensor } from "../models/interface/sensor";
 import { ISensorType } from "../models/interface/sensor-type";
 import { NameRegex, DescriptionRegex, PortRegex, IdRegex } from "./rules/common";
-import { regexValidation, createError } from "./helpers";
+import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { validateId as sensorTypeIdValidator} from "./sensor-type";
 
 export function validateName(name: string): Promise<string>  {
@@ -43,7 +43,8 @@ export function validateId(id: string): Promise<string> {
 }
 
 export function validate(sensor: ISensor, checkId: boolean = false): Promise<ISensor> {
-    return validateName(sensor.name)
+    return rejectIfNull(sensor, 'Sensor is null or undefined')
+    .then(() => validateName(sensor.name))
     .then(()=> validateDescription(sensor.description))
     .then(()=> validatePorts(sensor.connectionPorts))
     .then(()=> validateType(sensor.type))
