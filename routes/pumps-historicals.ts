@@ -1,16 +1,16 @@
 import * as restify from "restify";
-import * as Middleware from "../middleware/pump-historial";
-import * as pumpHistorialValidator from "../validation/pump-historial";
+import * as Middleware from "../middleware/pump-historical";
+import * as pumpHistoricalValidator from "../validation/pump-historical";
 import * as pumpValidator from "../validation/pump";
-import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
-import { IPumpHistorial } from "../models/interface/pump-historial";
+import { handleJsonData, handleErrors, checkQuery } from "./helpers";
+import { IPumpHistorical } from "../models/interface/pump-historical";
 
 export function routes(server: restify.Server, mainPath: string = ''): void {
 
     const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
     function byEnvironmentId(req: restify.Request, res: restify.Response,
-    next: restify.Next): Promise<IPumpHistorial[]> {
+    next: restify.Next): Promise<IPumpHistorical[]> {
         let commQuery: string[] = commonQuery;
         commQuery.push('byEnvironmentId');
         return checkQuery(commQuery, req.query)
@@ -25,7 +25,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
     }
 
     function byPumpId(req: restify.Request, res: restify.Response,
-    next: restify.Next): Promise<IPumpHistorial[]> {
+    next: restify.Next): Promise<IPumpHistorical[]> {
         let commQuery: string[] = commonQuery;
         commQuery.push('byPumpId');
         return checkQuery(commQuery, req.query)
@@ -39,7 +39,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
     }
 
     function byPump(req: restify.Request, res: restify.Response,
-    next: restify.Next): Promise<IPumpHistorial[]> {
+    next: restify.Next): Promise<IPumpHistorical[]> {
         let commQuery: string[] = commonQuery;
         commQuery.push('byPump');
         return checkQuery(commQuery, req.query)
@@ -53,7 +53,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
     }
 
     server.get(mainPath + '/', (req, res, next) => {
-        let queryResult: Promise<IPumpHistorial[]> = null;
+        let queryResult: Promise<IPumpHistorical[]> = null;
 
         if(req.query.byEnvironmentId){
             queryResult = byEnvironmentId(req, res, next);
@@ -62,53 +62,53 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
         } else {
             queryResult = byPump(req, res, next);
         }
-        queryResult.then(pumpHistorial => handleJsonData(pumpHistorial, res, next))
+        queryResult.then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.post(mainPath, (req, res, next) => {
-        pumpHistorialValidator.validate(req.body)
-        .then(pumpHistorial => Middleware.addPumpHistorial(pumpHistorial))
-        .then(pumpHistorial => handleJsonData(pumpHistorial, res, next, 201))
+        pumpHistoricalValidator.validate(req.body)
+        .then(pumpHistorical => Middleware.addPumpHistorical(pumpHistorical))
+        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next, 201))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath, (req, res, next)=>{
-        pumpHistorialValidator.validate(req.body, true)
-        .then(pumpHistorial => Middleware.updatePumpHistorial(pumpHistorial))
-        .then(pumpHistorial => handleJsonData(pumpHistorial, res, next))
+        pumpHistoricalValidator.validate(req.body, true)
+        .then(pumpHistorical => Middleware.updatePumpHistorical(pumpHistorical))
+        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath + '/:id', (req, res, next)=>{
-        pumpHistorialValidator.validate(req.body)
-        .then(pumpHistorial => Middleware.updatePumpHistorialById(req.params.id, pumpHistorial))
-        .then(pumpHistorial => handleJsonData(pumpHistorial, res, next))
+        pumpHistoricalValidator.validate(req.body)
+        .then(pumpHistorical => Middleware.updatePumpHistoricalById(req.params.id, pumpHistorical))
+        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next)=>{
-        pumpHistorialValidator.validate(req.body, true)
-        .then(pumpHistorial => Middleware.deletePumpHistorial(pumpHistorial))
+        pumpHistoricalValidator.validate(req.body, true)
+        .then(pumpHistorical => Middleware.deletePumpHistorical(pumpHistorical))
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:id', (req, res, next)=>{
-        Middleware.deletePumpHistorialById(req.params.id)
+        Middleware.deletePumpHistoricalById(req.params.id)
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next)=>{
-        Middleware.fetchPumpHistorials()
-        .then(pumpHistorials => handleJsonData(pumpHistorials, res, next))
+        Middleware.fetchPumpHistoricals()
+        .then(pumpHistoricals => handleJsonData(pumpHistoricals, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:id', (req, res, next)=>{
-        Middleware.getPumpHistorialById(req.params.id)
-        .then(pumpHistorial => handleJsonData(pumpHistorial, res, next))
+        Middleware.getPumpHistoricalById(req.params.id)
+        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 }
