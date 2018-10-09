@@ -9,7 +9,7 @@ import * as SensorsRoutes from "../routes/sensors";
 import * as SensorTypesRoutes from "../routes/sensor-types";
 import * as EnvironmentsRoutes from "../routes/environments";
 import * as PumpsRoutes from "../routes/pumps";
-import * as PumpsHistorialsRoutes from "../routes/pumps-historials";
+import * as PumpsHistoricalsRoutes from "../routes/pumps-historicals";
 import { handleJsonData, addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
@@ -49,11 +49,11 @@ let apiVersion = Config.Server.VERSION.split('.');
 let apiRoute = '/api/v' + apiVersion[0];
 MeasuresRoutes.routes(server, apiRoute + '/measures');
 PumpsRoutes.routes(server, apiRoute + '/pumps');
-PumpsHistorialsRoutes.routes(server, apiRoute + '/pumps-historials');
+PumpsHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals');
 EnvironmentsRoutes.routes(server, apiRoute + '/environments');
 SensorsRoutes.routes(server, apiRoute + '/sensors');
 SensorTypesRoutes.routes(server, apiRoute + '/sensor-types');
- 
+
 server.listen(Config.Server.PORT, function () {
   console.log('%s listening at %s', server.name, server.url);
 });
