@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "tsc && mocha --recursive --exit",
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "compile": "tsc"
   },
   "author": "nearlg",
   "homepage": "https://github.com/nearlg/greenPi-backend",
@@ -35,7 +36,6 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "mocha": "^5.2.0",
-    "mockgoose": "^7.3.5",
     "typescript": "^2.9.2"
   }
 }
