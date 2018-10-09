@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "tsc && mocha --recursive --exit",
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "compile": "tsc"
   },
   "author": "nearlg",
   "homepage": "https://github.com/nearlg/greenPi-backend",
