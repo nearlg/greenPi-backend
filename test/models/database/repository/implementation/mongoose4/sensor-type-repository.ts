@@ -2,7 +2,6 @@ import chai = require("chai");
 import chaiAsPromised = require("chai-as-promised");
 import { ObjectID } from "mongodb";
 import mongoose = require('mongoose');
-import { Mockgoose } from 'mockgoose';
 import * as Config from "../../../../../../config/config";
 import { ISensorType } from "../../../../../../models/interface/sensor-type";
 import { IUnit } from "../../../../../../models/interface/unit";
@@ -10,22 +9,22 @@ import { sensorTypeRepository } from "../../../../../../models/database/reposito
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
-let mockgoose: Mockgoose;
+// let mockgoose: Mockgoose;
 
 describe('Sensor type repository validation', () => {
 
     let sensorType: ISensorType;
     let unit: IUnit;
 
-    mongoose.Promise = Promise;
-        const options    = {promiseLibrary: Promise};
-        mockgoose = new Mockgoose(mongoose);
-    mockgoose.prepareStorage().then(() => {
-            mongoose.connect(Config.Database.URI_TEST, { useMongoClient: true });
-            mongoose.connection.on('connected', () => {
-            console.log('db connection is now open');
-            });
-        });
+    // mongoose.Promise = Promise;
+    //     const options    = {promiseLibrary: Promise};
+    //     mockgoose = new Mockgoose(mongoose);
+    // mockgoose.prepareStorage().then(() => {
+    //         mongoose.connect(Config.Database.URI_TEST, { useMongoClient: true });
+    //         mongoose.connection.on('connected', () => {
+    //         console.log('db connection is now open');
+    //         });
+    //     });
 
     /*before(() => {
         mongoose.Promise = Promise;
@@ -51,9 +50,9 @@ describe('Sensor type repository validation', () => {
         .catch(err => console.log(err));
     });*/
 
-    after(() => {
-        return mongoose.disconnect();
-    });
+    // after(() => {
+    //     return mongoose.disconnect();
+    // });
 
     /*beforeEach((done) => {
 
