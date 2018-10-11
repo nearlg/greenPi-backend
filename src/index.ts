@@ -1,6 +1,5 @@
 import * as Config from "../config/config";
 import * as restify from "restify";
-import * as corsMiddleware from "restify-cors-middleware";
 
 import mongoose = require("mongoose");
 
@@ -10,7 +9,7 @@ import * as SensorTypesRoutes from "../routes/sensor-types";
 import * as EnvironmentsRoutes from "../routes/environments";
 import * as PumpsRoutes from "../routes/pumps";
 import * as PumpsHistoricalsRoutes from "../routes/pumps-historicals";
-import { handleJsonData, addErrorHandler } from "../routes/helpers";
+import { addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
 
@@ -28,16 +27,6 @@ const server = restify.createServer({
 // Setup error handlers
 addErrorHandler(DataErrorHandler);
 addErrorHandler(MongooseErrorHandler);
-
-// Allow CORS
-const cors = corsMiddleware({
-  preflightMaxAge: 5, //Optional
-  origins: ['*'],
-  allowHeaders: ['API-Token'],
-  exposeHeaders: ['API-Token-Expiry']
-});
-server.pre(cors.preflight);
-server.use(cors.actual);
 
 // Set server plugings
 server.use(restify.plugins.acceptParser(server.acceptable));
