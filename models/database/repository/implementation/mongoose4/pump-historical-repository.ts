@@ -57,6 +57,9 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
     create(document: IPumpHistorical): Promise<IPumpHistorical> {
         return PumpHistoricalModel.create(document)
         .then(rejectIfNull('Pump historical not found'))
+        .then((o: IPumpHistoricalModel) => PumpHistoricalModel.populate(o, {
+            path: 'pump'
+        }))
         .then(toObject)
         .then(normalizeFiledNames);
     }

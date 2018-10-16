@@ -27,6 +27,9 @@ export class SensorRepository implements ISensorRepository {
     create(document: ISensor): Promise<ISensor> {
         return SensorModel.create(document)
             .then(rejectIfNull('Sensor not found'))
+            .then((o: ISensorModel) => SensorModel.populate(o, {
+                path: 'type'
+            }))
             .then(toObject)
             .then(normalizeFiledNames);
     }

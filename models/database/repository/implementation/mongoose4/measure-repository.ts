@@ -86,6 +86,12 @@ export class MeasureRepository implements IMeasureRepository {
     create(document: IMeasure): Promise<IMeasure> {
         return MeasureModel.create(document)
         .then(rejectIfNull('Measure not found'))
+        .then((o: IMeasureModel) => MeasureModel.populate(o, {
+            path: 'sensor',
+            populate: {
+                path: 'type'
+            }
+        }))
         .then(toObject)
         .then(normalizeFiledNames);
     }
