@@ -12,6 +12,8 @@ import * as PumpsHistoricalsRoutes from "../routes/pumps-historicals";
 import { addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
+import { socketService } from "../services/sockerio";
+
 
 // Configure database
 mongoose.Promise = Promise;
@@ -27,6 +29,9 @@ const server = restify.createServer({
 // Setup error handlers
 addErrorHandler(DataErrorHandler);
 addErrorHandler(MongooseErrorHandler);
+
+// const io: SocketIO.Server = SocketIO(server);
+
 
 // Set server plugings
 server.use(restify.plugins.acceptParser(server.acceptable));

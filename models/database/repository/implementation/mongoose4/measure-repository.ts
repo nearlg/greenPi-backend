@@ -123,6 +123,19 @@ export class MeasureRepository implements IMeasureRepository {
 
     findAll(): Promise<IMeasure[]> {
         return MeasureModel.find()
+        .sort({date: 1})
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
+        .exec()
+        .then(toObject)
+        .then(normalizeFiledNames);
+    }
+
+    findAllDistinct(): Promise<IMeasure[]> {
+        return MeasureModel.find()
+        .sort({date: -1})
+        .distinct('sensor')
         .populate({path:'sensor', populate: {
             path: 'type'
         }})
