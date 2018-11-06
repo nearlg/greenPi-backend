@@ -4,8 +4,10 @@ import * as measureValidator from "../validation/measure";
 import * as sensorValidator from "../validation/sensor";
 import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
 import { IMeasure } from "../models/interface/measure";
+import { SocketIOService } from "../services/socket-io-service";
 
-export function routes(server: restify.Server, mainPath: string = ''): void {
+export function routes(server: restify.Server, mainPath: string = '',
+    socketIOService: SocketIOService): void {
 
     const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
@@ -69,6 +71,10 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
     server.post(mainPath, (req, res, next)=>{
         measureValidator.validate(req.body)
         .then(measure => Middleware.addMeasure(measure))
+        .then(measure => {
+            socketIOService.emitLastMeasure(measure);
+            return measure;
+        })
         .then(measure => handleJsonData(measure, res, next, 201))
         .catch(err => handleErrors(err, next));
     });
