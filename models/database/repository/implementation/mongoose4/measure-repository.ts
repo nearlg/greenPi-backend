@@ -28,6 +28,25 @@ const MeasureModel = mongoose.model<IMeasureModel>('Measure', measureSchema);
 
 export class MeasureRepository implements IMeasureRepository {
 
+    findLastsBySensorIds(sensorIds: string[], gte?: Date, lte?: Date): Promise<IMeasure[]> {
+        const measures = sensorIds.map(sensorId => this.findLastBySensorId(sensorId, gte, lte));
+        return Promise.all(measures);
+    }
+
+    findLastBySensorId(sensorId: string, gte?: Date, lte?: Date): Promise<null | IMeasure> {
+        const searchingObject = getSearchingObject(gte, lte);
+        searchingObject['sensor'] = sensorId;
+        return MeasureModel.find(searchingObject)
+        .sort({date: -1})
+        .limit(1)
+        .populate({path:'sensor', populate: {
+            path: 'type'
+        }})
+        .then(doc => Array.isArray(doc)? doc[0] : doc)
+        .then(toObject)
+        .then(normalizeFiledNames);
+    }
+
     findAllByTypeIds(sensorTypeIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IMeasure[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['sensor.type'] = { $in: sensorTypeIds };
@@ -63,6 +82,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(toObject)
         .then(normalizeFiledNames);
     }
+
     findAllBySensors(sensors: ISensor[], sortBy?: string, gte?: Date, lte?: Date): Promise<IMeasure[]> {
         let sensorIds: string[] = sensors.map(sensor => sensor.id);
         return this.findAllBySensorIds(sensorIds, sortBy, gte, lte);
@@ -79,6 +99,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(toObject)
         .then(normalizeFiledNames);
     }
+
     findAllBySensor(sensor: ISensor, sortBy?: string, gte?: Date, lte?: Date): Promise<null|IMeasure[]> {
         return this.findAllBySensorId(sensor.id, sortBy, gte, lte);
     }
@@ -101,7 +122,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeFiledNames);
     }
 
-    updateById(id: string, document: IMeasure): Promise<IMeasure>{
+    updateById(id: string, document: IMeasure): Promise<IMeasure> {
         return MeasureModel.findByIdAndUpdate(id, document)
         .populate({path:'sensor', populate: {
             path: 'type'

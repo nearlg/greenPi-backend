@@ -28,6 +28,23 @@ const PumpHistoricalModel = mongoose.model<IPumpHistoricalModel>('PumpHistorical
 
 export class PumpHistoricalRepository implements IPumpHistoricalRepository {
 
+    findLastsByPumpIds(pumpIds: string[], gte?: Date, lte?: Date): Promise<IPumpHistoricalModel[]> {
+        const pumpHistoricals = pumpIds.map(pumpId => this.findLastByPumpId(pumpId, gte, lte));
+        return Promise.all(pumpHistoricals);
+    }
+
+    findLastByPumpId(pumpId: string, gte?: Date, lte?: Date): Promise<null | IPumpHistoricalModel> {
+        const searchingObject = getSearchingObject(gte, lte);
+        searchingObject['pump'] = pumpId;
+        return PumpHistoricalModel.find(searchingObject)
+        .sort({date: -1})
+        .limit(1)
+        .populate('pump')
+        .then(doc => Array.isArray(doc)? doc[0] : doc)
+        .then(toObject)
+        .then(normalizeFiledNames);
+    }
+
     findAllByPumpIds(pumpIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorical[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['pump'] = { $in: pumpIds };
@@ -37,10 +54,12 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(toObject)
         .then(normalizeFiledNames);
     }
+
     findAllByPumps(pumps: IPump[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorical[]> {
         let pumpIds: string[] = pumps.map(pump => pump.id);
         return this.findAllByPumpIds(pumpIds, sortBy, gte, lte);
     }
+
     findAllByPumpId(pumpId: string, sortBy: string = 'date', gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['pump'] = pumpId;
@@ -50,6 +69,7 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(toObject)
         .then(normalizeFiledNames);
     }
+
     findAllByPump(pump: IPump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]> {
         return this.findAllByPumpId(pump.id, sortBy, gte, lte);
     }
@@ -70,7 +90,7 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(normalizeFiledNames);
     }
 
-    updateById(id: string, document: IPumpHistorical): Promise<IPumpHistorical>{
+    updateById(id: string, document: IPumpHistorical): Promise<IPumpHistorical> {
         return PumpHistoricalModel.findByIdAndUpdate(id, document)
         .populate('pump')
         .exec();

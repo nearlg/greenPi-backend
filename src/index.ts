@@ -44,7 +44,7 @@ let apiVersion = Config.Server.VERSION.split('.');
 let apiRoute = '/api/v' + apiVersion[0];
 MeasuresRoutes.routes(server, apiRoute + '/measures', socketIOService);
 PumpsRoutes.routes(server, apiRoute + '/pumps');
-PumpsHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals');
+PumpsHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals', socketIOService);
 EnvironmentsRoutes.routes(server, apiRoute + '/environments');
 SensorsRoutes.routes(server, apiRoute + '/sensors');
 SensorTypesRoutes.routes(server, apiRoute + '/sensor-types');
