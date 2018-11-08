@@ -72,7 +72,7 @@ export class SocketIOService {
     }
 
     private listenLastPumpHistoricals() {
-        const eventName = 'last-pump-historicals';
+        const eventName = 'last-historicals';
         // Create the namespace
         const namespace = this.io.of(NamespaceNames.LastPumpHistoricals);
         // Listen any new connection for that namespace
@@ -119,7 +119,7 @@ export class SocketIOService {
         if (!this.io) {
             return;
         }
-        const eventName = 'last-pump-historicals';
+        const eventName = 'last-historicals';
         const namespace = this.io.of(NamespaceNames.LastPumpHistoricals);
         this.lastPumpHistoricals$ = new Subscriber(
             o => {

@@ -1,7 +1,6 @@
 import { IRepository } from "./repository";
 import { IPumpHistorical } from "../../../interface/pump-historical";
 import { IPump } from "../../../interface/pump";
-import { IEnvironment } from "../../../interface/environment";
 
 export interface IPumpHistoricalRepository extends IRepository<IPumpHistorical> {
 
