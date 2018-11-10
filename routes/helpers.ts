@@ -21,8 +21,9 @@ export function checkQuery(query: string[], querySended: object)
     return element === undefined? Promise.resolve() : Promise.reject(error);
 }
 
-export function handleJsonData(data: any, res: Response, next: Next, status?: number): void {
+export function handleJsonData<T>(data: T, res: Response, next: Next, status?: number): Promise<T> {
     dataHandler.handleJson(data, res, next, status);
+    return Promise.resolve(data);
 }
 
 export function handleErrors(err: Error, next: Next): void {

@@ -4,8 +4,10 @@ import * as pumpHistoricalValidator from "../validation/pump-historical";
 import * as pumpValidator from "../validation/pump";
 import { handleJsonData, handleErrors, checkQuery } from "./helpers";
 import { IPumpHistorical } from "../models/interface/pump-historical";
+import { SocketIOService } from "../services/socket-io-service";
 
-export function routes(server: restify.Server, mainPath: string = ''): void {
+export function routes(server: restify.Server, mainPath: string = '',
+sIOService: SocketIOService): void {
 
     const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
@@ -67,9 +69,14 @@ export function routes(server: restify.Server, mainPath: string = ''): void {
     });
 
     server.post(mainPath, (req, res, next) => {
+        if (!req.body.date) {
+            req.body.date = new Date();
+        }
         pumpHistoricalValidator.validate(req.body)
         .then(pumpHistorical => Middleware.addPumpHistorical(pumpHistorical))
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next, 201))
+        .then(pumpHistorical => sIOService.pumpsSIOService
+            .emitLastPumpHistorical(pumpHistorical))
         .catch(err => handleErrors(err, next));
     });
 

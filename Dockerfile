@@ -16,7 +16,6 @@ ENV DATABASE_URI="mongodb://mongo/greenpi" \
     SERVER_NAME="greenpi-backend"
 
 RUN npm install && \
-    npm install typescript -g && \
     npm run compile
 
 CMD node src/index.js

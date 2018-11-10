@@ -29,6 +29,16 @@ export class EnvironmentRepository implements IEnvironmentRepository {
     create(document: IEnvironment): Promise<IEnvironment> {
         return EnvironmentModel.create(document)
         .then(rejectIfNull('Environment not found'))
+        .then((o: IEnvironmentModel) => EnvironmentModel.populate(o, {
+            path: 'pumps'}))
+        .then((o: IEnvironmentModel) =>
+            EnvironmentModel.populate(o, {
+                path: 'sensors',
+                populate: {
+                    path: 'type'
+                }
+            })
+        )
         .then(toObject)
         .then(normalizeFiledNames);
     }

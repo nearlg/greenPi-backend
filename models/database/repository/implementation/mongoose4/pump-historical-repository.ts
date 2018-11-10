@@ -28,6 +28,30 @@ const PumpHistoricalModel = mongoose.model<IPumpHistoricalModel>('PumpHistorical
 
 export class PumpHistoricalRepository implements IPumpHistoricalRepository {
 
+    findLastsByPumpIds(pumpIds: string[]): Promise<IPumpHistoricalModel[]> {
+        // If it can not find a measure,
+        // it will be undefined in the 'measures' array
+        const pumpHistoricals = pumpIds.map(pumpId =>
+            this.findLastByPumpId(pumpId)
+            .catch(error => undefined)
+        );
+        // Remove all the undefined elements from the array
+        return Promise.all(pumpHistoricals)
+        .then(p => p.filter(p => p != undefined));
+    }
+
+    findLastByPumpId(pumpId: string): Promise<null | IPumpHistoricalModel> {
+        const searchingObject = { pump: pumpId };
+        return PumpHistoricalModel.find(searchingObject)
+        .sort({date: -1})
+        .limit(1)
+        .populate('pump')
+        .then(rejectIfNull('Measure not found'))
+        .then(toObject)
+        .then(normalizeFiledNames)
+        .then(doc => doc[0]);
+    }
+
     findAllByPumpIds(pumpIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorical[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['pump'] = { $in: pumpIds };
@@ -37,10 +61,12 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(toObject)
         .then(normalizeFiledNames);
     }
+
     findAllByPumps(pumps: IPump[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorical[]> {
         let pumpIds: string[] = pumps.map(pump => pump.id);
         return this.findAllByPumpIds(pumpIds, sortBy, gte, lte);
     }
+
     findAllByPumpId(pumpId: string, sortBy: string = 'date', gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['pump'] = pumpId;
@@ -50,13 +76,20 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(toObject)
         .then(normalizeFiledNames);
     }
+
     findAllByPump(pump: IPump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]> {
         return this.findAllByPumpId(pump.id, sortBy, gte, lte);
     }
 
     create(document: IPumpHistorical): Promise<IPumpHistorical> {
         return PumpHistoricalModel.create(document)
+        .then(pumpHistorical => PumpHistoricalModel.populate(pumpHistorical, {
+            path: 'pump'
+        }))
         .then(rejectIfNull('Pump historical not found'))
+        .then((o: IPumpHistoricalModel) => PumpHistoricalModel.populate(o, {
+            path: 'pump'
+        }))
         .then(toObject)
         .then(normalizeFiledNames);
     }
@@ -70,7 +103,7 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(normalizeFiledNames);
     }
 
-    updateById(id: string, document: IPumpHistorical): Promise<IPumpHistorical>{
+    updateById(id: string, document: IPumpHistorical): Promise<IPumpHistorical> {
         return PumpHistoricalModel.findByIdAndUpdate(id, document)
         .populate('pump')
         .exec();

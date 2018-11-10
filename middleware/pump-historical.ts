@@ -2,6 +2,14 @@ import { IPumpHistorical } from "../models/interface/pump-historical";
 import { pumpHistoricalRepository } from "../models/database/repository/implementation/mongoose4/pump-historical-repository"
 import { environmentRepository } from "../models/database/repository/implementation/mongoose4/environment-repository"
 import { IPump } from "../models/interface/pump";
+import { pumpRepository } from "../models/database/repository/implementation/mongoose4/pump-repository";
+
+function validateDependencies(pumpHistorical: IPumpHistorical): Promise<IPumpHistorical> {
+    const pumpId: string = (<IPump>pumpHistorical.pump).id ||
+        <string>pumpHistorical.pump;
+    return pumpRepository.findById(pumpId)
+    .then(() => pumpHistorical);
+}
 
 export function fetchByEnvironmentId(environmentId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]> {
     return environmentRepository.findById(environmentId)
@@ -9,23 +17,28 @@ export function fetchByEnvironmentId(environmentId: string, sortBy?: string, gte
 }
 
 export function fetchByPumpId(pumpId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]> {
-    return pumpHistoricalRepository.findAllByPumpId(pumpId, sortBy, gte, lte);
+    return pumpRepository.findById(pumpId)
+    .then(() => pumpHistoricalRepository.findAllByPumpId(pumpId, sortBy, gte, lte));
 }
 
 export function fetchByPump(pump: IPump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]> {
-    return pumpHistoricalRepository.findAllByPump(pump, sortBy, gte, lte);
+    return pumpRepository.findById(pump.id)
+    .then(() => pumpHistoricalRepository.findAllByPump(pump, sortBy, gte, lte));
 }
 
 export function addPumpHistorical(pumpHistorical: IPumpHistorical): Promise<IPumpHistorical> {
-    return pumpHistoricalRepository.create(pumpHistorical);
+    return validateDependencies(pumpHistorical)
+    .then(() => pumpHistoricalRepository.create(pumpHistorical));
 }
 
 export function updatePumpHistorical(pumpHistorical: IPumpHistorical): Promise<IPumpHistorical> {
-    return pumpHistoricalRepository.update(pumpHistorical);
+    return validateDependencies(pumpHistorical)
+    .then(() => pumpHistoricalRepository.update(pumpHistorical));
 }
 
 export function updatePumpHistoricalById(id: string, pumpHistorical: IPumpHistorical): Promise<IPumpHistorical> {
-    return pumpHistoricalRepository.updateById(id, pumpHistorical);
+    return validateDependencies(pumpHistorical)
+    .then(() => pumpHistoricalRepository.updateById(id, pumpHistorical));
 }
 
 export function deletePumpHistorical(pumpHistorical: IPumpHistorical): Promise<void> {
