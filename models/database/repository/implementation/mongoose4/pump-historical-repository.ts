@@ -28,21 +28,28 @@ const PumpHistoricalModel = mongoose.model<IPumpHistoricalModel>('PumpHistorical
 
 export class PumpHistoricalRepository implements IPumpHistoricalRepository {
 
-    findLastsByPumpIds(pumpIds: string[], gte?: Date, lte?: Date): Promise<IPumpHistoricalModel[]> {
-        const pumpHistoricals = pumpIds.map(pumpId => this.findLastByPumpId(pumpId, gte, lte));
-        return Promise.all(pumpHistoricals);
+    findLastsByPumpIds(pumpIds: string[]): Promise<IPumpHistoricalModel[]> {
+        // If it can not find a measure,
+        // it will be undefined in the 'measures' array
+        const pumpHistoricals = pumpIds.map(pumpId =>
+            this.findLastByPumpId(pumpId)
+            .catch(error => undefined)
+        );
+        // Remove all the undefined elements from the array
+        return Promise.all(pumpHistoricals)
+        .then(p => p.filter(p => p != undefined));
     }
 
-    findLastByPumpId(pumpId: string, gte?: Date, lte?: Date): Promise<null | IPumpHistoricalModel> {
-        const searchingObject = getSearchingObject(gte, lte);
-        searchingObject['pump'] = pumpId;
+    findLastByPumpId(pumpId: string): Promise<null | IPumpHistoricalModel> {
+        const searchingObject = { pump: pumpId };
         return PumpHistoricalModel.find(searchingObject)
         .sort({date: -1})
         .limit(1)
         .populate('pump')
-        .then(doc => Array.isArray(doc)? doc[0] : doc)
+        .then(rejectIfNull('Measure not found'))
         .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeFiledNames)
+        .then(doc => doc[0]);
     }
 
     findAllByPumpIds(pumpIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorical[]> {
@@ -76,6 +83,9 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
 
     create(document: IPumpHistorical): Promise<IPumpHistorical> {
         return PumpHistoricalModel.create(document)
+        .then(pumpHistorical => PumpHistoricalModel.populate(pumpHistorical, {
+            path: 'pump'
+        }))
         .then(rejectIfNull('Pump historical not found'))
         .then(toObject)
         .then(normalizeFiledNames);

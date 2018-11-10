@@ -4,8 +4,8 @@ import { ISensor } from "../../../interface/sensor";
 
 export interface IMeasureRepository extends IRepository<IMeasure> {
 
-    findLastsBySensorIds(sensorIds: string[], gte?: Date, lte?: Date): Promise<IMeasure[]>;
-    findLastBySensorId(sensorId: string, gte?: Date, lte?: Date): Promise<null | IMeasure>;
+    findLastsBySensorIds(sensorIds: string[]): Promise<IMeasure[]>;
+    findLastBySensorId(sensorId: string): Promise<null | IMeasure>;
 
     findAllByTypeIds(sensorTypeIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<null | IMeasure[]>;
     findAllByTypeId(sensorTypeId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IMeasure[]>;

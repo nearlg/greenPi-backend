@@ -28,23 +28,30 @@ const MeasureModel = mongoose.model<IMeasureModel>('Measure', measureSchema);
 
 export class MeasureRepository implements IMeasureRepository {
 
-    findLastsBySensorIds(sensorIds: string[], gte?: Date, lte?: Date): Promise<IMeasure[]> {
-        const measures = sensorIds.map(sensorId => this.findLastBySensorId(sensorId, gte, lte));
-        return Promise.all(measures);
+    findLastsBySensorIds(sensorIds: string[]): Promise<IMeasure[]> {
+        // If it can not find a measure,
+        // it will be undefined in the 'measures' array
+        const measures = sensorIds.map(sensorId =>
+            this.findLastBySensorId(sensorId)
+            .catch(error => undefined)
+        );
+        // Remove all the undefined elements from the array
+        return Promise.all(measures)
+        .then(measures => measures.filter(m => m != undefined));
     }
 
-    findLastBySensorId(sensorId: string, gte?: Date, lte?: Date): Promise<null | IMeasure> {
-        const searchingObject = getSearchingObject(gte, lte);
-        searchingObject['sensor'] = sensorId;
+    findLastBySensorId(sensorId: string): Promise<null | IMeasure> {
+        const searchingObject = { sensor: sensorId };
         return MeasureModel.find(searchingObject)
         .sort({date: -1})
         .limit(1)
         .populate({path:'sensor', populate: {
             path: 'type'
         }})
-        .then(doc => Array.isArray(doc)? doc[0] : doc)
+        .then(rejectIfNull('Measure not found'))
         .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeFiledNames)
+        .then(doc => doc[0]);
     }
 
     findAllByTypeIds(sensorTypeIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IMeasure[]> {
@@ -106,6 +113,12 @@ export class MeasureRepository implements IMeasureRepository {
 
     create(document: IMeasure): Promise<IMeasure> {
         return MeasureModel.create(document)
+        .then(measure => MeasureModel.populate(measure, {
+            path:'sensor',
+            populate: {
+                path: 'type'
+            }
+        }))
         .then(rejectIfNull('Measure not found'))
         .then(toObject)
         .then(normalizeFiledNames);
