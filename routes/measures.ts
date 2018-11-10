@@ -7,7 +7,7 @@ import { IMeasure } from "../models/interface/measure";
 import { SocketIOService } from "../services/socket-io-service";
 
 export function routes(server: restify.Server, mainPath: string = '',
-socketIOService: SocketIOService): void {
+sIOService: SocketIOService): void {
 
     const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
@@ -69,10 +69,13 @@ socketIOService: SocketIOService): void {
     });
 
     server.post(mainPath, (req, res, next) => {
+        if (!req.body.date) {
+            req.body.date = new Date();
+        }
         measureValidator.validate(req.body)
         .then(measure => Middleware.addMeasure(measure))
         .then(measure => handleJsonData<IMeasure>(measure, res, next, 201))
-        .then(measure => socketIOService.emitLastMeasure(measure))
+        .then(measure => sIOService.sensorsSIOService.emitLastMeasure(measure))
         .catch(err => handleErrors(err, next));
     });
 
