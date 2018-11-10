@@ -4,8 +4,8 @@ import { IPump } from "../../../interface/pump";
 
 export interface IPumpHistoricalRepository extends IRepository<IPumpHistorical> {
 
-    findLastsByPumpIds(pumpIds: string[], gte?: Date, lte?: Date): Promise<IPumpHistorical[]>;
-    findLastByPumpId(pumpId: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical>;
+    findLastsByPumpIds(pumpIds: string[]): Promise<IPumpHistorical[]>;
+    findLastByPumpId(pumpId: string): Promise<null | IPumpHistorical>;
 
     findAllByPumpId(pumpId: string, sortBy: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]>;
     findAllByPump(pump: IPump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]>;
