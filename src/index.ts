@@ -1,4 +1,4 @@
-import * as Config from "../config/config";
+import * as Config from "../config";
 import * as restify from "restify";
 
 import mongoose = require("mongoose");
