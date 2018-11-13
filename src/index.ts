@@ -9,6 +9,7 @@ import * as SensorTypesRoutes from "../routes/sensor-types";
 import * as EnvironmentsRoutes from "../routes/environments";
 import * as PumpsRoutes from "../routes/pumps";
 import * as PumpsHistoricalsRoutes from "../routes/pumps-historicals";
+import * as UsersRoutes from "../routes/users";
 import { addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
@@ -48,6 +49,7 @@ PumpsHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals', socketIOSe
 EnvironmentsRoutes.routes(server, apiRoute + '/environments');
 SensorsRoutes.routes(server, apiRoute + '/sensors');
 SensorTypesRoutes.routes(server, apiRoute + '/sensor-types');
+UsersRoutes.routes(server, apiRoute + '/users');
 
 server.listen(Config.Server.PORT, function () {
   console.log('%s listening at %s', server.name, server.url);
