@@ -1,4 +1,4 @@
-import * as Config from "../config/config";
+import * as Config from "../config";
 import * as restify from "restify";
 
 import mongoose = require("mongoose");
@@ -9,9 +9,11 @@ import * as SensorTypesRoutes from "../routes/sensor-types";
 import * as EnvironmentsRoutes from "../routes/environments";
 import * as PumpsRoutes from "../routes/pumps";
 import * as PumpsHistoricalsRoutes from "../routes/pumps-historicals";
+import * as UsersRoutes from "../routes/users";
 import { addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
+import { errorHandler as AuthErrorHandler } from "../routes/helpers/auth-error-handler";
 import { SocketIOService } from "../services/socket-io-service";
 
 
@@ -29,6 +31,7 @@ const server = restify.createServer({
 // Setup error handlers
 addErrorHandler(DataErrorHandler);
 addErrorHandler(MongooseErrorHandler);
+addErrorHandler(AuthErrorHandler);
 
 // SocketIO Service setup and listening
 const socketIOService = new SocketIOService(server.server);
@@ -48,6 +51,7 @@ PumpsHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals', socketIOSe
 EnvironmentsRoutes.routes(server, apiRoute + '/environments');
 SensorsRoutes.routes(server, apiRoute + '/sensors');
 SensorTypesRoutes.routes(server, apiRoute + '/sensor-types');
+UsersRoutes.routes(server, apiRoute + '/users');
 
 server.listen(Config.Server.PORT, function () {
   console.log('%s listening at %s', server.name, server.url);
