@@ -4,7 +4,6 @@ import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
 import { IUser } from '../../../../interface/user';
 import { IUserRepository } from '../../shared/user-repository';
 import { Security } from '../../../../../config';
-import { NotExtendedError } from 'restify-errors';
 
 export interface IUserModel extends IUser, mongoose.Document {
 }
@@ -23,19 +22,16 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        select: false,
         required: [true, 'A user must have a password']
     },
     facebook: {
         id: {
-            type: String,
-            required: [true, 'A Facebook account must have an id']
+            type: String
         }
     },
     google: {
         id: {
-            type: String,
-            required: [true, 'A Google account must have an id']
+            type: String
         }
     }
 });
@@ -46,12 +42,11 @@ userSchema.pre('save', function (next) {
     if (!user.isModified('password')) {
         return next();
     }
-    bcrypt.hash(Security.BCRYPT_SALT_ROUNDS, user.password)
+    bcrypt.hash(user.password, Security.BCRYPT_SALT_ROUNDS)
     .then(hash => {
         user.password = hash
-        return user;
+        return next();
     })
-    .then(user => next())
     .catch(err => next(err));
 });
 
@@ -68,15 +63,11 @@ export class UserRepository implements IUserRepository {
     }
 
     update(document: IUser): Promise<IUser> {
-        return UserModel.findOneAndUpdate({email: document.email}, document)
-        .exec()
-        .then(rejectIfNull('User not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        return this.updateByEmail(document.email, document);
     }
 
-    updateByEmail(email: string, document: IUser): Promise<IUser>{
-        return UserModel.findOneAndUpdate({email: document.email}, document)
+    updateByEmail(email: string, document: IUser): Promise<IUser> {
+        return UserModel.findOneAndUpdate({email: email}, document)
         .exec()
         .then(rejectIfNull('User not found'))
         .then(toObject)
