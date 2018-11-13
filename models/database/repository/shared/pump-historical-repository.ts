@@ -4,6 +4,10 @@ import { IPump } from "../../../interface/pump";
 
 export interface IPumpHistoricalRepository extends IRepository<IPumpHistorical> {
 
+    findById(id: string): Promise<IPumpHistorical | null>;
+    removeById(id: string): Promise<void>;
+    updateById(id: string, document: IPumpHistorical): Promise<IPumpHistorical>;
+
     findLastsByPumpIds(pumpIds: string[]): Promise<IPumpHistorical[]>;
     findLastByPumpId(pumpId: string): Promise<null | IPumpHistorical>;
 
