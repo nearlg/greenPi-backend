@@ -1,6 +1,6 @@
 import mongoose = require('mongoose');
 import bcrypt = require('bcrypt');
-import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
+import { rejectIfNull, toObject, normalizeFiledNames } from './helpers';
 import { IUser } from '../../../../interface/user';
 import { IUserRepository } from '../../shared/user-repository';
 import { Security } from '../../../../../config';
@@ -92,7 +92,8 @@ export class UserRepository implements IUserRepository {
     }
 
     findByEmail(email: string): Promise<null | IUser> {
-        return UserModel.findOne(email).exec()
+        return UserModel.findOne({ email: email })
+        .exec()
         .then(rejectIfNull('User not found'))
         .then(toObject)
         .then(normalizeFiledNames);
