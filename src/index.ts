@@ -13,6 +13,7 @@ import * as UsersRoutes from "../routes/users";
 import { addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
+import { errorHandler as AuthErrorHandler } from "../routes/helpers/auth-error-handler";
 import { SocketIOService } from "../services/socket-io-service";
 
 
@@ -30,6 +31,7 @@ const server = restify.createServer({
 // Setup error handlers
 addErrorHandler(DataErrorHandler);
 addErrorHandler(MongooseErrorHandler);
+addErrorHandler(AuthErrorHandler);
 
 // SocketIO Service setup and listening
 const socketIOService = new SocketIOService(server.server);
