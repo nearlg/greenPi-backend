@@ -46,8 +46,25 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
     });
 
     server.get(mainPath + '/:email', (req, res, next)=>{
-        Middleware.getUserByEmail(req.params.id)
+        Middleware.getUserByEmail(req.params.email)
         .then(user => handleJsonData(user, res, next))
+        .catch(err => handleErrors(err, next));
+    });
+
+    server.post(mainPath + '/sign-up', (req, res, next) => {
+        userValidator.validate(req.body, true)
+        .then(user => Middleware.addUser(user))
+        .then(user => handleJsonData(user, res, next, 201))
+        .catch(err => handleErrors(err, next));
+    });
+
+    server.post(mainPath + '/sign-in', (req, res, next) => {
+        const email: string = req.body.email;
+        const password: string = req.body.password;
+        userValidator.validateEmail(email)
+        .then(() => userValidator.validatePassword(password))
+        .then(() => Middleware.signIn(email, password))
+        .then(token => handleJsonData(token, res, next))
         .catch(err => handleErrors(err, next));
     });
 }
