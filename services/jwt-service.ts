@@ -27,5 +27,5 @@ function verifyToken(token: string) {
 
 export {
     createToken,
-    decodeToken
+    verifyToken
 };
