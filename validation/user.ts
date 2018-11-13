@@ -1,6 +1,6 @@
 import { IUser } from "../models/interface/user";
 import { NameRegex, EmailRegex,  PasswordRegex, FacebookIdRegex,
-    GoogleIdRegex, IdRegex}
+    GoogleIdRegex}
     from "./rules/user";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { FacebookAccount } from "../models/interface/facebook-account";
