@@ -25,6 +25,10 @@ Promise<null | FacebookAccount> {
     if (!facebookAccount) {
         return Promise.resolve(null);
     }
+    if (!facebookAccount.id) {
+        const err: Error = createError('A Facebook account must have an id');
+        return Promise.reject(err);
+    }
     return regexValidation(facebookAccount.id, FacebookIdRegex,
         'The Facebook Id must be a valid Id')
     .then(() => facebookAccount);
@@ -34,6 +38,10 @@ export function validateGoogle(googleAccount?: GoogleAccount):
 Promise<null | GoogleAccount> {
     if (!googleAccount) {
         return Promise.resolve(null);
+    }
+    if (!googleAccount.id) {
+        const err: Error = createError('A Google account must have an id');
+        return Promise.reject(err);
     }
     return regexValidation(googleAccount.id, GoogleIdRegex,
         'The Google Id must be a valid Id')
