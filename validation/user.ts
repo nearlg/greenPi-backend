@@ -3,7 +3,7 @@ import { NameRegex, EmailRegex,  PasswordRegex, FacebookIdRegex,
     GoogleIdRegex, IdRegex}
     from "./rules/user";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { FacebookAccount } from "../models/interface/facebook-account.";
+import { FacebookAccount } from "../models/interface/facebook-account";
 import { GoogleAccount } from "../models/interface/google-account";
 
 export function validateName(name: string): Promise<string>  {
@@ -40,17 +40,8 @@ Promise<null | GoogleAccount> {
     .then(() => googleAccount);
 }
 
-export function validateId(id: string): Promise<string> {
-    if(id && IdRegex.test(id)) {
-        return Promise.resolve(id);
-    }
-    let err: Error = createError('Invalid user id');
-    return Promise.reject(err);
-}
-
 export function validate(user: IUser,
-    checkPassword: boolean = false,
-    checkId: boolean = false):
+    checkPassword: boolean = false):
 Promise<IUser> {
     return rejectIfNull(user, 'User is null or undefined')
     .then(() => validateName(user.name))
@@ -59,7 +50,6 @@ Promise<IUser> {
     Promise.resolve(null))
     .then(() => validateFacebook(user.facebook))
     .then(() => validateGoogle(user.google))
-    .then(() => checkId? validateId(user.id) : Promise.resolve(null))
     .then(() => Promise.resolve(user))
     .catch(err => {
         err.message = 'Invalid user: ' + err.message;
