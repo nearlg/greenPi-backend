@@ -46,11 +46,11 @@ export function validateId(id: string): Promise<string> {
 export function validate(environment: IEnvironment, checkId: boolean = false): Promise<IEnvironment> {
     return rejectIfNull(environment, 'Environment is null or undefined')
     .then(() => validateName(environment.name))
-    .then(()=> validateDescription(environment.description))
-    .then(()=> validateSensors(environment.sensors))
-    .then(()=> validatePumps(environment.pumps))
+    .then(() => validateDescription(environment.description))
+    .then(() => validateSensors(environment.sensors))
+    .then(() => validatePumps(environment.pumps))
     .then(() => checkId? validateId(environment.id) : Promise.resolve(null))
-    .then(()=> Promise.resolve(environment))
+    .then(() => Promise.resolve(environment))
     .catch(err => {
         err.message = 'Invalid environment: ' + err.message;
         return Promise.reject(err);
