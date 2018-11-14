@@ -1,43 +1,67 @@
 import { Rule } from "./rule";
 import { RoleName } from "./role-name";
 import * as Config from "../../config";
+import { HttpMethod } from "./http-method";
 
 class Authz {
 
-    private rules: Rule[];
+    private rules: Map<string, Rule[]>;
 
     constructor() {
         this.setRules();
     }
 
-    isAuthorized(path: string, roleName: RoleName): Promise<boolean> {
+    isAuthorized(roleName: RoleName, path: string,
+    httpMethod: HttpMethod | string): Promise<boolean> {
         /**
          * If the path does not exist in 'rules', the role-name is admin
          */
-        const rule = this.getRule(path);
-        const roleNames = rule ? rule.RoleNames : [ RoleName.Admin ];
-        const roleNameFound = roleNames.find(r => r === roleName);
-        const isAuthorized = roleNameFound != undefined;
+        const apiRoute = this.getApiRoute();
+        path = path.replace(apiRoute,'');
+        const roleNames = this.getRoleNamesAuthorized(path, httpMethod);
+
+        const roleNameFounded = roleNames.find(r => r === roleName );
+        const isAuthorized = roleNameFounded != undefined;
         return Promise.resolve(isAuthorized);
     }
 
-    private getRule(path: string): Rule {
-        const rule = this.rules.find(rule => rule.path === path);
-        return rule;
+    private getRoleNamesAuthorized(path: string, httpMethod: HttpMethod | string):
+    RoleName[] {
+        const roleNamesByDefault = [ RoleName.Admin ];
+        // Get the rules by key which is the path
+        const rules = this.rules.get(path);
+        // If there are not rules, it returns the roles 'roleNamesByDefault'
+        if (!rules || rules.length == 0) {
+            return roleNamesByDefault;
+        }
+        const ruleFounded = rules.find(r => r.httpMethod === httpMethod);
+        // If there are any rule founded, it returns the roles 'roleNamesByDefault'
+        // Otherwise, it returns all the role names
+        // of that method from that path
+        const roleNames = ruleFounded ? ruleFounded.roleNames :
+            roleNamesByDefault;
+        return roleNames;
     }
 
     private setRules() {
-        const apiRoute = this.getApiRoute();
-        this.rules = [
-            {
-                path: apiRoute + '/users/sign-up',
-                RoleNames: [ RoleName.NonRegistered ]
-            },
-            {
-                path: apiRoute + '/users/sign-in',
-                RoleNames: [ RoleName.NonRegistered ]
-            }
-        ];
+        this.rules = new Map([
+            ['/users/profile', [
+                {
+                    httpMethod: HttpMethod.Get,
+                    roleNames: [ RoleName.Admin, RoleName.Observer ]
+                },
+                {
+                    httpMethod: HttpMethod.Post,
+                    roleNames: [ RoleName.NonRegistered ]
+                }
+            ]],
+            ['/users/profile/sign-in', [
+                {
+                    httpMethod: HttpMethod.Post,
+                    roleNames: [ RoleName.NonRegistered ]
+                }
+            ]]
+        ]);
     }
 
     private getApiRoute() {

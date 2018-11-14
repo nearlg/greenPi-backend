@@ -19,11 +19,12 @@ function bearerIsValid(req: restify.Request): Promise<any> {
  */
 function userIsAuthorized(req: restify.Request)
 : Promise<void> {
+    const method = req.method;
     const path = req.getRoute().path.toString();
     // If there is not Bearer or Authorization
     if (!req.headers.authorization) {
         const roleName = RoleName.NonRegistered;
-        return authzService.isAuthorized(path, roleName)
+        return authzService.isAuthorized(roleName, path, method)
         .then(isAuthorized => {
             if(!isAuthorized) {
                 const err = new Error();
@@ -36,15 +37,14 @@ function userIsAuthorized(req: restify.Request)
     return bearerIsValid(req)
     .then(validToken => validToken.sub || validToken)
     .then(userRepository.findByEmail)
-    .then(user => authzService.isAuthorized(path, RoleName.Admin)//TODO: reemplace 'RoleName.Admin' by 'user.RoleName'
-        .then(isAuthorized => {
-            if(!isAuthorized) {
-                const err = new Error();
-                err.name = 'NotAuthorizedError';
-                return Promise.reject(err);
-            }
-        })
-    );
+    .then(user => authzService.isAuthorized(user.roleName, path, method))
+    .then(isAuthorized => {
+        if(!isAuthorized) {
+            const err = new Error();
+            err.name = 'NotAuthorizedError';
+            return Promise.reject(err);
+        }
+    });
 }
 
 export function isAuthorized(req: restify.Request,

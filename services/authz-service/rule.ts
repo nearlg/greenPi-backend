@@ -1,6 +1,7 @@
 import { RoleName } from "./role-name";
+import { HttpMethod } from "./http-method";
 
 export interface Rule {
-    path: string,
-    RoleNames: RoleName[]
+    httpMethod: HttpMethod,
+    roleNames: RoleName[]
 }
