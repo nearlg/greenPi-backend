@@ -4,6 +4,7 @@ import { rejectIfNull, toObject, normalizeFiledNames } from './helpers';
 import { IUser } from '../../../../interface/user';
 import { IUserRepository } from '../../shared/user-repository';
 import { Security } from '../../../../../config';
+import { RoleName } from '../../../../../services/authz-service/role-name';
 
 export interface IUserModel extends IUser, mongoose.Document {
 }
@@ -33,6 +34,11 @@ const userSchema = new mongoose.Schema({
         id: {
             type: String
         }
+    },
+    roleName: {
+        type: String,
+        default: RoleName.Observer,
+        required: [true, 'A user must have a rol name']
     }
 });
 
