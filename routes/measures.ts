@@ -5,7 +5,6 @@ import * as sensorValidator from "../validation/sensor";
 import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
 import { IMeasure } from "../models/interface/measure";
 import { SocketIOService } from "../services/socket-io-service";
-import { isAuthorized } from "../middleware/authorization";
 
 export function routes(server: restify.Server, mainPath: string = '',
 sIOService: SocketIOService): void {
@@ -55,7 +54,7 @@ sIOService: SocketIOService): void {
         });
     }
 
-    server.get(mainPath + '/', isAuthorized, (req, res, next) => {
+    server.get(mainPath + '/', (req, res, next) => {
         let queryResult: Promise<IMeasure[]> = null;
 
         if(req.query.byEnvironmentId){
@@ -69,7 +68,7 @@ sIOService: SocketIOService): void {
         .catch(err => handleErrors(err, next));
     });
 
-    server.post(mainPath, isAuthorized, (req, res, next) => {
+    server.post(mainPath, (req, res, next) => {
         if (!req.body.date) {
             req.body.date = new Date();
         }
@@ -80,40 +79,40 @@ sIOService: SocketIOService): void {
         .catch(err => handleErrors(err, next));
     });
 
-    server.patch(mainPath, isAuthorized, (req, res, next) => {
+    server.patch(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
         .then(measure => Middleware.updateMeasure(measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.patch(mainPath + '/:id', isAuthorized, (req, res, next) => {
+    server.patch(mainPath + '/:id', (req, res, next) => {
         measureValidator.validate(req.body)
         .then(measure => Middleware.updateMeasureById(req.params.id, measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.del(mainPath, isAuthorized, (req, res, next) => {
+    server.del(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
         .then(measure => Middleware.deleteMeasure(measure))
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.del(mainPath + '/:id', isAuthorized, (req, res, next) => {
+    server.del(mainPath + '/:id', (req, res, next) => {
         Middleware.deleteMeasureById(req.params.id)
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.get(mainPath, isAuthorized, (req, res, next) => {
+    server.get(mainPath, (req, res, next) => {
         Middleware.fetchMeasures()
         .then(measures => handleJsonData(measures, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.get(mainPath + '/:id', isAuthorized, (req, res, next) => {
+    server.get(mainPath + '/:id', (req, res, next) => {
         Middleware.getMeasureById(req.params.id)
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
