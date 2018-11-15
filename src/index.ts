@@ -3,18 +3,19 @@ import * as restify from "restify";
 
 import mongoose = require("mongoose");
 
-import * as MeasuresRoutes from "../routes/measures";
-import * as SensorsRoutes from "../routes/sensors";
-import * as SensorTypesRoutes from "../routes/sensor-types";
-import * as EnvironmentsRoutes from "../routes/environments";
-import * as PumpsRoutes from "../routes/pumps";
-import * as PumpsHistoricalsRoutes from "../routes/pumps-historicals";
-import * as UsersRoutes from "../routes/users";
+import * as MeasureRoutes from "../routes/measures";
+import * as SensorRoutes from "../routes/sensors";
+import * as SensorTypeRoutes from "../routes/sensor-types";
+import * as EnvironmentRoutes from "../routes/environments";
+import * as PumpRoutes from "../routes/pumps";
+import * as PumpHistoricalsRoutes from "../routes/pump-historicals";
+import * as UserRoutes from "../routes/users";
 import { addErrorHandler } from "../routes/helpers";
 import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
 import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
 import { errorHandler as AuthErrorHandler } from "../routes/helpers/auth-error-handler";
 import { SocketIOService } from "../services/socket-io-service";
+import { requestAuthz } from "../plugins/authorization";
 
 
 // Configure database
@@ -41,17 +42,18 @@ socketIOService.listen();
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
+server.use(requestAuthz);
 
 // Set routes
 let apiVersion = Config.Server.VERSION.split('.');
 let apiRoute = '/api/v' + apiVersion[0];
-MeasuresRoutes.routes(server, apiRoute + '/measures', socketIOService);
-PumpsRoutes.routes(server, apiRoute + '/pumps');
-PumpsHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals', socketIOService);
-EnvironmentsRoutes.routes(server, apiRoute + '/environments');
-SensorsRoutes.routes(server, apiRoute + '/sensors');
-SensorTypesRoutes.routes(server, apiRoute + '/sensor-types');
-UsersRoutes.routes(server, apiRoute + '/users');
+MeasureRoutes.routes(server, apiRoute + '/measures', socketIOService);
+PumpRoutes.routes(server, apiRoute + '/pumps');
+PumpHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals', socketIOService);
+EnvironmentRoutes.routes(server, apiRoute + '/environments');
+SensorRoutes.routes(server, apiRoute + '/sensors');
+SensorTypeRoutes.routes(server, apiRoute + '/sensor-types');
+UserRoutes.routes(server, apiRoute + '/users');
 
 server.listen(Config.Server.PORT, function () {
   console.log('%s listening at %s', server.name, server.url);

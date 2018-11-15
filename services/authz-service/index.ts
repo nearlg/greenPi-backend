@@ -2,6 +2,7 @@ import { Rule } from "./rule";
 import { RoleName } from "./role-name";
 import * as Config from "../../config";
 import { HttpMethod } from "./http-method";
+import { rulesData } from "./rules-data";
 
 class Authz {
 
@@ -44,24 +45,7 @@ class Authz {
     }
 
     private setRules() {
-        this.rules = new Map([
-            ['/users/profile', [
-                {
-                    httpMethod: HttpMethod.Get,
-                    roleNames: [ RoleName.Admin, RoleName.Observer ]
-                },
-                {
-                    httpMethod: HttpMethod.Post,
-                    roleNames: [ RoleName.NonRegistered ]
-                }
-            ]],
-            ['/users/profile/sign-in', [
-                {
-                    httpMethod: HttpMethod.Post,
-                    roleNames: [ RoleName.NonRegistered ]
-                }
-            ]]
-        ]);
+        this.rules = rulesData;
     }
 
     private getApiRoute() {

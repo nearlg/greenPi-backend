@@ -1,6 +1,7 @@
 import jwt = require('jsonwebtoken');
 import { IUser } from '../models/interface/user';
 import { Security } from '../config';
+import { Request } from 'restify';
 
 function createToken(user: IUser): string {
     const payload = {
@@ -12,15 +13,18 @@ function createToken(user: IUser): string {
     return jwt.sign(payload, Security.JWT_SECRET, options);
 }
 
-function verifyToken(token: string): Promise<any> {
+function verifyEncodedToken(encodedToken: string): Promise<any> {
     return new Promise((resolve, reject) => {
         try {
-            if(!token) {
+            if(!encodedToken) {
                 const error =  new Error();
                 error.name = 'UnauthorizedError';
                 return reject(error);
             }
-            const decodedToken = jwt.verify(token, Security.JWT_SECRET);
+            const decodedToken = jwt.verify(encodedToken, Security.JWT_SECRET);
+            if (!decodedToken['sub']) {
+                throw new Error();
+            }
             resolve(decodedToken);
         } catch (err) {
             const error: Error = new Error('Invalid token');
@@ -30,7 +34,13 @@ function verifyToken(token: string): Promise<any> {
     });
 }
 
+function verifyTokenFromRequest(req: Request): Promise<any> {
+    const encodedToken = req.headers.authorization ?
+        req.headers.authorization.split(' ')[1] : '';
+    return verifyEncodedToken(encodedToken);
+}
+
 export {
     createToken,
-    verifyToken
+    verifyTokenFromRequest
 };
