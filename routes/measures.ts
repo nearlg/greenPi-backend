@@ -1,5 +1,5 @@
 import * as restify from "restify";
-import * as Middleware from "../middleware/measure";
+import * as Controller from "../controllers/measure";
 import * as measureValidator from "../validation/measure";
 import * as sensorValidator from "../validation/sensor";
 import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
@@ -21,7 +21,7 @@ sIOService: SocketIOService): void {
             let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             let environmentId: string = req.query.byEnvironmentId;
-            return Middleware
+            return Controller
                 .fetchByEnvironmentId(environmentId, sortBy, gte, lte);
         });
     }
@@ -36,7 +36,7 @@ sIOService: SocketIOService): void {
             let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             let sensorId: string = req.query.bySensorId;
-            return Middleware.fetchBySensorId(sensorId, sortBy, gte, lte);
+            return Controller.fetchBySensorId(sensorId, sortBy, gte, lte);
         });
     }
 
@@ -50,7 +50,7 @@ sIOService: SocketIOService): void {
             let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             return sensorValidator.validate(req.query.sensor, true)
-            .then(sensor => Middleware.fetchBySensor(sensor, sortBy, gte, lte));
+            .then(sensor => Controller.fetchBySensor(sensor, sortBy, gte, lte));
         });
     }
 
@@ -73,7 +73,7 @@ sIOService: SocketIOService): void {
             req.body.date = new Date();
         }
         measureValidator.validate(req.body)
-        .then(measure => Middleware.addMeasure(measure))
+        .then(measure => Controller.addMeasure(measure))
         .then(measure => handleJsonData<IMeasure>(measure, res, next, 201))
         .then(measure => sIOService.sensorsSIOService.emitLastMeasure(measure))
         .catch(err => handleErrors(err, next));
@@ -81,39 +81,39 @@ sIOService: SocketIOService): void {
 
     server.patch(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
-        .then(measure => Middleware.updateMeasure(measure))
+        .then(measure => Controller.updateMeasure(measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath + '/:id', (req, res, next) => {
         measureValidator.validate(req.body)
-        .then(measure => Middleware.updateMeasureById(req.params.id, measure))
+        .then(measure => Controller.updateMeasureById(req.params.id, measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
-        .then(measure => Middleware.deleteMeasure(measure))
+        .then(measure => Controller.deleteMeasure(measure))
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:id', (req, res, next) => {
-        Middleware.deleteMeasureById(req.params.id)
+        Controller.deleteMeasureById(req.params.id)
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next) => {
-        Middleware.fetchMeasures()
+        Controller.fetchMeasures()
         .then(measures => handleJsonData(measures, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:id', (req, res, next) => {
-        Middleware.getMeasureById(req.params.id)
+        Controller.getMeasureById(req.params.id)
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });

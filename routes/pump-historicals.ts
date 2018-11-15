@@ -1,5 +1,5 @@
 import * as restify from "restify";
-import * as Middleware from "../middleware/pump-historical";
+import * as Controller from "../controllers/pump-historical";
 import * as pumpHistoricalValidator from "../validation/pump-historical";
 import * as pumpValidator from "../validation/pump";
 import { handleJsonData, handleErrors, checkQuery } from "./helpers";
@@ -21,7 +21,7 @@ sIOService: SocketIOService): void {
             let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             let environmentId: string = req.query.byEnvironmentId;
-            return Middleware
+            return Controller
                 .fetchByEnvironmentId(environmentId, sortBy, gte, lte);
         });
     }
@@ -36,7 +36,7 @@ sIOService: SocketIOService): void {
             let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             let pumpId: string = req.query.byPumpId;
-            return Middleware.fetchByPumpId(pumpId, sortBy, gte, lte);
+            return Controller.fetchByPumpId(pumpId, sortBy, gte, lte);
         });
     }
 
@@ -50,7 +50,7 @@ sIOService: SocketIOService): void {
             let lte = req.query.lte? new Date(req.query.lte) : null;
             let sortBy: string = req.query.sortBy;
             return pumpValidator.validate(req.query.pump, true)
-            .then(pump => Middleware.fetchByPump(pump, sortBy, gte, lte));
+            .then(pump => Controller.fetchByPump(pump, sortBy, gte, lte));
         });
     }
 
@@ -73,7 +73,7 @@ sIOService: SocketIOService): void {
             req.body.date = new Date();
         }
         pumpHistoricalValidator.validate(req.body)
-        .then(pumpHistorical => Middleware.addPumpHistorical(pumpHistorical))
+        .then(pumpHistorical => Controller.addPumpHistorical(pumpHistorical))
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next, 201))
         .then(pumpHistorical => sIOService.pumpsSIOService
             .emitLastPumpHistorical(pumpHistorical))
@@ -82,39 +82,39 @@ sIOService: SocketIOService): void {
 
     server.patch(mainPath, (req, res, next) => {
         pumpHistoricalValidator.validate(req.body, true)
-        .then(pumpHistorical => Middleware.updatePumpHistorical(pumpHistorical))
+        .then(pumpHistorical => Controller.updatePumpHistorical(pumpHistorical))
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath + '/:id', (req, res, next) => {
         pumpHistoricalValidator.validate(req.body)
-        .then(pumpHistorical => Middleware.updatePumpHistoricalById(req.params.id, pumpHistorical))
+        .then(pumpHistorical => Controller.updatePumpHistoricalById(req.params.id, pumpHistorical))
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next) => {
         pumpHistoricalValidator.validate(req.body, true)
-        .then(pumpHistorical => Middleware.deletePumpHistorical(pumpHistorical))
+        .then(pumpHistorical => Controller.deletePumpHistorical(pumpHistorical))
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:id', (req, res, next) => {
-        Middleware.deletePumpHistoricalById(req.params.id)
+        Controller.deletePumpHistoricalById(req.params.id)
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next) => {
-        Middleware.fetchPumpHistoricals()
+        Controller.fetchPumpHistoricals()
         .then(pumpHistoricals => handleJsonData(pumpHistoricals, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:id', (req, res, next) => {
-        Middleware.getPumpHistoricalById(req.params.id)
+        Controller.getPumpHistoricalById(req.params.id)
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });

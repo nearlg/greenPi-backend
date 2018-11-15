@@ -1,5 +1,5 @@
 import * as restify from "restify";
-import * as Middleware from "../middleware/user";
+import * as Controller from "../controllers/user";
 import * as userValidator from "../validation/user";
 import { handleJsonData, handleErrors } from "./helpers";
 import { userRepository } from "../models/database/repository/implementation/mongoose4/user-repository";
@@ -14,14 +14,14 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         const password: string = req.body.password;
         userValidator.validateEmail(email)
         .then(() => userValidator.validatePassword(password))
-        .then(() => Middleware.signIn(email, password))
+        .then(() => Controller.signIn(email, password))
         .then(token => handleJsonData(token, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.post(mainPath + '/profile', (req, res, next) => {
         userValidator.validate(req.body, true)
-        .then(user => Middleware.addUser(user))
+        .then(user => Controller.addUser(user))
         .then(user => handleJsonData(user, res, next, 201))
         .catch(err => handleErrors(err, next));
     });
@@ -56,46 +56,46 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
 
     server.post(mainPath, (req, res, next) => {
         userValidator.validate(req.body, true, true)
-        .then(user => Middleware.addUser(user))
+        .then(user => Controller.addUser(user))
         .then(user => handleJsonData(user, res, next, 201))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath, (req, res, next) => {
         userValidator.validate(req.body, true)
-        .then(user => Middleware.updateUser(user))
+        .then(user => Controller.updateUser(user))
         .then(user => handleJsonData(user, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath + '/:email', (req, res, next) => {
         userValidator.validate(req.body)
-        .then(user => Middleware.updateUserByEmail(req.params.email, user))
+        .then(user => Controller.updateUserByEmail(req.params.email, user))
         .then(user => handleJsonData(user, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next) => {
         userValidator.validate(req.body, true)
-        .then(user => Middleware.deleteUser(user))
+        .then(user => Controller.deleteUser(user))
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:email', (req, res, next) => {
-        Middleware.deleteUserByEmail(req.params.email)
+        Controller.deleteUserByEmail(req.params.email)
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next) => {
-        Middleware.fetchUsers()
+        Controller.fetchUsers()
         .then(users => handleJsonData(users, res, next))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:email', (req, res, next) => {
-        Middleware.getUserByEmail(req.params.email)
+        Controller.getUserByEmail(req.params.email)
         .then(user => handleJsonData(user, res, next))
         .catch(err => handleErrors(err, next));
     });
