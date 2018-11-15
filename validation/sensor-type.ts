@@ -40,10 +40,10 @@ export function validateId(id: string): Promise<string> {
 export function validate(sensorType: ISensorType, checkId: boolean = false): Promise<ISensorType> {
     return rejectIfNull(sensorType, 'Sensor type is null or undefined')
     .then(() => validateName(sensorType.name))
-    .then(()=> validateDescription(sensorType.description))
-    .then(()=> validateUnit(sensorType.unit))
+    .then(() => validateDescription(sensorType.description))
+    .then(() => validateUnit(sensorType.unit))
     .then(() => checkId? validateId(sensorType.id) : Promise.resolve(null))
-    .then(()=> Promise.resolve(sensorType))
+    .then(() => Promise.resolve(sensorType))
     .catch(err => {
         err.message = 'Invalid sensor type: ' + err.message;
         return Promise.reject(err);

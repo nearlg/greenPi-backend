@@ -5,6 +5,7 @@ import { NameRegex, EmailRegex,  PasswordRegex, FacebookIdRegex,
 import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { FacebookAccount } from "../models/interface/facebook-account";
 import { GoogleAccount } from "../models/interface/google-account";
+import { RoleName } from "../services/authz-service/role-name";
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, NameRegex, 'The user must have a valid name');
@@ -48,13 +49,25 @@ Promise<null | GoogleAccount> {
     .then(() => googleAccount);
 }
 
+export function validateRoleName(roleName: RoleName):
+Promise<RoleName> {
+    if (roleName) {
+        return Promise.resolve(roleName);
+    }
+    const err: Error = createError('The user must have a rol name');
+    return Promise.reject(err);
+}
+
 export function validate(user: IUser,
-    checkPassword: boolean = false):
+    validatePwd: boolean = false,
+    validateRoleNm: boolean = false):
 Promise<IUser> {
     return rejectIfNull(user, 'User is null or undefined')
     .then(() => validateName(user.name))
     .then(() => validateEmail(user.email))
-    .then(() => checkPassword? validatePassword(user.password) :
+    .then(() => validatePwd? validatePassword(user.password) :
+    Promise.resolve(null))
+    .then(() => validateRoleNm? validateRoleName(user.roleName) :
     Promise.resolve(null))
     .then(() => validateFacebook(user.facebook))
     .then(() => validateGoogle(user.google))

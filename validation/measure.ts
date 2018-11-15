@@ -38,10 +38,10 @@ export function validateId(id: string): Promise<string> {
 export function validate(measure: IMeasure, checkId: boolean = false): Promise<IMeasure> {
     return rejectIfNull(measure, 'Measure is null or undefined')
     .then(() => validateDate(measure.date))
-    .then(()=> validateValue(measure.value))
-    .then(()=> validateSensor(measure.sensor))
+    .then(() => validateValue(measure.value))
+    .then(() => validateSensor(measure.sensor))
     .then(() => checkId? validateId(measure.id) : Promise.resolve(null))
-    .then(()=> Promise.resolve(measure))
+    .then(() => Promise.resolve(measure))
     .catch(err => {
         err.message = 'Invalid measure: ' + err.message;
         return Promise.reject(err);

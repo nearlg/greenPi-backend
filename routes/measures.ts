@@ -79,40 +79,40 @@ sIOService: SocketIOService): void {
         .catch(err => handleErrors(err, next));
     });
 
-    server.patch(mainPath, (req, res, next)=>{
+    server.patch(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
         .then(measure => Middleware.updateMeasure(measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.patch(mainPath + '/:id', (req, res, next)=>{
+    server.patch(mainPath + '/:id', (req, res, next) => {
         measureValidator.validate(req.body)
         .then(measure => Middleware.updateMeasureById(req.params.id, measure))
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.del(mainPath, (req, res, next)=>{
+    server.del(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
         .then(measure => Middleware.deleteMeasure(measure))
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.del(mainPath + '/:id', (req, res, next)=>{
+    server.del(mainPath + '/:id', (req, res, next) => {
         Middleware.deleteMeasureById(req.params.id)
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.get(mainPath, (req, res, next)=>{
+    server.get(mainPath, (req, res, next) => {
         Middleware.fetchMeasures()
         .then(measures => handleJsonData(measures, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.get(mainPath + '/:id', (req, res, next)=>{
+    server.get(mainPath + '/:id', (req, res, next) => {
         Middleware.getMeasureById(req.params.id)
         .then(measure => handleJsonData(measure, res, next))
         .catch(err => handleErrors(err, next));

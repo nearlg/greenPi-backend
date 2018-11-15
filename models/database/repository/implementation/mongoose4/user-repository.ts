@@ -4,6 +4,7 @@ import { rejectIfNull, toObject, normalizeFiledNames } from './helpers';
 import { IUser } from '../../../../interface/user';
 import { IUserRepository } from '../../shared/user-repository';
 import { Security } from '../../../../../config';
+import { RoleName } from '../../../../../services/authz-service/role-name';
 
 export interface IUserModel extends IUser, mongoose.Document {
 }
@@ -33,6 +34,11 @@ const userSchema = new mongoose.Schema({
         id: {
             type: String
         }
+    },
+    roleName: {
+        type: String,
+        default: RoleName.Observer,
+        required: [true, 'A user must have a rol name']
     }
 });
 
@@ -97,6 +103,15 @@ export class UserRepository implements IUserRepository {
         .then(rejectIfNull('User not found'))
         .then(toObject)
         .then(normalizeFiledNames);
+    }
+
+    getRoleNameByEmail(email: string): Promise<RoleName> {
+        return UserModel.findOne({ email: email })
+        .exec()
+        .then(rejectIfNull('User not found'))
+        .then(toObject)
+        .then(normalizeFiledNames)
+        .then((user: IUser) => user.roleName);
     }
 }
 

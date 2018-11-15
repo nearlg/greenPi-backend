@@ -32,10 +32,10 @@ export function validateId(id: string): Promise<string> {
 export function validate(pump: IPump, checkId: boolean = false): Promise<IPump> {
     return rejectIfNull(pump, 'Pump is null or undefined')
     .then(() => validateName(pump.name))
-    .then(()=> validateDescription(pump.description))
-    .then(()=> validatePorts(pump.connectionPorts))
+    .then(() => validateDescription(pump.description))
+    .then(() => validatePorts(pump.connectionPorts))
     .then(() => checkId? validateId(pump.id) : Promise.resolve(null))
-    .then(()=> Promise.resolve(pump))
+    .then(() => Promise.resolve(pump))
     .catch(err => {
         err.message = 'Invalid pump: ' + err.message;
         return Promise.reject(err);

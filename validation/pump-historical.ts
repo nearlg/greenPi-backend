@@ -38,10 +38,10 @@ export function validateId(id: string): Promise<string> {
 export function validate(pumpHistorical: IPumpHistorical, checkId: boolean = false): Promise<IPumpHistorical> {
     return rejectIfNull(pumpHistorical, 'Pump historical is null or undefined')
     .then(() => validateDate(pumpHistorical.date))
-    .then(()=> validateState(pumpHistorical.state))
-    .then(()=> validatePump(pumpHistorical.pump))
+    .then(() => validateState(pumpHistorical.state))
+    .then(() => validatePump(pumpHistorical.pump))
     .then(() => checkId? validateId(pumpHistorical.id) : Promise.resolve(null))
-    .then(()=> Promise.resolve(pumpHistorical))
+    .then(() => Promise.resolve(pumpHistorical))
     .catch(err => {
         err.message = 'Invalid pump historical: ' + err.message;
         return Promise.reject(err);

@@ -80,40 +80,40 @@ sIOService: SocketIOService): void {
         .catch(err => handleErrors(err, next));
     });
 
-    server.patch(mainPath, (req, res, next)=>{
+    server.patch(mainPath, (req, res, next) => {
         pumpHistoricalValidator.validate(req.body, true)
         .then(pumpHistorical => Middleware.updatePumpHistorical(pumpHistorical))
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.patch(mainPath + '/:id', (req, res, next)=>{
+    server.patch(mainPath + '/:id', (req, res, next) => {
         pumpHistoricalValidator.validate(req.body)
         .then(pumpHistorical => Middleware.updatePumpHistoricalById(req.params.id, pumpHistorical))
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.del(mainPath, (req, res, next)=>{
+    server.del(mainPath, (req, res, next) => {
         pumpHistoricalValidator.validate(req.body, true)
         .then(pumpHistorical => Middleware.deletePumpHistorical(pumpHistorical))
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.del(mainPath + '/:id', (req, res, next)=>{
+    server.del(mainPath + '/:id', (req, res, next) => {
         Middleware.deletePumpHistoricalById(req.params.id)
         .then(() => handleJsonData(null, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.get(mainPath, (req, res, next)=>{
+    server.get(mainPath, (req, res, next) => {
         Middleware.fetchPumpHistoricals()
         .then(pumpHistoricals => handleJsonData(pumpHistoricals, res, next))
         .catch(err => handleErrors(err, next));
     });
 
-    server.get(mainPath + '/:id', (req, res, next)=>{
+    server.get(mainPath + '/:id', (req, res, next) => {
         Middleware.getPumpHistoricalById(req.params.id)
         .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
         .catch(err => handleErrors(err, next));
