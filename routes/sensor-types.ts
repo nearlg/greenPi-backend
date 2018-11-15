@@ -1,7 +1,7 @@
 import * as restify from "restify";
 import * as Controller from "../controllers/sensor-type";
 import * as sensorTypeValidator from "../validation/sensor-type";
-import { handleJsonData, handleErrors } from "../routes/helpers";
+import { handleJsonData, handleErrors } from "./helpers";
 
 export function routes(server: restify.Server, mainPath: string = ''): void{
 

@@ -1,6 +1,6 @@
 import { Next, Response } from "restify";
-import { IErrorHandler } from "./helpers/interface/error-handler";
-import { dataHandler } from "./helpers/data-handler";
+import { IErrorHandler } from "./interface/error-handler";
+import { dataHandler } from "./data-handler";
 import { InternalServerError } from "restify-errors";
 
 let errorHandlers: IErrorHandler[] = new Array<IErrorHandler>();

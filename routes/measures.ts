@@ -2,7 +2,7 @@ import * as restify from "restify";
 import * as Controller from "../controllers/measure";
 import * as measureValidator from "../validation/measure";
 import * as sensorValidator from "../validation/sensor";
-import { handleJsonData, handleErrors, checkQuery } from "../routes/helpers";
+import { handleJsonData, handleErrors, checkQuery } from "./helpers";
 import { IMeasure } from "../models/interface/measure";
 import { SocketIOService } from "../services/socket-io-service";
 
