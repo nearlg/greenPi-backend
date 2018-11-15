@@ -104,6 +104,15 @@ export class UserRepository implements IUserRepository {
         .then(toObject)
         .then(normalizeFiledNames);
     }
+
+    getRoleNameByEmail(email: string): Promise<RoleName> {
+        return UserModel.findOne({ email: email })
+        .exec()
+        .then(rejectIfNull('User not found'))
+        .then(toObject)
+        .then(normalizeFiledNames)
+        .then((user: IUser) => user.roleName);
+    }
 }
 
 export const userRepository = new UserRepository();
