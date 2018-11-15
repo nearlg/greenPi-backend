@@ -12,7 +12,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         }
         sensorTypeValidator.validate(req.body)
         .then(sensorType => Controller.addSensorType(sensorType))
-        .then(sensorTypes => handleJsonData(sensorTypes, res, next, 201))
+        .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
         .catch(err => handleErrors(err, next));
     });
 
@@ -23,7 +23,7 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         }
         sensorTypeValidator.validate(req.body, true)
         .then(sensorType => Controller.updateSensorType(sensorType))
-        .then(sensorTypes => handleJsonData(sensorTypes, res, next))
+        .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
         .catch(err => handleErrors(err, next));
     });
 
@@ -34,32 +34,32 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
         }
         sensorTypeValidator.validate(req.body)
         .then(sensorType => Controller.updateSensorTypeById(req.params.id, sensorType))
-        .then(sensorTypes => handleJsonData(sensorTypes, res, next))
+        .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next) => {
         sensorTypeValidator.validate(req.body, true)
         .then(sensorType => Controller.deleteSensorType(sensorType))
-        .then(() => handleJsonData(null, res, next))
+        .then(() => handleJsonData(req, res, next, null))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:id', (req, res, next) => {
         Controller.deleteSensorTypeById(req.params.id)
-        .then(() => handleJsonData(null, res, next))
+        .then(() => handleJsonData(req, res, next, null))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next) => {
         Controller.fetchSensorTypes()
-        .then(sensorTypes => handleJsonData(sensorTypes, res, next))
+        .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:id', (req, res, next) => {
         Controller.getSensorTypeById(req.params.id)
-        .then(sensorType => handleJsonData(sensorType, res, next))
+        .then(sensorType => handleJsonData(req, res, next, sensorType))
         .catch(err => handleErrors(err, next));
     });
 }

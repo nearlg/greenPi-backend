@@ -64,7 +64,7 @@ sIOService: SocketIOService): void {
         } else {
             queryResult = bySensor(req, res, next);
         }
-        queryResult.then(measure => handleJsonData(measure, res, next))
+        queryResult.then(measure => handleJsonData(req, res, next, measure))
         .catch(err => handleErrors(err, next));
     });
 
@@ -74,7 +74,7 @@ sIOService: SocketIOService): void {
         }
         measureValidator.validate(req.body)
         .then(measure => Controller.addMeasure(measure))
-        .then(measure => handleJsonData<IMeasure>(measure, res, next, 201))
+        .then(measure => handleJsonData<IMeasure>(req, res, next, measure))
         .then(measure => sIOService.sensorsSIOService.emitLastMeasure(measure))
         .catch(err => handleErrors(err, next));
     });
@@ -82,39 +82,39 @@ sIOService: SocketIOService): void {
     server.patch(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
         .then(measure => Controller.updateMeasure(measure))
-        .then(measure => handleJsonData(measure, res, next))
+        .then(measure => handleJsonData(req, res, next, measure))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath + '/:id', (req, res, next) => {
         measureValidator.validate(req.body)
         .then(measure => Controller.updateMeasureById(req.params.id, measure))
-        .then(measure => handleJsonData(measure, res, next))
+        .then(measure => handleJsonData(req, res, next, measure))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next) => {
         measureValidator.validate(req.body, true)
         .then(measure => Controller.deleteMeasure(measure))
-        .then(() => handleJsonData(null, res, next))
+        .then(() => handleJsonData(req, res, next, null))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:id', (req, res, next) => {
         Controller.deleteMeasureById(req.params.id)
-        .then(measure => handleJsonData(measure, res, next))
+        .then(measure => handleJsonData(req, res, next, measure))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next) => {
         Controller.fetchMeasures()
-        .then(measures => handleJsonData(measures, res, next))
+        .then(measures => handleJsonData(req, res, next, measures))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:id', (req, res, next) => {
         Controller.getMeasureById(req.params.id)
-        .then(measure => handleJsonData(measure, res, next))
+        .then(measure => handleJsonData(req, res, next, measure))
         .catch(err => handleErrors(err, next));
     });
 }

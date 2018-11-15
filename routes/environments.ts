@@ -8,46 +8,46 @@ export function routes(server: restify.Server, mainPath: string = ''): void{
     server.post(mainPath, (req, res, next) => {
         environmentValidator.validate(req.body)
         .then(environment => Controller.addEnvironment(environment))
-        .then(environment => handleJsonData(environment, res, next, 201))
+        .then(environment => handleJsonData(req, res, next, environment))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath, (req, res, next) => {
         environmentValidator.validate(req.body, true)
         .then(environment => Controller.updateEnvironment(environment))
-        .then(environment => handleJsonData(environment, res, next))
+        .then(environment => handleJsonData(req, res, next, environment))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath + '/:id', (req, res, next) => {
         environmentValidator.validate(req.body)
         .then(environment => Controller.updateEnvironmentById(req.params.id, environment))
-        .then(environment => handleJsonData(environment, res, next))
+        .then(environment => handleJsonData(req, res, next, environment))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next) => {
         environmentValidator.validate(req.body, true)
         .then(environment => Controller.deleteEnvironment(environment))
-        .then(() => handleJsonData(null, res, next))
+        .then(() => handleJsonData(null, res, next, req))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:id', (req, res, next) => {
         Controller.deleteEnvironmentById(req.params.id)
-        .then(() => handleJsonData(null, res, next))
+        .then(() => handleJsonData(null, res, next, req))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next) => {
         Controller.fetchEnvironments()
-        .then(environments => handleJsonData(environments, res, next))
+        .then(environments => handleJsonData(req, res, next, environments))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:id', (req, res, next) => {
         Controller.getEnvironmentById(req.params.id)
-        .then(environment => handleJsonData(environment, res, next))
+        .then(environment => handleJsonData(req, res, next, environment))
         .catch(err => handleErrors(err, next));
     });
 }

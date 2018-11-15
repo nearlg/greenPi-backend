@@ -1,4 +1,4 @@
-import { Next, Response } from "restify";
+import { Next, Response, Request } from "restify";
 import { IErrorHandler } from "./interface/error-handler";
 import { dataHandler } from "./data-handler";
 import { InternalServerError } from "restify-errors";
@@ -21,8 +21,9 @@ export function checkQuery(query: string[], querySended: object)
     return element === undefined? Promise.resolve() : Promise.reject(error);
 }
 
-export function handleJsonData<T>(data: T, res: Response, next: Next, status?: number): Promise<T> {
-    dataHandler.handleJson(data, res, next, status);
+export function handleJsonData<T>(req: Request, res: Response, next: Next,
+data: T): Promise<T> {
+    dataHandler.handleJson(res, next, req.method, data);
     return Promise.resolve(data);
 }
 

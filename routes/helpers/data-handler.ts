@@ -1,10 +1,14 @@
 import { Next, Response } from "restify";
+import { HttpMethod } from "../../services/authz-service/http-method";
 
 class DataHandler {
-    handleJson(data: any, res: Response, next: Next, status: number = 200): void {
+    handleJson(res: Response, next: Next, httpMethod: string, data: any): void {
+        let status = 200;
         if(!data){
-            res.send(204, data);
-            return;
+            status = 204;
+        }
+        if (httpMethod === HttpMethod.Post) {
+            status = 201;
         }
         res.send(status, data);
         next();

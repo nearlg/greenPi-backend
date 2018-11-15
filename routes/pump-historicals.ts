@@ -64,7 +64,7 @@ sIOService: SocketIOService): void {
         } else {
             queryResult = byPump(req, res, next);
         }
-        queryResult.then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
+        queryResult.then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
         .catch(err => handleErrors(err, next));
     });
 
@@ -74,7 +74,7 @@ sIOService: SocketIOService): void {
         }
         pumpHistoricalValidator.validate(req.body)
         .then(pumpHistorical => Controller.addPumpHistorical(pumpHistorical))
-        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next, 201))
+        .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
         .then(pumpHistorical => sIOService.pumpsSIOService
             .emitLastPumpHistorical(pumpHistorical))
         .catch(err => handleErrors(err, next));
@@ -83,39 +83,39 @@ sIOService: SocketIOService): void {
     server.patch(mainPath, (req, res, next) => {
         pumpHistoricalValidator.validate(req.body, true)
         .then(pumpHistorical => Controller.updatePumpHistorical(pumpHistorical))
-        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
+        .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
         .catch(err => handleErrors(err, next));
     });
 
     server.patch(mainPath + '/:id', (req, res, next) => {
         pumpHistoricalValidator.validate(req.body)
         .then(pumpHistorical => Controller.updatePumpHistoricalById(req.params.id, pumpHistorical))
-        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
+        .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath, (req, res, next) => {
         pumpHistoricalValidator.validate(req.body, true)
         .then(pumpHistorical => Controller.deletePumpHistorical(pumpHistorical))
-        .then(() => handleJsonData(null, res, next))
+        .then(() => handleJsonData(req, res, next, null))
         .catch(err => handleErrors(err, next));
     });
 
     server.del(mainPath + '/:id', (req, res, next) => {
         Controller.deletePumpHistoricalById(req.params.id)
-        .then(() => handleJsonData(null, res, next))
+        .then(() => handleJsonData(req, res, next, null))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath, (req, res, next) => {
         Controller.fetchPumpHistoricals()
-        .then(pumpHistoricals => handleJsonData(pumpHistoricals, res, next))
+        .then(pumpHistoricals => handleJsonData(req, res, next, pumpHistoricals))
         .catch(err => handleErrors(err, next));
     });
 
     server.get(mainPath + '/:id', (req, res, next) => {
         Controller.getPumpHistoricalById(req.params.id)
-        .then(pumpHistorical => handleJsonData(pumpHistorical, res, next))
+        .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
         .catch(err => handleErrors(err, next));
     });
 }
