@@ -11,7 +11,7 @@ class DataHandler {
             status = 201;
         }
         res.send(status, data);
-        next();
+        return next();
     }
 }
 
