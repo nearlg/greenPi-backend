@@ -1,4 +1,4 @@
-import { IUnit } from "./unit";
+import { IUnit } from './unit';
 
 export interface ISensorType {
     id?: any;

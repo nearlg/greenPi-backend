@@ -1,19 +1,18 @@
-import { IMeasure } from "../models/interface/measure";
-import { DateRegex, IdRegex } from "./rules/common";
-import { ValueRegex } from "./rules/measure";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { ISensor } from "../models/interface/sensor";
-import { validateId as sensorIdValidator} from "./sensor";
+import { IMeasure } from '../models/interface/measure';
+import * as measureRegex from './rules/measure';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { ISensor } from '../models/interface/sensor';
+import { validateId as sensorIdValidator} from './sensor';
 
 export function validateDate(date: Date): Promise<Date>  {
     let dateString: string = date && typeof date.toISOString === 'function'?
     date.toISOString() : date + '';
-    return regexValidation(dateString, DateRegex, 'The measure must have a valid date')
+    return regexValidation(dateString, measureRegex.DateRegex, 'The measure must have a valid date')
     .then(() => Promise.resolve(date));
 }
 
 export function validateValue(value: number): Promise<number>  {
-    return regexValidation(value, ValueRegex, 'The measure must have a valid value');
+    return regexValidation(value, measureRegex.ValueRegex, 'The measure must have a valid value');
 }
 
 export function validateSensor(sensor: ISensor | string): Promise<ISensor | string> {
@@ -28,14 +27,14 @@ export function validateSensor(sensor: ISensor | string): Promise<ISensor | stri
 }
 
 export function validateId(id: string): Promise<string> {
-    if(id && IdRegex.test(id)) {
+    if(id && measureRegex.IdRegex.test(id)) {
         return Promise.resolve(id);
     }
     let err: Error = createError('Invalid measure id');
     return Promise.reject(err);
 }
 
-export function validate(measure: IMeasure, checkId: boolean = false): Promise<IMeasure> {
+export function validate(measure: IMeasure, checkId: boolean = true): Promise<IMeasure> {
     return rejectIfNull(measure, 'Measure is null or undefined')
     .then(() => validateDate(measure.date))
     .then(() => validateValue(measure.value))

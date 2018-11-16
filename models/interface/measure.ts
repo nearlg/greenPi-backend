@@ -1,4 +1,4 @@
-import { ISensor } from "./sensor";
+import { ISensor } from './sensor';
 
 export interface IMeasure {
     id?: any;

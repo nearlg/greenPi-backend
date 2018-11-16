@@ -1,11 +1,11 @@
-import chai = require("chai");
-import chaiAsPromised = require("chai-as-promised");
-import { ObjectID } from "mongodb";
+import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+import { ObjectID } from 'mongodb';
 import mongoose = require('mongoose');
-import * as Config from "../../../../../../config";
-import { ISensorType } from "../../../../../../models/interface/sensor-type";
-import { IUnit } from "../../../../../../models/interface/unit";
-import { sensorTypeRepository } from "../../../../../../models/database/repository/implementation/mongoose4/sensor-type-repository";
+import * as Config from '../../../../../../config';
+import { ISensorType } from '../../../../../../models/interface/sensor-type';
+import { IUnit } from '../../../../../../models/interface/unit';
+import { sensorTypeRepository } from '../../../../../../models/database/repository/implementation/mongoose4/sensor-type-repository';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;

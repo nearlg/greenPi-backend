@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
-import { IPumpRepository } from "../../shared/pump-repository";
-import { IPump } from "../../../../interface/pump";
+import { rejectIfNull, normalizeData } from './helpers';
+import { IPumpRepository } from '../../shared/pump-repository';
+import { IPump } from '../../../../interface/pump';
 
 export interface IPumpModel extends IPump, mongoose.Document {
 }
@@ -21,45 +21,32 @@ export class PumpRepository implements IPumpRepository {
 
     create(document: IPump): Promise<IPump> {
         return PumpModel.create(document)
-            .then(rejectIfNull('Pump not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(rejectIfNull('Pump not found'))
+        .then(normalizeData);
     }
 
     update(document: IPump): Promise<IPump> {
-        return PumpModel.findByIdAndUpdate(document.id, document, {'new': true}).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        return PumpModel.findByIdAndUpdate(document.id, document,
+            {'new': true}).exec()
+        .then(rejectIfNull('Pump not found'))
+        .then(normalizeData);
     }
 
-    updateById(id: string, document: IPump): Promise<IPump>{
-        return PumpModel.findByIdAndUpdate(id, document).exec();
-    }
-
-    remove(document: IPump): Promise<void> {
-        return PumpModel.findByIdAndRemove(document.id).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(() => null);
-    }
-
-    removeById(id: string): Promise<void> {
+    remove(id: string): Promise<IPump> {
         return PumpModel.findByIdAndRemove(id).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(() => null);
+        .then(rejectIfNull('Pump not found'))
+        .then(normalizeData);
     }
 
     findAll(): Promise<IPump[]> {
         return PumpModel.find().exec()
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
-    findById(id: string): Promise<null|IPump> {
+    find(id: string): Promise<IPump> {
         return PumpModel.findById(id).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(rejectIfNull('Pump not found'))
+        .then(normalizeData);
     }
 }
 

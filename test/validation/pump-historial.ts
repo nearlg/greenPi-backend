@@ -1,8 +1,8 @@
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import * as pumpHistoricalValidator from "../../validation/pump-historical";
-import { IPumpHistorical } from "../../models/interface/pump-historical";
-import { IPump } from "../../models/interface/pump";
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+import * as pumpHistoricalValidator from '../../validation/pump-historical';
+import { IPumpHistorical } from '../../models/interface/pump-historical';
+import { IPump } from '../../models/interface/pump';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
@@ -59,19 +59,43 @@ describe('Pump historical validation', () => {
     });
 
     describe('State validation', () => {
-        it('State must be a valid number', () => {
-            let val: any = 'random';
+        it('State must be a number', () => {
+            const val: any = 'random';
             return expect(pumpHistoricalValidator.validateState(val))
             .to.be.rejected;
         });
 
-        it('State can be a positive number', () => {
-            return expect(pumpHistoricalValidator.validateState(+3))
+        it('State can be zero (0)', () => {
+            return expect(pumpHistoricalValidator.validateState(0))
             .to.be.fulfilled;
         });
 
-        it('State can be a negative number', () => {
-            return expect(pumpHistoricalValidator.validateState(-3))
+        it('State can be one (1)', () => {
+            return expect(pumpHistoricalValidator.validateState(1))
+            .to.be.fulfilled;
+        });
+
+        it('State can NOT be a positive zero (+0)', () => {
+            const val: any = '+0';
+            return expect(pumpHistoricalValidator.validateState(val))
+            .to.be.rejected;
+        });
+
+        it('State can NOT be a negative zero (-0)', () => {
+            const val: any = '-0';
+            return expect(pumpHistoricalValidator.validateState(val))
+            .to.be.rejected;
+        });
+
+        it('State can be a positive one (+1)', () => {
+            const val: any = '+1';
+            return expect(pumpHistoricalValidator.validateState(val))
+            .to.be.fulfilled;
+        });
+
+        it('State can be a negative one (-1)', () => {
+            const val: any = '-1';
+            return expect(pumpHistoricalValidator.validateState(val))
             .to.be.fulfilled;
         });
 

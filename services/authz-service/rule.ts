@@ -1,5 +1,5 @@
-import { RoleName } from "./role-name";
-import { HttpMethod } from "./http-method";
+import { RoleName } from './role-name';
+import { HttpMethod } from './http-method';
 
 export interface Rule {
     httpMethod: HttpMethod,

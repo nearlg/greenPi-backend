@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
-import { IEnvironmentRepository } from "../../shared/environment-repository";
-import { IEnvironment } from "../../../../interface/environment";
+import { rejectIfNull, normalizeData } from './helpers';
+import { IEnvironmentRepository } from '../../shared/environment-repository';
+import { IEnvironment } from '../../../../interface/environment';
 
 export interface IEnvironmentModel extends IEnvironment, mongoose.Document {
 }
@@ -39,64 +39,46 @@ export class EnvironmentRepository implements IEnvironmentRepository {
                 }
             })
         )
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     update(document: IEnvironment): Promise<IEnvironment> {
-        return EnvironmentModel.findByIdAndUpdate(document.id, document, {'new': true})
+        return EnvironmentModel.findByIdAndUpdate(document.id, document,
+            {'new': true})
         .populate('pumps')
         .populate({path:'sensors', populate: {
             path: 'type'
         }})
         .exec()
         .then(rejectIfNull('Environment not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
-    updateById(id: string, document: IEnvironment): Promise<IEnvironment>{
-        return EnvironmentModel.findByIdAndUpdate(id, document)
-        .populate('pumps')
-        .populate({path:'sensors', populate: {
-            path: 'type'
-        }})
-        .exec();
-    }
-
-    remove(document: IEnvironment): Promise<void> {
-        return EnvironmentModel.findByIdAndRemove(document.id).exec()
-            .then(rejectIfNull('Environment not found'))
-            .then(() => null);
-    }
-
-    removeById(id: string): Promise<void> {
-        return EnvironmentModel.findByIdAndRemove(id).exec()
-            .then(rejectIfNull('Environment not found'))
-            .then(() => null);
+    remove(id: string): Promise<IEnvironment> {
+        return EnvironmentModel.findByIdAndRemove(id)
+        .exec()
+        .then(normalizeData);
     }
 
     findAll(): Promise<IEnvironment[]> {
         return EnvironmentModel.find()
-            .populate('pumps')
-            .populate({path:'sensors', populate: {
-                path: 'type'
-            }})
-            .exec()
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .populate('pumps')
+        .populate({path:'sensors', populate: {
+            path: 'type'
+        }})
+        .exec()
+        .then(normalizeData);
     }
 
-    findById(id: string): Promise<null|IEnvironment> {
+    find(id: string): Promise<IEnvironment> {
         return EnvironmentModel.findById(id)
-            .populate('pumps')
-            .populate({path:'sensors', populate: {
-                path: 'type'
-            }})
-            .exec()
-            .then(rejectIfNull('Environment not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .populate('pumps')
+        .populate({path:'sensors', populate: {
+            path: 'type'
+        }})
+        .exec()
+        .then(rejectIfNull('Environment not found'))
+        .then(normalizeData);
     }
 }
 

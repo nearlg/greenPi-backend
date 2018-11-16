@@ -1,15 +1,14 @@
-import { IRepository } from "./repository";
-import { IPumpHistorical } from "../../../interface/pump-historical";
-import { IPump } from "../../../interface/pump";
+import { IRepository } from './repository';
+import { IPumpHistorical } from '../../../interface/pump-historical';
+import { IPump } from '../../../interface/pump';
 
 export interface IPumpHistoricalRepository extends IRepository<IPumpHistorical> {
 
-    findById(id: string): Promise<IPumpHistorical | null>;
-    removeById(id: string): Promise<void>;
-    updateById(id: string, document: IPumpHistorical): Promise<IPumpHistorical>;
+    find(id: string): Promise<IPumpHistorical>;
+    remove(id: string): Promise<IPumpHistorical>;
 
     findLastsByPumpIds(pumpIds: string[]): Promise<IPumpHistorical[]>;
-    findLastByPumpId(pumpId: string): Promise<null | IPumpHistorical>;
+    findLastByPumpId(pumpId: string): Promise<IPumpHistorical>;
 
     findAllByPumpId(pumpId: string, sortBy: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]>;
     findAllByPump(pump: IPump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IPumpHistorical[]>;

@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
-import { ISensorTypeRepository } from "../../shared/sensor-type-repository";
-import { ISensorType } from "../../../../interface/sensor-type";
+import { rejectIfNull, normalizeData } from './helpers';
+import { ISensorTypeRepository } from '../../shared/sensor-type-repository';
+import { ISensorType } from '../../../../interface/sensor-type';
 
 export interface ISensorTypeModel extends ISensorType, mongoose.Document {
 }
@@ -28,48 +28,32 @@ export class SensorTypeRepository implements ISensorTypeRepository {
 
     create(document: ISensorType): Promise<ISensorType> {
         return SensorTypeModel.create(document)
-            .then(rejectIfNull('Sensor type not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(rejectIfNull('Sensor type not found'))
+        .then(normalizeData);
     }
 
     update(document: ISensorType): Promise<ISensorType> {
-        return SensorTypeModel.findByIdAndUpdate(document.id, document, {'new': true}).exec()
-            .then(rejectIfNull('Sensor type not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
-    }
-
-    updateById(id: string, document: ISensorType): Promise<ISensorType>{
-        return SensorTypeModel.findByIdAndUpdate(id, document).exec()
+        return SensorTypeModel.findByIdAndUpdate(document.id, document,
+            {'new': true}).exec()
         .then(rejectIfNull('Sensor type not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
-    remove(document: ISensorType): Promise<void> {
-        return SensorTypeModel.findByIdAndRemove(document.id).exec()
-            .then(rejectIfNull('Sensor type not found'))
-            .then(() => null);
-    }
-
-    removeById(id: string): Promise<void> {
+    remove(id: string): Promise<ISensorType> {
         return SensorTypeModel.findByIdAndRemove(id).exec()
-            .then(rejectIfNull('Sensor type not found'))
-            .then(() => null);
+        .then(rejectIfNull('Sensor type not found'))
+        .then(normalizeData);
     }
 
     findAll(): Promise<ISensorType[]> {
         return SensorTypeModel.find().exec()
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
-    findById(id: string): Promise<null|ISensorType> {
+    find(id: string): Promise<ISensorType> {
         return SensorTypeModel.findById(id).exec()
-            .then(rejectIfNull('Sensor type not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(rejectIfNull('Sensor type not found'))
+        .then(normalizeData);
     }
 }
 
