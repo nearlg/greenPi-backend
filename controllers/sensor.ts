@@ -21,7 +21,16 @@ export function addSensor(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
+// export function updateSensor(req: Request, res: Response, next: Next) {
+//     sensorValidator.validate(req.body, true)
+//     .then(validateDependencies)
+//     .then(sensorRepository.update)
+//     .then(sensor => handleJsonData(req, res, next, sensor))
+//     .catch(err => handleErrors(err, next));
+// }
+
 export function updateSensor(req: Request, res: Response, next: Next) {
+    req.body.id = req.params.id;
     sensorValidator.validate(req.body, true)
     .then(validateDependencies)
     .then(sensorRepository.update)
@@ -29,22 +38,14 @@ export function updateSensor(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
-export function updateSensorById(req: Request, res: Response, next: Next) {
-    sensorValidator.validate(req.body)
-    .then(validateDependencies)
-    .then(sensor => sensorRepository.updateById(req.params.id, sensor))
-    .then(sensor => handleJsonData(req, res, next, sensor))
-    .catch(err => handleErrors(err, next));
-}
+// export function deleteSensor(req: Request, res: Response, next: Next) {
+//     sensorValidator.validate(req.body, true)
+//     .then(sensorRepository.remove)
+//     .then(() => handleJsonData(req, res, next, null))
+//     .catch(err => handleErrors(err, next));
+// }
 
 export function deleteSensor(req: Request, res: Response, next: Next) {
-    sensorValidator.validate(req.body, true)
-    .then(sensorRepository.remove)
-    .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
-}
-
-export function deleteSensorById(req: Request, res: Response, next: Next) {
     sensorRepository.removeById(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
     .catch(err => handleErrors(err, next));

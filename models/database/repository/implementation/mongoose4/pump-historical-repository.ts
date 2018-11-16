@@ -40,7 +40,7 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(p => p.filter(p => p != undefined));
     }
 
-    findLastByPumpId(pumpId: string): Promise<null | IPumpHistoricalModel> {
+    findLastByPumpId(pumpId: string): Promise<IPumpHistoricalModel> {
         const searchingObject = { pump: pumpId };
         return PumpHistoricalModel.find(searchingObject)
         .sort({date: -1})
@@ -52,7 +52,8 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(doc => doc[0]);
     }
 
-    findAllByPumpIds(pumpIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IPumpHistorical[]> {
+    findAllByPumpIds(pumpIds: string[], sortBy?: string, gte?: Date, lte?: Date):
+    Promise<IPumpHistorical[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['pump'] = { $in: pumpIds };
         return PumpHistoricalModel.find(searchingObject)
@@ -95,7 +96,8 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
     }
 
     update(document: IPumpHistorical): Promise<IPumpHistorical> {
-        return PumpHistoricalModel.findByIdAndUpdate(document.id, document, {'new': true})
+        return PumpHistoricalModel.findByIdAndUpdate(document.id, document,
+            {'new': true})
         .populate('pump')
         .exec()
         .then(rejectIfNull('Pump historical not found'))
@@ -103,22 +105,12 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(normalizeFiledNames);
     }
 
-    updateById(id: string, document: IPumpHistorical): Promise<IPumpHistorical> {
-        return PumpHistoricalModel.findByIdAndUpdate(id, document)
-        .populate('pump')
-        .exec();
-    }
-
-    remove(document: IPumpHistorical): Promise<void> {
-        return PumpHistoricalModel.findByIdAndRemove(document.id).exec()
+    remove(id: string): Promise<IPumpHistorical> {
+        return PumpHistoricalModel.findByIdAndRemove(id)
+        .exec()
         .then(rejectIfNull('Pump historical not found'))
-        .then(() => null);
-    }
-
-    removeById(id: string): Promise<void> {
-        return PumpHistoricalModel.findByIdAndRemove(id).exec()
-        .then(rejectIfNull('Pump historical not found'))
-        .then(() => null);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     findAll(): Promise<IPumpHistorical[]> {
@@ -129,7 +121,7 @@ export class PumpHistoricalRepository implements IPumpHistoricalRepository {
         .then(normalizeFiledNames);
     }
 
-    findById(id: string): Promise<null|IPumpHistorical> {
+    find(id: string): Promise<IPumpHistorical> {
         return PumpHistoricalModel.findById(id)
         .populate('pump')
         .exec()

@@ -69,26 +69,19 @@ export class UserRepository implements IUserRepository {
     }
 
     update(document: IUser): Promise<IUser> {
-        return this.updateByEmail(document.email, document);
-    }
-
-    updateByEmail(email: string, document: IUser): Promise<IUser> {
-        return UserModel.findOneAndUpdate({email: email}, document)
+        return UserModel.findOneAndUpdate({email: document.email}, document)
         .exec()
         .then(rejectIfNull('User not found'))
         .then(toObject)
         .then(normalizeFiledNames);
     }
 
-    remove(document: IUser): Promise<void> {
-        return this.removeByEmail(document.email);
-    }
-
-    removeByEmail(email: string): Promise<void> {
+    remove(email: string): Promise<IUser> {
         return UserModel.findOneAndRemove({email: email})
         .exec()
         .then(rejectIfNull('User not found'))
-        .then(() => null);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     findAll(): Promise<IUser[]> {
@@ -97,7 +90,7 @@ export class UserRepository implements IUserRepository {
         .then(normalizeFiledNames);
     }
 
-    findByEmail(email: string): Promise<null | IUser> {
+    find(email: string): Promise<IUser> {
         return UserModel.findOne({ email: email })
         .exec()
         .then(rejectIfNull('User not found'))
@@ -105,7 +98,7 @@ export class UserRepository implements IUserRepository {
         .then(normalizeFiledNames);
     }
 
-    getRoleNameByEmail(email: string): Promise<RoleName> {
+    getRoleName(email: string): Promise<RoleName> {
         return UserModel.findOne({ email: email })
         .exec()
         .then(rejectIfNull('User not found'))

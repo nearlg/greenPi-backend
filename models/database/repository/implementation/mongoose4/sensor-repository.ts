@@ -26,51 +26,43 @@ export class SensorRepository implements ISensorRepository {
 
     create(document: ISensor): Promise<ISensor> {
         return SensorModel.create(document)
-            .then(rejectIfNull('Sensor not found'))
-            .then((o: ISensorModel) => SensorModel.populate(o, {
-                path: 'type'
-            }))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(rejectIfNull('Sensor not found'))
+        .then((o: ISensorModel) => SensorModel.populate(o, {
+            path: 'type'
+        }))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     update(document: ISensor): Promise<ISensor> {
-        return SensorModel.findByIdAndUpdate(document.id, document, {'new': true}).exec()
-            .then(rejectIfNull('Sensor not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        return SensorModel.findByIdAndUpdate(document.id, document,
+            {'new': true}).exec()
+        .then(rejectIfNull('Sensor not found'))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
-    updateById(id: string, document: ISensor): Promise<ISensor>{
-        return SensorModel.findByIdAndUpdate(id, document).exec();
-    }
-
-    remove(document: ISensor): Promise<void> {
-        return SensorModel.findByIdAndRemove(document.id).exec()
-            .then(rejectIfNull('Sensor not found'))
-            .then(() => null);
-    }
-
-    removeById(id: string): Promise<void> {
+    remove(id: string): Promise<ISensor> {
         return SensorModel.findByIdAndRemove(id).exec()
-            .then(rejectIfNull('Sensor not found'))
-            .then(() => null);
+        .then(rejectIfNull('Sensor not found'))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     findAll(): Promise<ISensor[]> {
         return SensorModel.find()
-            .populate('type')
-            .exec()
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .populate('type')
+        .exec()
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
-    findById(id: string): Promise<null|ISensor> {
+    find(id: string): Promise<ISensor> {
         return SensorModel.findById(id)
-            .populate('type')
-            .then(rejectIfNull('Sensor not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .populate('type')
+        .then(rejectIfNull('Sensor not found'))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 }
 

@@ -21,45 +21,37 @@ export class PumpRepository implements IPumpRepository {
 
     create(document: IPump): Promise<IPump> {
         return PumpModel.create(document)
-            .then(rejectIfNull('Pump not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(rejectIfNull('Pump not found'))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     update(document: IPump): Promise<IPump> {
-        return PumpModel.findByIdAndUpdate(document.id, document, {'new': true}).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        return PumpModel.findByIdAndUpdate(document.id, document,
+            {'new': true}).exec()
+        .then(rejectIfNull('Pump not found'))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
-    updateById(id: string, document: IPump): Promise<IPump>{
-        return PumpModel.findByIdAndUpdate(id, document).exec();
-    }
-
-    remove(document: IPump): Promise<void> {
-        return PumpModel.findByIdAndRemove(document.id).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(() => null);
-    }
-
-    removeById(id: string): Promise<void> {
+    remove(id: string): Promise<IPump> {
         return PumpModel.findByIdAndRemove(id).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(() => null);
+        .then(rejectIfNull('Pump not found'))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
     findAll(): Promise<IPump[]> {
         return PumpModel.find().exec()
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 
-    findById(id: string): Promise<null|IPump> {
+    find(id: string): Promise<IPump> {
         return PumpModel.findById(id).exec()
-            .then(rejectIfNull('Pump not found'))
-            .then(toObject)
-            .then(normalizeFiledNames);
+        .then(rejectIfNull('Pump not found'))
+        .then(toObject)
+        .then(normalizeFiledNames);
     }
 }
 
