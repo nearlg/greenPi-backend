@@ -78,7 +78,7 @@ export function addMeasure(req: Request, res: Response, next: Next) {
     if (!req.body.date) {
         req.body.date = new Date();
     }
-    measureValidator.validate(req.body)
+    measureValidator.validate(req.body, false)
     .then(validateDependencies)
     .then(measureRepository.create)
     .then(measure => handleJsonData<IMeasure>(req, res, next, measure))
@@ -88,7 +88,7 @@ export function addMeasure(req: Request, res: Response, next: Next) {
 
 export function updateMeasure(req: Request, res: Response, next: Next) {
     req.body.id = req.params.id;
-    measureValidator.validate(req.body, true)
+    measureValidator.validate(req.body)
     .then(validateDependencies)
     .then(measureRepository.update)
     .then(measure => handleJsonData(req, res, next, measure))

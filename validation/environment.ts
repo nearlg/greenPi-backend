@@ -43,7 +43,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(environment: IEnvironment, checkId: boolean = false): Promise<IEnvironment> {
+export function validate(environment: IEnvironment, checkId: boolean = true): Promise<IEnvironment> {
     return rejectIfNull(environment, 'Environment is null or undefined')
     .then(() => validateName(environment.name))
     .then(() => validateDescription(environment.description))

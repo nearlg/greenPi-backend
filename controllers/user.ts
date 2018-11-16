@@ -6,7 +6,7 @@ import { userRepository } from '../models/database/repository/implementation/mon
 import { createToken, verifyTokenFromRequest } from '../services/jwt-service';
 
 export function addUser(req: Request, res: Response, next: Next) {
-    userValidator.validate(req.body, true, true)
+    userValidator.validate(req.body, true)
     .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
@@ -14,7 +14,7 @@ export function addUser(req: Request, res: Response, next: Next) {
 
 export function updateUser(req: Request, res: Response, next: Next) {
     req.body.email = req.params.email;
-    userValidator.validate(req.body, true)
+    userValidator.validate(req.body)
     .then(userRepository.update)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
@@ -39,7 +39,7 @@ export function getUser(req: Request, res: Response, next: Next) {
 }
 
 export function signUp(req: Request, res: Response, next: Next) {
-    userValidator.validate(req.body, true)
+    userValidator.validate(req.body)
     .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));

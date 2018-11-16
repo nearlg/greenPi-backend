@@ -4,7 +4,7 @@ import { pumpRepository } from '../models/database/repository/implementation/mon
 import { handleJsonData, handleErrors } from './helpers';
 
 export function addPump(req: Request, res: Response, next: Next) {
-    pumpValidator.validate(req.body)
+    pumpValidator.validate(req.body, false)
     .then(pumpRepository.create)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(err, next));
@@ -12,7 +12,7 @@ export function addPump(req: Request, res: Response, next: Next) {
 
 export function updatePump(req: Request, res: Response, next: Next) {
     req.body.id = req.params.id;
-    pumpValidator.validate(req.body, true)
+    pumpValidator.validate(req.body)
     .then(pumpRepository.update)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(err, next));

@@ -4,7 +4,7 @@ import * as environmentValidator from '../validation/environment';
 import { handleJsonData, handleErrors } from './helpers';
 
 export function addEnvironment(req: Request, res: Response, next: Next) {
-    environmentValidator.validate(req.body)
+    environmentValidator.validate(req.body, false)
     .then(environmentRepository.create)
     .then(environment => handleJsonData(req, res, next, environment))
     .catch(err => handleErrors(err, next));
@@ -12,7 +12,7 @@ export function addEnvironment(req: Request, res: Response, next: Next) {
 
 export function updateEnvironment(req: Request, res: Response, next: Next) {
     req.body.id = req.params.id;
-    environmentValidator.validate(req.body, true)
+    environmentValidator.validate(req.body)
     .then(environmentRepository.update)
     .then(environment => handleJsonData(req, res, next, environment))
     .catch(err => handleErrors(err, next));

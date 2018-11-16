@@ -29,7 +29,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(pump: IPump, checkId: boolean = false): Promise<IPump> {
+export function validate(pump: IPump, checkId: boolean = true): Promise<IPump> {
     return rejectIfNull(pump, 'Pump is null or undefined')
     .then(() => validateName(pump.name))
     .then(() => validateDescription(pump.description))

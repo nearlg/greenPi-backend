@@ -14,7 +14,7 @@ function validateDependencies(sensor: ISensor): Promise<ISensor> {
 }
 
 export function addSensor(req: Request, res: Response, next: Next) {
-    sensorValidator.validate(req.body)
+    sensorValidator.validate(req.body, false)
     .then(validateDependencies)
     .then(sensorRepository.create)
     .then(sensor => handleJsonData(req, res, next, sensor))
@@ -23,7 +23,7 @@ export function addSensor(req: Request, res: Response, next: Next) {
 
 export function updateSensor(req: Request, res: Response, next: Next) {
     req.body.id = req.params.id;
-    sensorValidator.validate(req.body, true)
+    sensorValidator.validate(req.body)
     .then(validateDependencies)
     .then(sensorRepository.update)
     .then(sensor => handleJsonData(req, res, next, sensor))

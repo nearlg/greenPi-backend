@@ -35,7 +35,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(measure: IMeasure, checkId: boolean = false): Promise<IMeasure> {
+export function validate(measure: IMeasure, checkId: boolean = true): Promise<IMeasure> {
     return rejectIfNull(measure, 'Measure is null or undefined')
     .then(() => validateDate(measure.date))
     .then(() => validateValue(measure.value))

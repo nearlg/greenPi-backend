@@ -81,7 +81,7 @@ export function addPumpHistorical(req: Request, res: Response, next: Next) {
     if (!req.body.date) {
         req.body.date = new Date();
     }
-    pumpHistoricalValidator.validate(req.body)
+    pumpHistoricalValidator.validate(req.body, false)
     .then(validateDependencies)
     .then(pumpHistoricalRepository.create)
     .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))

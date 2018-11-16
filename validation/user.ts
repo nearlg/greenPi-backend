@@ -58,15 +58,12 @@ Promise<RoleName> {
     return Promise.reject(err);
 }
 
-export function validate(user: IUser,
-    validatePwd: boolean = false,
-    validateRoleNm: boolean = false):
+export function validate(user: IUser, validateRoleNm: boolean = false):
 Promise<IUser> {
     return rejectIfNull(user, 'User is null or undefined')
     .then(() => validateName(user.name))
     .then(() => validateEmail(user.email))
-    .then(() => validatePwd? validatePassword(user.password) :
-    Promise.resolve(null))
+    .then(() => validatePassword(user.password))
     .then(() => validateRoleNm? validateRoleName(user.roleName) :
     Promise.resolve(null))
     .then(() => validateFacebook(user.facebook))

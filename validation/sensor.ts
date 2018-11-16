@@ -42,7 +42,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err)
 }
 
-export function validate(sensor: ISensor, checkId: boolean = false): Promise<ISensor> {
+export function validate(sensor: ISensor, checkId: boolean = true): Promise<ISensor> {
     return rejectIfNull(sensor, 'Sensor is null or undefined')
     .then(() => validateName(sensor.name))
     .then(() => validateDescription(sensor.description))

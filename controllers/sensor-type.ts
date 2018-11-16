@@ -8,7 +8,7 @@ export function addSensorType(req: Request, res: Response, next: Next) {
         name: req.body.unitName? req.body.unitName : null,
         description: req.body.unitDescription? req.body.unitDescription : null
     }
-    sensorTypeValidator.validate(req.body)
+    sensorTypeValidator.validate(req.body, false)
     .then(sensorTypeRepository.create)
     .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
     .catch(err => handleErrors(err, next));
@@ -20,7 +20,7 @@ export function updateSensorType(req: Request, res: Response, next: Next) {
         name: req.body.unitName? req.body.unitName : null,
         description: req.body.unitDescription? req.body.unitDescription : null
     }
-    sensorTypeValidator.validate(req.body, true)
+    sensorTypeValidator.validate(req.body)
     .then(sensorTypeRepository.update)
     .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
     .catch(err => handleErrors(err, next));

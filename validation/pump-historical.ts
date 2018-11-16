@@ -35,7 +35,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err)
 }
 
-export function validate(pumpHistorical: IPumpHistorical, checkId: boolean = false): Promise<IPumpHistorical> {
+export function validate(pumpHistorical: IPumpHistorical, checkId: boolean = true): Promise<IPumpHistorical> {
     return rejectIfNull(pumpHistorical, 'Pump historical is null or undefined')
     .then(() => validateDate(pumpHistorical.date))
     .then(() => validateState(pumpHistorical.state))
