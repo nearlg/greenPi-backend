@@ -7,34 +7,21 @@ import { createToken, verifyTokenFromRequest } from "../services/jwt-service";
 
 export function addUser(req: Request, res: Response, next: Next) {
     userValidator.validate(req.body, true, true)
-    .then(user => userRepository.create(user))
+    .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
 }
 
 export function updateUser(req: Request, res: Response, next: Next) {
+    req.body.email = req.params.email;
     userValidator.validate(req.body, true)
-    .then(user => userRepository.update(user))
-    .then(user => handleJsonData(req, res, next, user))
-    .catch(err => handleErrors(err, next));
-}
-
-export function updateUserByEmail(req: Request, res: Response, next: Next) {
-    userValidator.validate(req.body)
-    .then(user => userRepository.updateByEmail(req.params.email, user))
+    .then(userRepository.update)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
 }
 
 export function deleteUser(req: Request, res: Response, next: Next) {
-    userValidator.validate(req.body, true)
-    .then(user => userRepository.remove(user))
-    .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
-}
-
-export function deleteUserByEmail(req: Request, res: Response, next: Next) {
-    userRepository.removeByEmail(req.params.email)
+    userRepository.remove(req.params.email)
     .then(() => handleJsonData(req, res, next, null))
     .catch(err => handleErrors(err, next));
 }
@@ -45,15 +32,15 @@ export function fetchUsers(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
-export function getUserByEmail(req: Request, res: Response, next: Next) {
-    userRepository.findByEmail(req.params.email)
+export function getUser(req: Request, res: Response, next: Next) {
+    userRepository.find(req.params.email)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
 }
 
 export function signUp(req: Request, res: Response, next: Next) {
     userValidator.validate(req.body, true)
-    .then(user => userRepository.create(user))
+    .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
 }
@@ -63,7 +50,7 @@ export function signIn(req: Request, res: Response, next: Next) {
     const password: string = req.body.password;
     userValidator.validatePassword(password)
     .then(() => userValidator.validateEmail(email))
-    .then(userRepository.findByEmail)
+    .then(userRepository.find)
     .then(user => {
         return bcrypt.compare(password, user.password)
         .then(passwdIsCorrect => {
@@ -88,14 +75,14 @@ export function signIn(req: Request, res: Response, next: Next) {
 
 export function getProfile(req: Request, res: Response, next: Next) {
     verifyTokenFromRequest(req)
-    .then(validToken => userRepository.findByEmail(validToken.sub))
+    .then(validToken => userRepository.find(validToken.sub))
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
 }
 
 export function editProfile(req: Request, res: Response, next: Next) {
     verifyTokenFromRequest(req)
-    .then(validToken => userRepository.findByEmail(validToken.sub))
+    .then(validToken => userRepository.find(validToken.sub))
     .then(user => {
         const name: string = req.body.name;
         const password: string = req.body.password;

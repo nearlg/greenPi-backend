@@ -20,7 +20,7 @@ import { requestAuthz } from "../plugins/authorization";
 
 // Configure database
 mongoose.Promise = Promise;
-const options    = {promiseLibrary: Promise};
+// const options    = {promiseLibrary: Promise};
 mongoose.connect(Config.Database.URI, { useMongoClient: true });
 
 // Create server
@@ -46,9 +46,9 @@ server.use(requestAuthz);
 // Set routes
 let apiVersion = Config.Server.VERSION.split('.');
 let apiRoute = '/api/v' + apiVersion[0];
-MeasureRoutes.routes(server, apiRoute + '/measures', socketIOService);
+MeasureRoutes.routes(server, apiRoute + '/measures');
 PumpRoutes.routes(server, apiRoute + '/pumps');
-PumpHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals', socketIOService);
+PumpHistoricalsRoutes.routes(server, apiRoute + '/pump-historicals');
 EnvironmentRoutes.routes(server, apiRoute + '/environments');
 SensorRoutes.routes(server, apiRoute + '/sensors');
 SensorTypeRoutes.routes(server, apiRoute + '/sensor-types');

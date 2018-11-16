@@ -5,34 +5,21 @@ import { handleJsonData, handleErrors } from "./helpers";
 
 export function addPump(req: Request, res: Response, next: Next) {
     pumpValidator.validate(req.body)
-    .then(pump => pumpRepository.create(pump))
+    .then(pumpRepository.create)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(err, next));
 }
 
 export function updatePump(req: Request, res: Response, next: Next) {
+    req.body.id = req.params.id;
     pumpValidator.validate(req.body, true)
-    .then(pump => pumpRepository.update(pump))
-    .then(pump => handleJsonData(req, res, next, pump))
-    .catch(err => handleErrors(err, next));
-}
-
-export function updatePumpById(req: Request, res: Response, next: Next) {
-    pumpValidator.validate(req.body, true)
-    .then(pump => pumpRepository.updateById(req.params.id, pump))
+    .then(pumpRepository.update)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(err, next));
 }
 
 export function deletePump(req: Request, res: Response, next: Next) {
-    pumpValidator.validate(req.body, true)
-    .then(pump => pumpRepository.remove(pump))
-    .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
-}
-
-export function deletePumpById(req: Request, res: Response, next: Next) {
-    pumpRepository.removeById(req.params.id)
+    pumpRepository.remove(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
     .catch(err => handleErrors(err, next));
 }
@@ -43,8 +30,8 @@ export function fetchPumps(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
-export function getPumpById(req: Request, res: Response, next: Next) {
-    pumpRepository.findById(req.params.id)
+export function getPump(req: Request, res: Response, next: Next) {
+    pumpRepository.find(req.params.id)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(err, next));
 }

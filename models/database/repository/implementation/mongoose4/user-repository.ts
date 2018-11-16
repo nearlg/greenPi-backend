@@ -1,6 +1,6 @@
 import mongoose = require('mongoose');
 import bcrypt = require('bcrypt');
-import { rejectIfNull, toObject, normalizeFiledNames } from './helpers';
+import { rejectIfNull, normalizeData } from './helpers';
 import { IUser } from '../../../../interface/user';
 import { IUserRepository } from '../../shared/user-repository';
 import { Security } from '../../../../../config';
@@ -64,46 +64,40 @@ export class UserRepository implements IUserRepository {
     create(document: IUser): Promise<IUser> {
         return UserModel.create(document)
         .then(rejectIfNull('User not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     update(document: IUser): Promise<IUser> {
         return UserModel.findOneAndUpdate({email: document.email}, document)
         .exec()
         .then(rejectIfNull('User not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     remove(email: string): Promise<IUser> {
         return UserModel.findOneAndRemove({email: email})
         .exec()
         .then(rejectIfNull('User not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     findAll(): Promise<IUser[]> {
         return UserModel.find().exec()
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     find(email: string): Promise<IUser> {
         return UserModel.findOne({ email: email })
         .exec()
         .then(rejectIfNull('User not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     getRoleName(email: string): Promise<RoleName> {
         return UserModel.findOne({ email: email })
         .exec()
         .then(rejectIfNull('User not found'))
-        .then(toObject)
-        .then(normalizeFiledNames)
+        .then(normalizeData)
         .then((user: IUser) => user.roleName);
     }
 }

@@ -1,5 +1,5 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, toObject, normalizeFiledNames } from "./helpers";
+import { rejectIfNull, normalizeData } from "./helpers";
 import { ISensorTypeRepository } from "../../shared/sensor-type-repository";
 import { ISensorType } from "../../../../interface/sensor-type";
 
@@ -29,36 +29,31 @@ export class SensorTypeRepository implements ISensorTypeRepository {
     create(document: ISensorType): Promise<ISensorType> {
         return SensorTypeModel.create(document)
         .then(rejectIfNull('Sensor type not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     update(document: ISensorType): Promise<ISensorType> {
         return SensorTypeModel.findByIdAndUpdate(document.id, document,
             {'new': true}).exec()
         .then(rejectIfNull('Sensor type not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     remove(id: string): Promise<ISensorType> {
         return SensorTypeModel.findByIdAndRemove(id).exec()
         .then(rejectIfNull('Sensor type not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     findAll(): Promise<ISensorType[]> {
         return SensorTypeModel.find().exec()
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 
     find(id: string): Promise<ISensorType> {
         return SensorTypeModel.findById(id).exec()
         .then(rejectIfNull('Sensor type not found'))
-        .then(toObject)
-        .then(normalizeFiledNames);
+        .then(normalizeData);
     }
 }
 

@@ -1,6 +1,6 @@
 import { Request, Next, Response} from "restify";
 import { verifyTokenFromRequest } from "../services/jwt-service";
-import { handleErrors } from "../routes/helpers";
+import { handleErrors } from "../controllers/helpers";
 import { RoleName } from "../services/authz-service/role-name";
 import { authzService } from "../services/authz-service";
 import { userRepository } from "../models/database/repository/implementation/mongoose4/user-repository";
@@ -22,7 +22,7 @@ function requestIsAuthorized(req: Request)
         return noAuthorization ? RoleName.NonRegistered :
         verifyTokenFromRequest(req)
         .then(validToken => validToken.sub)
-        .then(userRepository.getRoleNameByEmail);
+        .then(userRepository.getRoleName);
     })
     // If the rolename is NOT authorize for the giving path and method,
     // It creates an error

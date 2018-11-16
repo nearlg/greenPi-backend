@@ -1,22 +1,17 @@
 import * as restify from "restify";
-import * as Controller from "../controllers/user";
+import * as controller from "../controllers/user";
 
 export function routes(server: restify.Server, mainPath: string = ''): void{
-
     // User profile
-
-    server.post(mainPath + '/profile/sign-in', Controller.signIn);
-    server.post(mainPath + '/profile', Controller.signUp);
-    server.get(mainPath + '/profile', Controller.getProfile);
-    server.patch(mainPath + '/profile', Controller.editProfile);
+    server.post(mainPath + '/profile/sign-in', controller.signIn);
+    server.post(mainPath + '/profile', controller.signUp);
+    server.get(mainPath + '/profile', controller.getProfile);
+    server.patch(mainPath + '/profile', controller.editProfile);
 
     // For the Admins
-
-    server.post(mainPath, Controller.addUser);
-    // server.patch(mainPath, Controller.updateUser);
-    server.patch(mainPath + '/:email', Controller.updateUserByEmail);
-    // server.del(mainPath, Controller.deleteUser);
-    server.del(mainPath + '/:email', Controller.deleteUserByEmail);
-    server.get(mainPath, Controller.fetchUsers);
-    server.get(mainPath + '/:email', Controller.getUserByEmail);
+    server.post(mainPath, controller.addUser);
+    server.patch(mainPath + '/:email', controller.updateUser);
+    server.del(mainPath + '/:email', controller.deleteUser);
+    server.get(mainPath, controller.fetchUsers);
+    server.get(mainPath + '/:email', controller.getUser);
 }

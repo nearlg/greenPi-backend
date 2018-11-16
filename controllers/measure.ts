@@ -14,7 +14,7 @@ const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 function validateDependencies(measure: IMeasure): Promise<IMeasure> {
     const sensorId: string = (<ISensor>measure.sensor).id ||
         <string>measure.sensor;
-    return sensorRepository.findById(sensorId)
+    return sensorRepository.find(sensorId)
     .then(() => measure);
 }
 
@@ -27,7 +27,7 @@ function byEnvironmentId(req: Request, res: Response, next: Next) {
         let lte = req.query.lte? new Date(req.query.lte) : null;
         let sortBy: string = req.query.sortBy;
         let environmentId: string = req.query.byEnvironmentId;
-        return environmentRepository.findById(environmentId)
+        return environmentRepository.find(environmentId)
         .then(environment => measureRepository
             .findAllBySensors(<Array<ISensor>>environment.sensors, sortBy, gte, lte));
     });
@@ -42,7 +42,7 @@ function bySensorId(req: Request, res: Response, next: Next) {
         let lte = req.query.lte? new Date(req.query.lte) : null;
         let sortBy: string = req.query.sortBy;
         let sensorId: string = req.query.bySensorId;
-        return sensorRepository.findById(sensorId)
+        return sensorRepository.find(sensorId)
         .then(() => measureRepository.findAllBySensorId(sensorId, sortBy, gte, lte));
     });
 }
@@ -56,12 +56,12 @@ function bySensor(req: Request, res: Response, next: Next) {
         let lte = req.query.lte? new Date(req.query.lte) : null;
         let sortBy: string = req.query.sortBy;
         return sensorValidator.validate(req.query.sensor, true)
-        .then(sensor => sensorRepository.findById(sensor.id)
+        .then(sensor => sensorRepository.find(sensor.id)
         .then(() => measureRepository.findAllBySensor(sensor, sortBy, gte, lte)));
     });
 }
 
-export function getMeasure(req: Request, res: Response, next: Next) {
+export function getMeasures(req: Request, res: Response, next: Next) {
     let queryResult: Promise<IMeasure[]> = null;
     if(req.query.byEnvironmentId){
         queryResult = byEnvironmentId(req, res, next);
@@ -87,6 +87,7 @@ export function addMeasure(req: Request, res: Response, next: Next) {
 }
 
 export function updateMeasure(req: Request, res: Response, next: Next) {
+    req.body.id = req.params.id;
     measureValidator.validate(req.body, true)
     .then(validateDependencies)
     .then(measureRepository.update)
@@ -94,23 +95,8 @@ export function updateMeasure(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
-export function updateMeasureById(req: Request, res: Response, next: Next) {
-    measureValidator.validate(req.body)
-    .then(validateDependencies)
-    .then(measure => measureRepository.updateById(req.params.id, measure))
-    .then(measure => handleJsonData(req, res, next, measure))
-    .catch(err => handleErrors(err, next));
-}
-
 export function deleteMeasure(req: Request, res: Response, next: Next) {
-    measureValidator.validate(req.body, true)
-    .then(measureRepository.remove)
-    .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
-}
-
-export function deleteMeasureById(req: Request, res: Response, next: Next) {
-    measureRepository.removeById(req.params.id)
+    measureRepository.remove(req.params.id)
     .then(measure => handleJsonData(req, res, next, measure))
     .catch(err => handleErrors(err, next));
 }
@@ -121,8 +107,8 @@ export function fetchMeasures(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
-export function getMeasureById(req: Request, res: Response, next: Next) {
-    measureRepository.findById(req.params.id)
+export function getMeasure(req: Request, res: Response, next: Next) {
+    measureRepository.find(req.params.id)
     .then(measure => handleJsonData(req, res, next, measure))
     .catch(err => handleErrors(err, next));
 }

@@ -14,7 +14,7 @@ const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 function validateDependencies(pumpHistorical: IPumpHistorical): Promise<IPumpHistorical> {
     const pumpId: string = (<IPump>pumpHistorical.pump).id ||
         <string>pumpHistorical.pump;
-    return pumpRepository.findById(pumpId)
+    return pumpRepository.find(pumpId)
     .then(() => pumpHistorical);
 }
 
@@ -28,7 +28,7 @@ Promise<IPumpHistorical[]> {
         let lte = req.query.lte? new Date(req.query.lte) : null;
         let sortBy: string = req.query.sortBy;
         let environmentId: string = req.query.byEnvironmentId;
-        return environmentRepository.findById(environmentId)
+        return environmentRepository.find(environmentId)
         .then(environment => pumpHistoricalRepository
             .findAllByPumps(<Array<IPump>>environment.pumps, sortBy, gte, lte));
     });
@@ -44,7 +44,7 @@ Promise<IPumpHistorical[]> {
         let lte = req.query.lte? new Date(req.query.lte) : null;
         let sortBy: string = req.query.sortBy;
         let pumpId: string = req.query.byPumpId;
-        return pumpRepository.findById(pumpId)
+        return pumpRepository.find(pumpId)
         .then(() => pumpHistoricalRepository.findAllByPumpId(pumpId, sortBy, gte, lte));
     });
 }
@@ -59,7 +59,7 @@ Promise<IPumpHistorical[]> {
         let lte = req.query.lte? new Date(req.query.lte) : null;
         let sortBy: string = req.query.sortBy;
         return pumpValidator.validate(req.query.pump, true)
-        .then(pump => pumpRepository.findById(pump.id)
+        .then(pump => pumpRepository.find(pump.id)
         .then(() => pumpHistoricalRepository.findAllByPump(pump, sortBy, gte, lte)));
     });
 }
@@ -85,36 +85,21 @@ export function addPumpHistorical(req: Request, res: Response, next: Next) {
     .then(validateDependencies)
     .then(pumpHistoricalRepository.create)
     .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
-    .then(pumpHistorical => socketIOService.pumpsSIOService
-        .emitLastPumpHistorical(pumpHistorical))
+    .then(socketIOService.pumpsSIOService.emitLastPumpHistorical)
     .catch(err => handleErrors(err, next));
 }
 
 export function updatePumpHistorical(req: Request, res: Response, next: Next) {
-    pumpHistoricalValidator.validate(req.body, true)
-    .then(validateDependencies)
-    .then(pumpHistoricalRepository.update)
-    .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
-    .catch(err => handleErrors(err, next));
-}
-
-export function updatePumpHistoricalById(req: Request, res: Response, next: Next) {
+    req.body.id = req.params.id;
     pumpHistoricalValidator.validate(req.body)
     .then(validateDependencies)
-    .then(pumpHistorical => pumpHistoricalRepository.updateById(req.params.id, pumpHistorical))
+    .then(pumpHistorical => pumpHistoricalRepository.update(pumpHistorical))
     .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
     .catch(err => handleErrors(err, next));
 }
 
 export function deletePumpHistorical(req: Request, res: Response, next: Next) {
-    pumpHistoricalValidator.validate(req.body, true)
-    .then(pumpHistoricalRepository.remove)
-    .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
-}
-
-export function deletePumpHistoricalById(req: Request, res: Response, next: Next) {
-    return pumpHistoricalRepository.removeById(req.params.id)
+    return pumpHistoricalRepository.remove(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
     .catch(err => handleErrors(err, next));
 }
@@ -125,8 +110,8 @@ export function fetchPumpHistoricals(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
-export function getPumpHistoricalById(req: Request, res: Response, next: Next) {
-    pumpHistoricalRepository.findById(req.params.id)
+export function getPumpHistorical(req: Request, res: Response, next: Next) {
+    pumpHistoricalRepository.find(req.params.id)
     .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
     .catch(err => handleErrors(err, next));
 }

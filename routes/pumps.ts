@@ -1,12 +1,10 @@
 import * as restify from "restify";
-import * as Controller from "../controllers/pump";
+import * as controller from "../controllers/pump";
 
 export function routes(server: restify.Server, mainPath: string = ''): void{
-    server.post(mainPath, Controller.addPump);
-    // server.patch(mainPath, Controller.updatePump);
-    server.patch(mainPath + '/:id', Controller.updatePumpById);
-    // server.del(mainPath, Controller.deletePump);
-    server.del(mainPath + '/:id', Controller.deletePumpById);
-    server.get(mainPath, Controller.fetchPumps);
-    server.get(mainPath + '/:id',  Controller.getPumpById);
+    server.post(mainPath, controller.addPump);
+    server.patch(mainPath + '/:id', controller.updatePump);
+    server.del(mainPath + '/:id', controller.deletePump);
+    server.get(mainPath, controller.fetchPumps);
+    server.get(mainPath + '/:id',  controller.getPump);
 }

@@ -1,29 +1,5 @@
-export function rejectIfNull(errorMsg: string) {
-    return function (document: any) {
-        if (!document) {
-            let err: Error = new Error(errorMsg);
-            err.name = 'DataNotFoundError';
-            throw err;
-        } else {
-            return document;
-        }
-    };
-}
-
-export function toObject(documents: any) {
-    return Array.isArray(documents) ?
-        documents.map(toObjectDocument) :
-        toObjectDocument(documents);
-}
-
 function toObjectDocument(document: any) {
     return document.toObject();
-}
-
-export function normalizeFiledNames(document: any): any {
-    return Array.isArray(document) ?
-        normalizeDocuments(document) :
-        normalizeDocument(document);
 }
 
 function normalizeDocuments(documents: any[]): any[] {
@@ -44,6 +20,35 @@ function normalizeDocument(document: any): any {
         normalizeFiledNames(document[field]);
     }
     return document;
+}
+
+function toObject(documents: any) {
+    return Array.isArray(documents) ?
+        documents.map(toObjectDocument) :
+        toObjectDocument(documents);
+}
+
+function normalizeFiledNames(document: any): any {
+    return Array.isArray(document) ?
+        normalizeDocuments(document) :
+        normalizeDocument(document);
+}
+
+export function normalizeData(data: any): any {
+    data = toObject(data);
+    return normalizeFiledNames(data);
+}
+
+export function rejectIfNull(errorMsg: string) {
+    return function (document: any) {
+        if (!document) {
+            let err: Error = new Error(errorMsg);
+            err.name = 'DataNotFoundError';
+            throw err;
+        } else {
+            return document;
+        }
+    };
 }
 
 export function getSearchingObject(gte?: Date, lte?: Date): Object {
