@@ -1,23 +1,21 @@
 import { IUser } from '../models/interface/user';
-import { NameRegex, EmailRegex,  PasswordRegex, FacebookIdRegex,
-    GoogleIdRegex}
-    from './rules/user';
+import * as userRegex from './rules/user';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 import { FacebookAccount } from '../models/interface/facebook-account';
 import { GoogleAccount } from '../models/interface/google-account';
 import { RoleName } from '../services/authz-service/role-name';
 
 export function validateName(name: string): Promise<string>  {
-    return regexValidation(name, NameRegex, 'The user must have a valid name');
+    return regexValidation(name, userRegex.NameRegex, 'The user must have a valid name');
 }
 
 export function validateEmail(email: string): Promise<string>  {
-    return regexValidation(email, EmailRegex,
+    return regexValidation(email, userRegex.EmailRegex,
         'The user must have a valid email');
 }
 
 export function validatePassword(password: string): Promise<string>  {
-    return regexValidation(password, PasswordRegex,
+    return regexValidation(password, userRegex.PasswordRegex,
         'The user must have a valid password');
 }
 
@@ -30,7 +28,7 @@ Promise<null | FacebookAccount> {
         const err: Error = createError('A Facebook account must have an id');
         return Promise.reject(err);
     }
-    return regexValidation(facebookAccount.id, FacebookIdRegex,
+    return regexValidation(facebookAccount.id, userRegex.FacebookIdRegex,
         'The Facebook Id must be a valid Id')
     .then(() => facebookAccount);
 }
@@ -44,7 +42,7 @@ Promise<null | GoogleAccount> {
         const err: Error = createError('A Google account must have an id');
         return Promise.reject(err);
     }
-    return regexValidation(googleAccount.id, GoogleIdRegex,
+    return regexValidation(googleAccount.id, userRegex.GoogleIdRegex,
         'The Google Id must be a valid Id')
     .then(() => googleAccount);
 }

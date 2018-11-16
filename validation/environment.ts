@@ -1,18 +1,18 @@
 import { IEnvironment } from '../models/interface/environment';
-import { NameRegex, DescriptionRegex, IdRegex } from './rules/common';
+import * as environmentRegex from './rules/environment';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 import { ISensor } from '../models/interface/sensor';
 import { IPump } from '../models/interface/pump';
 
 export function validateName(name: string): Promise<string>  {
-    return regexValidation(name, NameRegex, 'The environment must have a valid name');
+    return regexValidation(name, environmentRegex.NameRegex, 'The environment must have a valid name');
 }
 
 export function validateDescription(description: string): Promise<string>  {
     if(!description){
         return Promise.resolve(null);
     }
-    return regexValidation(description, DescriptionRegex, 'The environment must have a valid description');
+    return regexValidation(description, environmentRegex.DescriptionRegex, 'The environment must have a valid description');
 }
 
 export function validateSensors(sensors: (ISensor|string)[]): Promise<(ISensor|string)[]> {
@@ -36,7 +36,7 @@ export function validatePumps(pumps: (IPump|string)[]): Promise<(IPump|string)[]
 }
 
 export function validateId(id: string): Promise<string> {
-    if(id && IdRegex.test(id)) {
+    if(id && environmentRegex.IdRegex.test(id)) {
         return Promise.resolve(id);
     }
     let err: Error = createError('Invalid environment id');
