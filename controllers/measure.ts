@@ -1,8 +1,15 @@
+import { Request, Response, Next } from "restify";
+import { handleJsonData, handleErrors, checkQuery } from "./helpers";
 import { IMeasure } from "../models/interface/measure";
 import { measureRepository } from "../models/database/repository/implementation/mongoose4/measure-repository"
 import { environmentRepository } from "../models/database/repository/implementation/mongoose4/environment-repository"
 import { ISensor } from "../models/interface/sensor";
+import * as measureValidator from "../validation/measure";
+import * as sensorValidator from "../validation/sensor";
 import { sensorRepository } from "../models/database/repository/implementation/mongoose4/sensor-repository";
+import { socketIOService } from "../services/socket-io-service";
+
+const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
 function validateDependencies(measure: IMeasure): Promise<IMeasure> {
     const sensorId: string = (<ISensor>measure.sensor).id ||
@@ -11,49 +18,111 @@ function validateDependencies(measure: IMeasure): Promise<IMeasure> {
     .then(() => measure);
 }
 
-export function fetchByEnvironmentId(environmentId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IMeasure[]> {
-    return environmentRepository.findById(environmentId)
-    .then(environment => measureRepository
-        .findAllBySensors(<Array<ISensor>>environment.sensors, sortBy, gte, lte));
+function byEnvironmentId(req: Request, res: Response, next: Next) {
+    let commQuery: string[] = commonQuery;
+    commQuery.push('byEnvironmentId');
+    return checkQuery(commQuery, req.query)
+    .then(() => {
+        let gte = req.query.gte? new Date(req.query.gte) : null;
+        let lte = req.query.lte? new Date(req.query.lte) : null;
+        let sortBy: string = req.query.sortBy;
+        let environmentId: string = req.query.byEnvironmentId;
+        return environmentRepository.findById(environmentId)
+        .then(environment => measureRepository
+            .findAllBySensors(<Array<ISensor>>environment.sensors, sortBy, gte, lte));
+    });
 }
 
-export function fetchBySensorId(sensorId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IMeasure[]> {
-    return sensorRepository.findById(sensorId)
-    .then(() => measureRepository.findAllBySensorId(sensorId, sortBy, gte, lte));
+function bySensorId(req: Request, res: Response, next: Next) {
+    let commQuery: string[] = commonQuery;
+    commQuery.push('bySensorId');
+    return checkQuery(commQuery, req.query)
+    .then(() => {
+        let gte = req.query.gte? new Date(req.query.gte) : null;
+        let lte = req.query.lte? new Date(req.query.lte) : null;
+        let sortBy: string = req.query.sortBy;
+        let sensorId: string = req.query.bySensorId;
+        return sensorRepository.findById(sensorId)
+        .then(() => measureRepository.findAllBySensorId(sensorId, sortBy, gte, lte));
+    });
 }
 
-export function fetchBySensor(sensor: ISensor, sortBy?: string, gte?: Date, lte?: Date): Promise<null | IMeasure[]> {
-    return sensorRepository.findById(sensor.id)
-    .then(() => measureRepository.findAllBySensor(sensor, sortBy, gte, lte));
+function bySensor(req: Request, res: Response, next: Next) {
+    let commQuery: string[] = commonQuery;
+    commQuery.push('bySensor');
+    return checkQuery(commQuery, req.query)
+    .then(() => {
+        let gte = req.query.gte? new Date(req.query.gte) : null;
+        let lte = req.query.lte? new Date(req.query.lte) : null;
+        let sortBy: string = req.query.sortBy;
+        return sensorValidator.validate(req.query.sensor, true)
+        .then(sensor => sensorRepository.findById(sensor.id)
+        .then(() => measureRepository.findAllBySensor(sensor, sortBy, gte, lte)));
+    });
 }
 
-export function addMeasure(measure: IMeasure): Promise<IMeasure> {
-    return validateDependencies(measure)
-    .then(() => measureRepository.create(measure));
+export function getMeasure(req: Request, res: Response, next: Next) {
+    let queryResult: Promise<IMeasure[]> = null;
+    if(req.query.byEnvironmentId){
+        queryResult = byEnvironmentId(req, res, next);
+    } else if(req.query.bySensorId){
+        queryResult = bySensorId(req, res, next);
+    } else {
+        queryResult = bySensor(req, res, next);
+    }
+    queryResult.then(measure => handleJsonData(req, res, next, measure))
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateMeasure(measure: IMeasure): Promise<IMeasure> {
-    return validateDependencies(measure)
-    .then(() => measureRepository.update(measure));
+export function addMeasure(req: Request, res: Response, next: Next) {
+    if (!req.body.date) {
+        req.body.date = new Date();
+    }
+    measureValidator.validate(req.body)
+    .then(validateDependencies)
+    .then(measureRepository.create)
+    .then(measure => handleJsonData<IMeasure>(req, res, next, measure))
+    .then(socketIOService.sensorsSIOService.emitLastMeasure)
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateMeasureById(id: string, measure: IMeasure): Promise<IMeasure> {
-    return validateDependencies(measure)
-    .then(() => measureRepository.updateById(id, measure));
+export function updateMeasure(req: Request, res: Response, next: Next) {
+    measureValidator.validate(req.body, true)
+    .then(validateDependencies)
+    .then(measureRepository.update)
+    .then(measure => handleJsonData(req, res, next, measure))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteMeasure(measure: IMeasure): Promise<void> {
-    return measureRepository.remove(measure);
+export function updateMeasureById(req: Request, res: Response, next: Next) {
+    measureValidator.validate(req.body)
+    .then(validateDependencies)
+    .then(measure => measureRepository.updateById(req.params.id, measure))
+    .then(measure => handleJsonData(req, res, next, measure))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteMeasureById(id: string): Promise<void> {
-    return measureRepository.removeById(id);
+export function deleteMeasure(req: Request, res: Response, next: Next) {
+    measureValidator.validate(req.body, true)
+    .then(measureRepository.remove)
+    .then(() => handleJsonData(req, res, next, null))
+    .catch(err => handleErrors(err, next));
 }
 
-export function fetchMeasures(): Promise<IMeasure[]> {
-    return measureRepository.findAll();
+export function deleteMeasureById(req: Request, res: Response, next: Next) {
+    measureRepository.removeById(req.params.id)
+    .then(measure => handleJsonData(req, res, next, measure))
+    .catch(err => handleErrors(err, next));
 }
 
-export function getMeasureById(id: string): Promise<IMeasure> {
-    return measureRepository.findById(id);
+export function fetchMeasures(req: Request, res: Response, next: Next) {
+    measureRepository.findAll()
+    .then(measures => handleJsonData(req, res, next, measures))
+    .catch(err => handleErrors(err, next));
+}
+
+export function getMeasureById(req: Request, res: Response, next: Next) {
+    measureRepository.findById(req.params.id)
+    .then(measure => handleJsonData(req, res, next, measure))
+    .catch(err => handleErrors(err, next));
 }

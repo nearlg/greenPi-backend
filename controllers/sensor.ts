@@ -1,4 +1,7 @@
+import { Request, Response, Next } from "restify";
+import { handleJsonData, handleErrors } from "./helpers";
 import { ISensor } from "../models/interface/sensor";
+import * as sensorValidator from "../validation/sensor";
 import { sensorRepository } from "../models/database/repository/implementation/mongoose4/sensor-repository"
 import { sensorTypeRepository } from "../models/database/repository/implementation/mongoose4/sensor-type-repository"
 import { ISensorType } from "../models/interface/sensor-type";
@@ -10,33 +13,51 @@ function validateDependencies(sensor: ISensor): Promise<ISensor> {
     .then(() => sensor);
 }
 
-export function addSensor(sensor: ISensor): Promise<ISensor> {
-    return validateDependencies(sensor)
-    .then(() => sensorRepository.create(sensor));
+export function addSensor(req: Request, res: Response, next: Next) {
+    sensorValidator.validate(req.body)
+    .then(validateDependencies)
+    .then(sensorRepository.create)
+    .then(sensor => handleJsonData(req, res, next, sensor))
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateSensor(sensor: ISensor): Promise<ISensor> {
-    return validateDependencies(sensor)
-    .then(() => sensorRepository.update(sensor));
+export function updateSensor(req: Request, res: Response, next: Next) {
+    sensorValidator.validate(req.body, true)
+    .then(validateDependencies)
+    .then(sensorRepository.update)
+    .then(sensor => handleJsonData(req, res, next, sensor))
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateSensorById(id: string, sensor: ISensor): Promise<ISensor> {
-    return validateDependencies(sensor)
-    .then(() => sensorRepository.updateById(id, sensor));
+export function updateSensorById(req: Request, res: Response, next: Next) {
+    sensorValidator.validate(req.body)
+    .then(validateDependencies)
+    .then(sensor => sensorRepository.updateById(req.params.id, sensor))
+    .then(sensor => handleJsonData(req, res, next, sensor))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteSensor(sensor: ISensor): Promise<void> {
-    return sensorRepository.remove(sensor);
+export function deleteSensor(req: Request, res: Response, next: Next) {
+    sensorValidator.validate(req.body, true)
+    .then(sensorRepository.remove)
+    .then(() => handleJsonData(req, res, next, null))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteSensorById(id: string): Promise<void> {
-    return sensorRepository.removeById(id);
+export function deleteSensorById(req: Request, res: Response, next: Next) {
+    sensorRepository.removeById(req.params.id)
+    .then(() => handleJsonData(req, res, next, null))
+    .catch(err => handleErrors(err, next));
 }
 
-export function fetchSensors(): Promise<ISensor[]> {
-    return sensorRepository.findAll();
+export function fetchSensors(req: Request, res: Response, next: Next) {
+    sensorRepository.findAll()
+    .then(sensors => handleJsonData(req, res, next, sensors))
+    .catch(err => handleErrors(err, next));
 }
 
-export function getSensorById(id: string): Promise<ISensor> {
-    return sensorRepository.findById(id);
+export function getSensorById(req: Request, res: Response, next: Next) {
+    sensorRepository.findById(req.params.id)
+    .then(sensor => handleJsonData(req, res, next, sensor))
+    .catch(err => handleErrors(err, next));
 }

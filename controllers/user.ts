@@ -1,38 +1,69 @@
+import { Request, Response, Next } from "restify";
 import bcrypt = require('bcrypt');
-import { IUser } from "../models/interface/user";
+import { handleJsonData, handleErrors } from "./helpers";
+import * as userValidator from "../validation/user";
 import { userRepository } from "../models/database/repository/implementation/mongoose4/user-repository";
-import { createToken } from "../services/jwt-service";
+import { createToken, verifyTokenFromRequest } from "../services/jwt-service";
 
-export function addUser(user: IUser): Promise<IUser> {
-    return userRepository.create(user);
+export function addUser(req: Request, res: Response, next: Next) {
+    userValidator.validate(req.body, true, true)
+    .then(user => userRepository.create(user))
+    .then(user => handleJsonData(req, res, next, user))
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateUser(user: IUser): Promise<IUser> {
-    return userRepository.update(user);
+export function updateUser(req: Request, res: Response, next: Next) {
+    userValidator.validate(req.body, true)
+    .then(user => userRepository.update(user))
+    .then(user => handleJsonData(req, res, next, user))
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateUserByEmail(email: string, user: IUser): Promise<IUser> {
-    return userRepository.updateByEmail(email, user);
+export function updateUserByEmail(req: Request, res: Response, next: Next) {
+    userValidator.validate(req.body)
+    .then(user => userRepository.updateByEmail(req.params.email, user))
+    .then(user => handleJsonData(req, res, next, user))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteUser(user: IUser): Promise<void> {
-    return userRepository.remove(user);
+export function deleteUser(req: Request, res: Response, next: Next) {
+    userValidator.validate(req.body, true)
+    .then(user => userRepository.remove(user))
+    .then(() => handleJsonData(req, res, next, null))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteUserByEmail(email: string): Promise<void> {
-    return userRepository.removeByEmail(email);
+export function deleteUserByEmail(req: Request, res: Response, next: Next) {
+    userRepository.removeByEmail(req.params.email)
+    .then(() => handleJsonData(req, res, next, null))
+    .catch(err => handleErrors(err, next));
 }
 
-export function fetchUsers(): Promise<IUser[]> {
-    return userRepository.findAll();
+export function fetchUsers(req: Request, res: Response, next: Next) {
+    userRepository.findAll()
+    .then(users => handleJsonData(req, res, next, users))
+    .catch(err => handleErrors(err, next));
 }
 
-export function getUserByEmail(email: string): Promise<IUser> {
-    return userRepository.findByEmail(email);
+export function getUserByEmail(req: Request, res: Response, next: Next) {
+    userRepository.findByEmail(req.params.email)
+    .then(user => handleJsonData(req, res, next, user))
+    .catch(err => handleErrors(err, next));
 }
 
-export function signIn(userEmail: string, password: string): Promise<string> {
-    return userRepository.findByEmail(userEmail)
+export function signUp(req: Request, res: Response, next: Next) {
+    userValidator.validate(req.body, true)
+    .then(user => userRepository.create(user))
+    .then(user => handleJsonData(req, res, next, user))
+    .catch(err => handleErrors(err, next));
+}
+
+export function signIn(req: Request, res: Response, next: Next) {
+    const email: string = req.body.email;
+    const password: string = req.body.password;
+    userValidator.validatePassword(password)
+    .then(() => userValidator.validateEmail(email))
+    .then(userRepository.findByEmail)
     .then(user => {
         return bcrypt.compare(password, user.password)
         .then(passwdIsCorrect => {
@@ -42,13 +73,41 @@ export function signIn(userEmail: string, password: string): Promise<string> {
             }
             return Promise.reject();
         })
+        // With this, the real error is hidden and
+        // is more complex to know if the user does not exist
+        // or the password was wrong
+        .catch(error => {
+            const err = new Error();
+            err.name = 'InvalidCredentialsError';
+            return Promise.reject(err);
+        });
     })
-    // With this, the real error is hidden and
-    // is more complex to know if the user does not exist
-    // or the password was wrong
-    .catch(error => {
-        const err = new Error();
-        err.name = 'InvalidCredentialsError';
-        return Promise.reject(err);
-    });
+    .then(token => handleJsonData(req, res, next, token))
+    .catch(err => handleErrors(err, next));
+}
+
+export function getProfile(req: Request, res: Response, next: Next) {
+    verifyTokenFromRequest(req)
+    .then(validToken => userRepository.findByEmail(validToken.sub))
+    .then(user => handleJsonData(req, res, next, user))
+    .catch(err => handleErrors(err, next));
+}
+
+export function editProfile(req: Request, res: Response, next: Next) {
+    verifyTokenFromRequest(req)
+    .then(validToken => userRepository.findByEmail(validToken.sub))
+    .then(user => {
+        const name: string = req.body.name;
+        const password: string = req.body.password;
+        return userValidator.validateName(name)
+        .then(() => userValidator.validatePassword(password))
+        .then(() => {
+            user.name = name;
+            user.password = password;
+            return user;
+        })
+    })
+    .then(userRepository.update)
+    .then(user => handleJsonData(req, res, next, user))
+    .catch(err => handleErrors(err, next));
 }

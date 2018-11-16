@@ -10,11 +10,11 @@ import * as EnvironmentRoutes from "../routes/environments";
 import * as PumpRoutes from "../routes/pumps";
 import * as PumpHistoricalsRoutes from "../routes/pump-historicals";
 import * as UserRoutes from "../routes/users";
-import { addErrorHandler } from "../routes/helpers";
-import { errorHandler as DataErrorHandler } from "../routes/helpers/data-error-handler";
-import { errorHandler as MongooseErrorHandler } from "../routes/helpers/mongoose-error-handler";
-import { errorHandler as AuthErrorHandler } from "../routes/helpers/auth-error-handler";
-import { SocketIOService } from "../services/socket-io-service";
+import { addErrorHandler } from "../controllers/helpers";
+import { errorHandler as DataErrorHandler } from "../controllers/helpers/data-error-handler";
+import { errorHandler as MongooseErrorHandler } from "../controllers/helpers/mongoose-error-handler";
+import { errorHandler as AuthErrorHandler } from "../controllers/helpers/auth-error-handler";
+import { socketIOService } from "../services/socket-io-service";
 import { requestAuthz } from "../plugins/authorization";
 
 
@@ -35,8 +35,7 @@ addErrorHandler(MongooseErrorHandler);
 addErrorHandler(AuthErrorHandler);
 
 // SocketIO Service setup and listening
-const socketIOService = new SocketIOService(server.server);
-socketIOService.listen();
+socketIOService.listen(server.server);
 
 // Set server plugings
 server.use(restify.plugins.acceptParser(server.acceptable));

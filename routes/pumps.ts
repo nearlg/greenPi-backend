@@ -1,53 +1,12 @@
 import * as restify from "restify";
 import * as Controller from "../controllers/pump";
-import * as pumpValidator from "../validation/pump";
-import { handleJsonData, handleErrors } from "./helpers";
 
 export function routes(server: restify.Server, mainPath: string = ''): void{
-
-    server.post(mainPath, (req, res, next) => {
-        pumpValidator.validate(req.body)
-        .then(pump => Controller.addPump(pump))
-        .then(pump => handleJsonData(req, res, next, pump))
-        .catch(err => handleErrors(err, next));
-    });
-
-    server.patch(mainPath, (req, res, next) => {
-        pumpValidator.validate(req.body, true)
-        .then(pump => Controller.updatePump(pump))
-        .then(pump => handleJsonData(req, res, next, pump))
-        .catch(err => handleErrors(err, next));
-    });
-
-    server.patch(mainPath + '/:id', (req, res, next) => {
-        pumpValidator.validate(req.body)
-        .then(pump => Controller.updatePumpById(req.params.id, pump))
-        .then(pump => handleJsonData(req, res, next, pump))
-        .catch(err => handleErrors(err, next));
-    });
-
-    server.del(mainPath, (req, res, next) => {
-        pumpValidator.validate(req.body, true)
-        .then(pump => Controller.deletePump(pump))
-        .then(() => handleJsonData(req, res, next, null))
-        .catch(err => handleErrors(err, next));
-    });
-
-    server.del(mainPath + '/:id', (req, res, next) => {
-        Controller.deletePumpById(req.params.id)
-        .then(() => handleJsonData(req, res, next, null))
-        .catch(err => handleErrors(err, next));
-    });
-
-    server.get(mainPath, (req, res, next) => {
-        Controller.fetchPumps()
-        .then(pumps => handleJsonData(req, res, next, pumps))
-        .catch(err => handleErrors(err, next));
-    });
-
-    server.get(mainPath + '/:id',  (req, res, next) => {
-        Controller.getPumpById(req.params.id)
-        .then(pump => handleJsonData(req, res, next, pump))
-        .catch(err => handleErrors(err, next));
-    });
+    server.post(mainPath, Controller.addPump);
+    // server.patch(mainPath, Controller.updatePump);
+    server.patch(mainPath + '/:id', Controller.updatePumpById);
+    // server.del(mainPath, Controller.deletePump);
+    server.del(mainPath + '/:id', Controller.deletePumpById);
+    server.get(mainPath, Controller.fetchPumps);
+    server.get(mainPath + '/:id',  Controller.getPumpById);
 }

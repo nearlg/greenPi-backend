@@ -1,30 +1,60 @@
-import { IEnvironment } from "../models/interface/environment";
+import { Request, Response, Next } from "restify";
 import { environmentRepository } from "../models/database/repository/implementation/mongoose4/environment-repository"
+import * as environmentValidator from "../validation/environment";
+import { handleJsonData, handleErrors } from "./helpers";
 
-export function addEnvironment(environment: IEnvironment): Promise<IEnvironment> {
-    return environmentRepository.create(environment);
+function addEnvironment(req: Request, res: Response, next: Next) {
+    environmentValidator.validate(req.body)
+    .then(environment => environmentRepository.create(environment))
+    .then(environment => handleJsonData(req, res, next, environment))
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateEnvironment(environment: IEnvironment): Promise<IEnvironment> {
-    return environmentRepository.update(environment);
+function updateEnvironment(req: Request, res: Response, next: Next) {
+    environmentValidator.validate(req.body, true)
+    .then(environment => environmentRepository.update(environment))
+    .then(environment => handleJsonData(req, res, next, environment))
+    .catch(err => handleErrors(err, next));
 }
 
-export function updateEnvironmentById(id: string, environment: IEnvironment): Promise<IEnvironment> {
-    return environmentRepository.updateById(id, environment);
+function updateEnvironmentById(req: Request, res: Response, next: Next) {
+    environmentValidator.validate(req.body)
+    .then(environment => environmentRepository.updateById(req.params.id, environment))
+    .then(environment => handleJsonData(req, res, next, environment))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteEnvironment(environment: IEnvironment): Promise<void> {
-    return environmentRepository.remove(environment);
+function deleteEnvironment(req: Request, res: Response, next: Next) {
+    environmentValidator.validate(req.body, true)
+    .then(environment => environmentRepository.remove(environment))
+    .then(() => handleJsonData(null, res, next, req))
+    .catch(err => handleErrors(err, next));
 }
 
-export function deleteEnvironmentById(id: string): Promise<void> {
-    return environmentRepository.removeById(id);
+function deleteEnvironmentById(req: Request, res: Response, next: Next) {
+    return environmentRepository.removeById(req.params.id)
+    .then(() => handleJsonData(null, res, next, req))
+    .catch(err => handleErrors(err, next));
 }
 
-export function fetchEnvironments(): Promise<IEnvironment[]> {
-    return environmentRepository.findAll();
+function fetchEnvironments(req: Request, res: Response, next: Next) {
+    return environmentRepository.findAll()
+    .then(environments => handleJsonData(req, res, next, environments))
+    .catch(err => handleErrors(err, next));
 }
 
-export function getEnvironmentById(id: string): Promise<IEnvironment> {
-    return environmentRepository.findById(id);
+function getEnvironmentById(req: Request, res: Response, next: Next) {
+    return environmentRepository.findById(req.params.id)
+    .then(environment => handleJsonData(req, res, next, environment))
+    .catch(err => handleErrors(err, next));
+}
+
+export {
+    addEnvironment,
+    updateEnvironment,
+    updateEnvironmentById,
+    deleteEnvironment,
+    deleteEnvironmentById,
+    fetchEnvironments,
+    getEnvironmentById
 }
