@@ -1,9 +1,9 @@
-import { Request, Next, Response} from "restify";
-import { verifyTokenFromRequest } from "../services/jwt-service";
-import { handleErrors } from "../controllers/helpers";
-import { RoleName } from "../services/authz-service/role-name";
-import { authzService } from "../services/authz-service";
-import { userRepository } from "../models/database/repository/implementation/mongoose4/user-repository";
+import { Request, Next, Response} from 'restify';
+import { verifyTokenFromRequest } from '../services/jwt-service';
+import { handleErrors } from '../controllers/helpers';
+import { RoleName } from '../services/authz-service/role-name';
+import { authzService } from '../services/authz-service';
+import { userRepository } from '../models/database/repository/implementation/mongoose4/user-repository';
 
 /**
  * Check if the user role can have access to the path

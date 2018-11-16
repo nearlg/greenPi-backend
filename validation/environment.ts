@@ -1,8 +1,8 @@
-import { IEnvironment } from "../models/interface/environment";
-import { NameRegex, DescriptionRegex, IdRegex } from "./rules/common";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { ISensor } from "../models/interface/sensor";
-import { IPump } from "../models/interface/pump";
+import { IEnvironment } from '../models/interface/environment';
+import { NameRegex, DescriptionRegex, IdRegex } from './rules/common';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { ISensor } from '../models/interface/sensor';
+import { IPump } from '../models/interface/pump';
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, NameRegex, 'The environment must have a valid name');

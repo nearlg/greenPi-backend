@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, normalizeData } from "./helpers";
-import { IEnvironmentRepository } from "../../shared/environment-repository";
-import { IEnvironment } from "../../../../interface/environment";
+import { rejectIfNull, normalizeData } from './helpers';
+import { IEnvironmentRepository } from '../../shared/environment-repository';
+import { IEnvironment } from '../../../../interface/environment';
 
 export interface IEnvironmentModel extends IEnvironment, mongoose.Document {
 }

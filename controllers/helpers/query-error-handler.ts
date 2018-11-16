@@ -1,6 +1,6 @@
-import { IErrorHandler } from "./interface/error-handler";
-import { Next } from "restify";
-import { InvalidArgumentError, HttpError, MissingParameterError } from "restify-errors";//TODO: find error type for queries
+import { IErrorHandler } from './interface/error-handler';
+import { Next } from 'restify';
+import { InvalidArgumentError, HttpError, MissingParameterError } from 'restify-errors';//TODO: find error type for queries
 
 class QueryErrorHandler implements IErrorHandler {
 

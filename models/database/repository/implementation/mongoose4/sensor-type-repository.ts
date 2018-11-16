@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, normalizeData } from "./helpers";
-import { ISensorTypeRepository } from "../../shared/sensor-type-repository";
-import { ISensorType } from "../../../../interface/sensor-type";
+import { rejectIfNull, normalizeData } from './helpers';
+import { ISensorTypeRepository } from '../../shared/sensor-type-repository';
+import { ISensorType } from '../../../../interface/sensor-type';
 
 export interface ISensorTypeModel extends ISensorType, mongoose.Document {
 }

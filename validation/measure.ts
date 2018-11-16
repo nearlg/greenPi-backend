@@ -1,9 +1,9 @@
-import { IMeasure } from "../models/interface/measure";
-import { DateRegex, IdRegex } from "./rules/common";
-import { ValueRegex } from "./rules/measure";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { ISensor } from "../models/interface/sensor";
-import { validateId as sensorIdValidator} from "./sensor";
+import { IMeasure } from '../models/interface/measure';
+import { DateRegex, IdRegex } from './rules/common';
+import { ValueRegex } from './rules/measure';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { ISensor } from '../models/interface/sensor';
+import { validateId as sensorIdValidator} from './sensor';
 
 export function validateDate(date: Date): Promise<Date>  {
     let dateString: string = date && typeof date.toISOString === 'function'?

@@ -1,8 +1,8 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, normalizeData, getSearchingObject } from "./helpers";
-import { IPumpHistoricalRepository } from "../../shared/pump-historical-repository";
-import { IPumpHistorical } from "../../../../interface/pump-historical";
-import { IPump } from "../../../../interface/pump";
+import { rejectIfNull, normalizeData, getSearchingObject } from './helpers';
+import { IPumpHistoricalRepository } from '../../shared/pump-historical-repository';
+import { IPumpHistorical } from '../../../../interface/pump-historical';
+import { IPump } from '../../../../interface/pump';
 
 export interface IPumpHistoricalModel extends IPumpHistorical, mongoose.Document {
 }

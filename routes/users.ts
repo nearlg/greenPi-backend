@@ -1,5 +1,5 @@
-import * as restify from "restify";
-import * as controller from "../controllers/user";
+import * as restify from 'restify';
+import * as controller from '../controllers/user';
 
 export function routes(server: restify.Server, mainPath: string = ''): void{
     // User profile

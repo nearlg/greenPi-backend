@@ -1,7 +1,7 @@
-import { IErrorHandler } from "./interface/error-handler";
-import { Next } from "restify";
-import { NotFoundError, BadRequestError } from "restify-errors";
-import { ValidationError } from "mongoose";
+import { IErrorHandler } from './interface/error-handler';
+import { Next } from 'restify';
+import { NotFoundError, BadRequestError } from 'restify-errors';
+import { ValidationError } from 'mongoose';
 
 class DataErrorHandler implements IErrorHandler {
 

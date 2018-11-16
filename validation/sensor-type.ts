@@ -1,8 +1,8 @@
-import { ISensorType } from "../models/interface/sensor-type";
-import { NameRegex, DescriptionRegex, PortRegex, IdRegex } from "./rules/common";
-import { UnitNameRegex } from "./rules/sensor-type";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { IUnit } from "../models/interface/unit";
+import { ISensorType } from '../models/interface/sensor-type';
+import { NameRegex, DescriptionRegex, PortRegex, IdRegex } from './rules/common';
+import { UnitNameRegex } from './rules/sensor-type';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { IUnit } from '../models/interface/unit';
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, NameRegex, 'The sensor type must have a valid name');

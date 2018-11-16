@@ -1,8 +1,8 @@
-import { Rule } from "./rule";
-import { RoleName } from "./role-name";
-import * as Config from "../../config";
-import { HttpMethod } from "./http-method";
-import { rulesData } from "./rules-data";
+import { Rule } from './rule';
+import { RoleName } from './role-name';
+import * as Config from '../../config';
+import { HttpMethod } from './http-method';
+import { rulesData } from './rules-data';
 
 class Authz {
 

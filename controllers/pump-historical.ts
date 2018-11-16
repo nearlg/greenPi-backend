@@ -1,13 +1,13 @@
-import { Request, Response, Next } from "restify";
-import { handleJsonData, handleErrors, checkQuery } from "./helpers";
-import { IPumpHistorical } from "../models/interface/pump-historical";
-import { pumpHistoricalRepository } from "../models/database/repository/implementation/mongoose4/pump-historical-repository"
-import { environmentRepository } from "../models/database/repository/implementation/mongoose4/environment-repository"
-import { IPump } from "../models/interface/pump";
-import { pumpRepository } from "../models/database/repository/implementation/mongoose4/pump-repository";
-import * as pumpValidator from "../validation/pump";
-import * as pumpHistoricalValidator from "../validation/pump-historical";
-import { socketIOService } from "../services/socket-io-service";
+import { Request, Response, Next } from 'restify';
+import { handleJsonData, handleErrors, checkQuery } from './helpers';
+import { IPumpHistorical } from '../models/interface/pump-historical';
+import { pumpHistoricalRepository } from '../models/database/repository/implementation/mongoose4/pump-historical-repository'
+import { environmentRepository } from '../models/database/repository/implementation/mongoose4/environment-repository'
+import { IPump } from '../models/interface/pump';
+import { pumpRepository } from '../models/database/repository/implementation/mongoose4/pump-repository';
+import * as pumpValidator from '../validation/pump';
+import * as pumpHistoricalValidator from '../validation/pump-historical';
+import { socketIOService } from '../services/socket-io-service';
 
 const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 

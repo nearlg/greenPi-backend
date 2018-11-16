@@ -1,5 +1,5 @@
-import * as restify from "restify";
-import * as controller from "../controllers/sensor";
+import * as restify from 'restify';
+import * as controller from '../controllers/sensor';
 
 export function routes(server: restify.Server, mainPath: string = ''): void{
     server.post(mainPath, controller.addSensor);

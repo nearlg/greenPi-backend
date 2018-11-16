@@ -1,11 +1,11 @@
-import { IUser } from "../models/interface/user";
+import { IUser } from '../models/interface/user';
 import { NameRegex, EmailRegex,  PasswordRegex, FacebookIdRegex,
     GoogleIdRegex}
-    from "./rules/user";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { FacebookAccount } from "../models/interface/facebook-account";
-import { GoogleAccount } from "../models/interface/google-account";
-import { RoleName } from "../services/authz-service/role-name";
+    from './rules/user';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { FacebookAccount } from '../models/interface/facebook-account';
+import { GoogleAccount } from '../models/interface/google-account';
+import { RoleName } from '../services/authz-service/role-name';
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, NameRegex, 'The user must have a valid name');

@@ -1,7 +1,7 @@
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import * as sensorTypeValidator from "../../validation/sensor-type";
-import { IUnit } from "../../models/interface/unit";
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+import * as sensorTypeValidator from '../../validation/sensor-type';
+import { IUnit } from '../../models/interface/unit';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;

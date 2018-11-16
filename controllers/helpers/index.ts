@@ -1,7 +1,7 @@
-import { Next, Response, Request } from "restify";
-import { IErrorHandler } from "./interface/error-handler";
-import { dataHandler } from "./data-handler";
-import { InternalServerError } from "restify-errors";
+import { Next, Response, Request } from 'restify';
+import { IErrorHandler } from './interface/error-handler';
+import { dataHandler } from './data-handler';
+import { InternalServerError } from 'restify-errors';
 
 let errorHandlers: IErrorHandler[] = new Array<IErrorHandler>();
 
@@ -17,7 +17,7 @@ export function checkQuery(query: string[], querySended: object)
         return q !in query;
     });
     error.name = 'InvalidArgumentError';
-    error.message = "Query " + element + " is not valid";
+    error.message = 'Query ' + element + ' is not valid';
     return element === undefined? Promise.resolve() : Promise.reject(error);
 }
 

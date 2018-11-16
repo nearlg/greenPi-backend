@@ -1,5 +1,5 @@
-import { ISensor } from "./sensor";
-import { IPump } from "./pump";
+import { ISensor } from './sensor';
+import { IPump } from './pump';
 
 export interface IEnvironment {
     id?: any;

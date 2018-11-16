@@ -1,7 +1,7 @@
 import mongoose = require('mongoose');
-import { rejectIfNull, normalizeData } from "./helpers";
-import { IPumpRepository } from "../../shared/pump-repository";
-import { IPump } from "../../../../interface/pump";
+import { rejectIfNull, normalizeData } from './helpers';
+import { IPumpRepository } from '../../shared/pump-repository';
+import { IPump } from '../../../../interface/pump';
 
 export interface IPumpModel extends IPump, mongoose.Document {
 }

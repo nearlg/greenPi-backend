@@ -1,21 +1,21 @@
-import * as Config from "../config";
-import * as restify from "restify";
+import * as Config from '../config';
+import * as restify from 'restify';
 
-import mongoose = require("mongoose");
+import mongoose = require('mongoose');
 
-import * as MeasureRoutes from "../routes/measures";
-import * as SensorRoutes from "../routes/sensors";
-import * as SensorTypeRoutes from "../routes/sensor-types";
-import * as EnvironmentRoutes from "../routes/environments";
-import * as PumpRoutes from "../routes/pumps";
-import * as PumpHistoricalsRoutes from "../routes/pump-historicals";
-import * as UserRoutes from "../routes/users";
-import { addErrorHandler } from "../controllers/helpers";
-import { errorHandler as DataErrorHandler } from "../controllers/helpers/data-error-handler";
-import { errorHandler as MongooseErrorHandler } from "../controllers/helpers/mongoose-error-handler";
-import { errorHandler as AuthErrorHandler } from "../controllers/helpers/auth-error-handler";
-import { socketIOService } from "../services/socket-io-service";
-import { requestAuthz } from "../plugins/authorization";
+import * as MeasureRoutes from '../routes/measures';
+import * as SensorRoutes from '../routes/sensors';
+import * as SensorTypeRoutes from '../routes/sensor-types';
+import * as EnvironmentRoutes from '../routes/environments';
+import * as PumpRoutes from '../routes/pumps';
+import * as PumpHistoricalsRoutes from '../routes/pump-historicals';
+import * as UserRoutes from '../routes/users';
+import { addErrorHandler } from '../controllers/helpers';
+import { errorHandler as DataErrorHandler } from '../controllers/helpers/data-error-handler';
+import { errorHandler as MongooseErrorHandler } from '../controllers/helpers/mongoose-error-handler';
+import { errorHandler as AuthErrorHandler } from '../controllers/helpers/auth-error-handler';
+import { socketIOService } from '../services/socket-io-service';
+import { requestAuthz } from '../plugins/authorization';
 
 
 // Configure database

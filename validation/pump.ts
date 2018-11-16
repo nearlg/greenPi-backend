@@ -1,6 +1,6 @@
-import { IPump } from "../models/interface/pump";
-import { NameRegex, DescriptionRegex, PortRegex, IdRegex } from "./rules/common";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
+import { IPump } from '../models/interface/pump';
+import { NameRegex, DescriptionRegex, PortRegex, IdRegex } from './rules/common';
+import { regexValidation, createError, rejectIfNull } from './helpers';
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, NameRegex, 'The pump must have a valid name');

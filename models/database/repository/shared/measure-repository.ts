@@ -1,6 +1,6 @@
-import { IRepository } from "./repository";
-import { IMeasure } from "../../../interface/measure";
-import { ISensor } from "../../../interface/sensor";
+import { IRepository } from './repository';
+import { IMeasure } from '../../../interface/measure';
+import { ISensor } from '../../../interface/sensor';
 
 export interface IMeasureRepository extends IRepository<IMeasure> {
 

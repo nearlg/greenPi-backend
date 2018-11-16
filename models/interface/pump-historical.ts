@@ -1,4 +1,4 @@
-import { IPump } from "./pump";
+import { IPump } from './pump';
 
 export const enum State {
     Off = 0,

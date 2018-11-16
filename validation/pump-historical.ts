@@ -1,9 +1,9 @@
-import { IPumpHistorical, State } from "../models/interface/pump-historical";
-import { IPump } from "../models/interface/pump";
-import { DateRegex, IdRegex } from "./rules/common";
-import { StateRegex } from "./rules/pump-historical";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { validateId as pumpIdValidator } from "./pump"
+import { IPumpHistorical, State } from '../models/interface/pump-historical';
+import { IPump } from '../models/interface/pump';
+import { DateRegex, IdRegex } from './rules/common';
+import { StateRegex } from './rules/pump-historical';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { validateId as pumpIdValidator } from './pump'
 
 export function validateDate(date: Date): Promise<Date>  {
      let dateString: string = date && typeof date.toISOString === 'function'?

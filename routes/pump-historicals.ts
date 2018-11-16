@@ -1,5 +1,5 @@
-import * as restify from "restify";
-import * as controller from "../controllers/pump-historical";
+import * as restify from 'restify';
+import * as controller from '../controllers/pump-historical';
 
 export function routes(server: restify.Server, mainPath: string = '') {
     server.get(mainPath + '/', controller.getPumpHistoricals);

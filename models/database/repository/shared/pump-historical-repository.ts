@@ -1,6 +1,6 @@
-import { IRepository } from "./repository";
-import { IPumpHistorical } from "../../../interface/pump-historical";
-import { IPump } from "../../../interface/pump";
+import { IRepository } from './repository';
+import { IPumpHistorical } from '../../../interface/pump-historical';
+import { IPump } from '../../../interface/pump';
 
 export interface IPumpHistoricalRepository extends IRepository<IPumpHistorical> {
 

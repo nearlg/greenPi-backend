@@ -1,7 +1,7 @@
-import { IErrorHandler } from "./interface/error-handler";
-import { Next } from "restify";
+import { IErrorHandler } from './interface/error-handler';
+import { Next } from 'restify';
 import {  InvalidCredentialsError ,UnauthorizedError, NotAuthorizedError }
-    from "restify-errors";
+    from 'restify-errors';
 
 class AuthErrorHandler implements IErrorHandler {
 

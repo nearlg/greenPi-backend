@@ -1,13 +1,13 @@
-import { Request, Response, Next } from "restify";
-import { handleJsonData, handleErrors, checkQuery } from "./helpers";
-import { IMeasure } from "../models/interface/measure";
-import { measureRepository } from "../models/database/repository/implementation/mongoose4/measure-repository"
-import { environmentRepository } from "../models/database/repository/implementation/mongoose4/environment-repository"
-import { ISensor } from "../models/interface/sensor";
-import * as measureValidator from "../validation/measure";
-import * as sensorValidator from "../validation/sensor";
-import { sensorRepository } from "../models/database/repository/implementation/mongoose4/sensor-repository";
-import { socketIOService } from "../services/socket-io-service";
+import { Request, Response, Next } from 'restify';
+import { handleJsonData, handleErrors, checkQuery } from './helpers';
+import { IMeasure } from '../models/interface/measure';
+import { measureRepository } from '../models/database/repository/implementation/mongoose4/measure-repository'
+import { environmentRepository } from '../models/database/repository/implementation/mongoose4/environment-repository'
+import { ISensor } from '../models/interface/sensor';
+import * as measureValidator from '../validation/measure';
+import * as sensorValidator from '../validation/sensor';
+import { sensorRepository } from '../models/database/repository/implementation/mongoose4/sensor-repository';
+import { socketIOService } from '../services/socket-io-service';
 
 const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 

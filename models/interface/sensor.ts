@@ -1,4 +1,4 @@
-import { ISensorType } from "./sensor-type";
+import { ISensorType } from './sensor-type';
 
 export interface ISensor {
     id?: any;

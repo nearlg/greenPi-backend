@@ -1,5 +1,5 @@
-import { HttpMethod } from "./http-method";
-import { RoleName } from "./role-name";
+import { HttpMethod } from './http-method';
+import { RoleName } from './role-name';
 
 export const rulesData = new Map([
     ['/environments', [

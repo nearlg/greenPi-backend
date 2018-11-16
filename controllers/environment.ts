@@ -1,7 +1,7 @@
-import { Request, Response, Next } from "restify";
-import { environmentRepository } from "../models/database/repository/implementation/mongoose4/environment-repository"
-import * as environmentValidator from "../validation/environment";
-import { handleJsonData, handleErrors } from "./helpers";
+import { Request, Response, Next } from 'restify';
+import { environmentRepository } from '../models/database/repository/implementation/mongoose4/environment-repository'
+import * as environmentValidator from '../validation/environment';
+import { handleJsonData, handleErrors } from './helpers';
 
 export function addEnvironment(req: Request, res: Response, next: Next) {
     environmentValidator.validate(req.body)

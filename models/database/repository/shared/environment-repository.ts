@@ -1,5 +1,5 @@
-import { IRepository } from "./repository";
-import { IEnvironment } from "../../../interface/environment";
+import { IRepository } from './repository';
+import { IEnvironment } from '../../../interface/environment';
 
 export interface IEnvironmentRepository extends IRepository<IEnvironment> {
     find(id: string): Promise<IEnvironment>;

@@ -1,8 +1,8 @@
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import * as pumpHistoricalValidator from "../../validation/pump-historical";
-import { IPumpHistorical } from "../../models/interface/pump-historical";
-import { IPump } from "../../models/interface/pump";
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+import * as pumpHistoricalValidator from '../../validation/pump-historical';
+import { IPumpHistorical } from '../../models/interface/pump-historical';
+import { IPump } from '../../models/interface/pump';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;

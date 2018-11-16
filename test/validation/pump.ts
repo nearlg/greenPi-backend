@@ -1,6 +1,6 @@
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import * as pumpValidator from "../../validation/pump";
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+import * as pumpValidator from '../../validation/pump';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;

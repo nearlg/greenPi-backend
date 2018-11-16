@@ -1,9 +1,9 @@
-import { Request, Response, Next } from "restify";
+import { Request, Response, Next } from 'restify';
 import bcrypt = require('bcrypt');
-import { handleJsonData, handleErrors } from "./helpers";
-import * as userValidator from "../validation/user";
-import { userRepository } from "../models/database/repository/implementation/mongoose4/user-repository";
-import { createToken, verifyTokenFromRequest } from "../services/jwt-service";
+import { handleJsonData, handleErrors } from './helpers';
+import * as userValidator from '../validation/user';
+import { userRepository } from '../models/database/repository/implementation/mongoose4/user-repository';
+import { createToken, verifyTokenFromRequest } from '../services/jwt-service';
 
 export function addUser(req: Request, res: Response, next: Next) {
     userValidator.validate(req.body, true, true)

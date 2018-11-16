@@ -1,7 +1,7 @@
-import { Request, Response, Next } from "restify";
-import * as pumpValidator from "../validation/pump";
-import { pumpRepository } from "../models/database/repository/implementation/mongoose4/pump-repository"
-import { handleJsonData, handleErrors } from "./helpers";
+import { Request, Response, Next } from 'restify';
+import * as pumpValidator from '../validation/pump';
+import { pumpRepository } from '../models/database/repository/implementation/mongoose4/pump-repository'
+import { handleJsonData, handleErrors } from './helpers';
 
 export function addPump(req: Request, res: Response, next: Next) {
     pumpValidator.validate(req.body)

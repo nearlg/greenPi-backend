@@ -1,10 +1,10 @@
-import { Request, Response, Next } from "restify";
-import { handleJsonData, handleErrors } from "./helpers";
-import { ISensor } from "../models/interface/sensor";
-import * as sensorValidator from "../validation/sensor";
-import { sensorRepository } from "../models/database/repository/implementation/mongoose4/sensor-repository"
-import { sensorTypeRepository } from "../models/database/repository/implementation/mongoose4/sensor-type-repository"
-import { ISensorType } from "../models/interface/sensor-type";
+import { Request, Response, Next } from 'restify';
+import { handleJsonData, handleErrors } from './helpers';
+import { ISensor } from '../models/interface/sensor';
+import * as sensorValidator from '../validation/sensor';
+import { sensorRepository } from '../models/database/repository/implementation/mongoose4/sensor-repository'
+import { sensorTypeRepository } from '../models/database/repository/implementation/mongoose4/sensor-type-repository'
+import { ISensorType } from '../models/interface/sensor-type';
 
 function validateDependencies(sensor: ISensor): Promise<ISensor> {
     const sensorTypeId: string = (<ISensorType>sensor.type).name ||
