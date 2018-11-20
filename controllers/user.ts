@@ -49,7 +49,7 @@ export function signUp(req: Request, res: Response, next: Next) {
     .catch(err => handleErrors(err, next));
 }
 
-export function signIn(req: Request, res: Response, next: Next) {
+export function signInLocal(req: Request, res: Response, next: Next) {
     const email: string = req.body.email;
     const password: string = req.body.password;
     userValidator.validatePassword(password)
