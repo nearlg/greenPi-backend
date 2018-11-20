@@ -1,8 +1,6 @@
 import { IUser } from '../models/interface/user';
 import * as userRegex from './rules/user';
 import { regexValidation, createError, rejectIfNull } from './helpers';
-import { FacebookAccount } from '../models/interface/facebook-account';
-import { GoogleAccount } from '../models/interface/google-account';
 import { RoleName } from '../services/authz-service/role-name';
 
 export function validateName(name: string): Promise<string>  {
@@ -19,32 +17,24 @@ export function validatePassword(password: string): Promise<string>  {
         'The user must have a valid password');
 }
 
-export function validateFacebook(facebookAccount?: FacebookAccount):
-Promise<null | FacebookAccount> {
-    if (!facebookAccount) {
+export function validateFacebook(facebookId?: string):
+Promise<null | string> {
+    if (!facebookId) {
         return Promise.resolve(null);
     }
-    if (!facebookAccount.id) {
-        const err: Error = createError('A Facebook account must have an id');
-        return Promise.reject(err);
-    }
-    return regexValidation(facebookAccount.id, userRegex.FacebookIdRegex,
+    return regexValidation(facebookId, userRegex.FacebookIdRegex,
         'The Facebook Id must be a valid Id')
-    .then(() => facebookAccount);
+    .then(() => facebookId);
 }
 
-export function validateGoogle(googleAccount?: GoogleAccount):
-Promise<null | GoogleAccount> {
-    if (!googleAccount) {
+export function validateGoogle(googleId?: string):
+Promise<null | string> {
+    if (!googleId) {
         return Promise.resolve(null);
     }
-    if (!googleAccount.id) {
-        const err: Error = createError('A Google account must have an id');
-        return Promise.reject(err);
-    }
-    return regexValidation(googleAccount.id, userRegex.GoogleIdRegex,
+    return regexValidation(googleId, userRegex.GoogleIdRegex,
         'The Google Id must be a valid Id')
-    .then(() => googleAccount);
+    .then(() => googleId);
 }
 
 export function validateRoleName(roleName: RoleName):
@@ -56,16 +46,20 @@ Promise<RoleName> {
     return Promise.reject(err);
 }
 
-export function validate(user: IUser, validateRoleNm: boolean = false):
+export function validate(user: IUser):
 Promise<IUser> {
     return rejectIfNull(user, 'User is null or undefined')
     .then(() => validateName(user.name))
     .then(() => validateEmail(user.email))
-    .then(() => validatePassword(user.password))
-    .then(() => validateRoleNm? validateRoleName(user.roleName) :
-    Promise.resolve(null))
-    .then(() => validateFacebook(user.facebook))
-    .then(() => validateGoogle(user.google))
+    .then(() => validateRoleName(user.roleName))
+    .then(() => validateFacebook(user.facebookId))
+    .then(() => validateGoogle(user.googleId))
+    .then(() => {
+        if(user.googleId || user.facebookId) {
+            return;
+        }
+        return validatePassword(user.password);
+    })
     .then(() => Promise.resolve(user))
     .catch(err => {
         err.message = 'Invalid user: ' + err.message;
