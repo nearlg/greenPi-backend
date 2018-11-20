@@ -4,9 +4,13 @@ import { handleJsonData, handleErrors } from './helpers';
 import * as userValidator from '../validation/user';
 import { userRepository } from '../models/database/repository/implementation/mongoose4/user-repository';
 import { createToken, verifyTokenFromRequest } from '../services/jwt-service';
+import { RoleName } from '../services/authz-service/role-name';
 
 export function addUser(req: Request, res: Response, next: Next) {
-    userValidator.validate(req.body, true)
+    if (req.body) {
+        req.body.rolName = RoleName.Observer;
+    }
+    userValidator.validate(req.body)
     .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));

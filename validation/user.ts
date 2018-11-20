@@ -56,16 +56,20 @@ Promise<RoleName> {
     return Promise.reject(err);
 }
 
-export function validate(user: IUser, validateRoleNm: boolean = false):
+export function validate(user: IUser):
 Promise<IUser> {
     return rejectIfNull(user, 'User is null or undefined')
     .then(() => validateName(user.name))
     .then(() => validateEmail(user.email))
-    .then(() => validatePassword(user.password))
-    .then(() => validateRoleNm? validateRoleName(user.roleName) :
-    Promise.resolve(null))
+    .then(() => validateRoleName(user.roleName))
     .then(() => validateFacebook(user.facebook))
     .then(() => validateGoogle(user.google))
+    .then(() => {
+        if(user.google || user.facebook) {
+            return;
+        }
+        return validatePassword(user.password);
+    })
     .then(() => Promise.resolve(user))
     .catch(err => {
         err.message = 'Invalid user: ' + err.message;

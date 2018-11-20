@@ -22,18 +22,13 @@ const userSchema = new mongoose.Schema({
         lowercase: true
     },
     password: {
-        type: String,
-        required: [true, 'A user must have a password']
+        type: String
     },
-    facebook: {
-        id: {
-            type: String
-        }
+    facebookId: {
+        type: String
     },
-    google: {
-        id: {
-            type: String
-        }
+    googleId: {
+        type: String
     },
     roleName: {
         type: String,
@@ -45,7 +40,7 @@ const userSchema = new mongoose.Schema({
 // Encrypt user's password before saving it to the database
 userSchema.pre('save', function (next) {
     const user: IUserModel = this;
-    if (!user.isModified('password')) {
+    if (!user.password || !user.isModified('password')) {
         return next();
     }
     bcrypt.hash(user.password, Security.BCRYPT_SALT_ROUNDS)
@@ -99,6 +94,13 @@ export class UserRepository implements IUserRepository {
         .then(rejectIfNull('User not found'))
         .then(normalizeData)
         .then((user: IUser) => user.roleName);
+    }
+
+    findByGoogleId(id: string): Promise<IUser> {
+        return UserModel.findOne({ 'google.id': id })
+        .exec()
+        .then(rejectIfNull('User not found'))
+        .then(normalizeData);
     }
 }
 
