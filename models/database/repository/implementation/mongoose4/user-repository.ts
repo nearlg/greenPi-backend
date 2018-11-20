@@ -97,7 +97,7 @@ export class UserRepository implements IUserRepository {
     }
 
     findByGoogleId(id: string): Promise<IUser> {
-        return UserModel.findOne({ 'google.id': id })
+        return UserModel.findOne({ 'googleId': id })
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData);
