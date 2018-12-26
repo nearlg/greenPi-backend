@@ -12,8 +12,8 @@ export function routes(server: restify.Server, mainPath: string = '') {
 
     // For the Admins
     server.post(mainPath, controller.addUser);
-    server.patch(mainPath + '/:email', controller.updateUser);
-    server.del(mainPath + '/:email', controller.deleteUser);
+    server.patch(mainPath + '/:id', controller.updateUser);
+    server.del(mainPath + '/:id', controller.deleteUser);
     server.get(mainPath, controller.fetchUsers);
-    server.get(mainPath + '/:email', controller.getUser);
+    server.get(mainPath + '/:id', controller.getUser);
 }

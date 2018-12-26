@@ -10,14 +10,14 @@ export function addUser(req: Request, res: Response, next: Next) {
     if (req.body) {
         req.body.rolName = RoleName.Observer;
     }
-    userValidator.validate(req.body)
+    userValidator.validate(req.body, false)
     .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
 }
 
 export function updateUser(req: Request, res: Response, next: Next) {
-    req.body.email = req.params.email;
+    req.body.id = req.params.id;
     userValidator.validate(req.body)
     .then(userRepository.update)
     .then(user => handleJsonData(req, res, next, user))
@@ -25,7 +25,7 @@ export function updateUser(req: Request, res: Response, next: Next) {
 }
 
 export function deleteUser(req: Request, res: Response, next: Next) {
-    userRepository.remove(req.params.email)
+    userRepository.remove(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
     .catch(err => handleErrors(err, next));
 }
@@ -37,13 +37,16 @@ export function fetchUsers(req: Request, res: Response, next: Next) {
 }
 
 export function getUser(req: Request, res: Response, next: Next) {
-    userRepository.find(req.params.email)
+    userRepository.find(req.params.id)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
 }
 
 export function signUp(req: Request, res: Response, next: Next) {
-    userValidator.validate(req.body)
+    if (req.body) {
+        req.body.rolName = RoleName.Observer;
+    }
+    userValidator.validate(req.body, false)
     .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(err, next));
@@ -54,7 +57,7 @@ export function signInLocal(req: Request, res: Response, next: Next) {
     const password: string = req.body.password;
     userValidator.validatePassword(password)
     .then(() => userValidator.validateEmail(email))
-    .then(userRepository.find)
+    .then(userRepository.findByEmail)
     .then(user => {
         return bcrypt.compare(password, user.password)
         .then(passwdIsCorrect => {

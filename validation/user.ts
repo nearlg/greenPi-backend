@@ -3,6 +3,14 @@ import * as userRegex from './rules/user';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 import { RoleName } from '../services/authz.service/role-name';
 
+export function validateId(id: string): Promise<string> {
+    if(id && userRegex.IdRegex.test(id)){
+        return Promise.resolve(id);
+    }
+    let err: Error = createError('Invalid user id');
+    return Promise.reject(err)
+}
+
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, userRegex.NameRegex, 'The user must have a valid name');
 }
@@ -46,7 +54,7 @@ Promise<RoleName> {
     return Promise.reject(err);
 }
 
-export function validate(user: User):
+export function validate(user: User, checkId: boolean = true):
 Promise<User> {
     return rejectIfNull(user, 'User is null or undefined')
     .then(() => validateName(user.name))
@@ -60,6 +68,7 @@ Promise<User> {
         }
         return validatePassword(user.password);
     })
+    .then(() => checkId? validateId(user.id) : Promise.resolve(null))
     .then(() => Promise.resolve(user))
     .catch(err => {
         err.message = 'Invalid user: ' + err.message;
