@@ -5,7 +5,7 @@ import { pumpHistoricalRepository, environmentRepository, pumpRepository } from 
 import { Pump } from '../models/interface/pump';
 import * as pumpValidator from '../validation/pump';
 import * as pumpHistoricalValidator from '../validation/pump-historical';
-import { socketIOService } from '../services/socket-io-service';
+import { socketIOService } from '../services/socket-io.service';
 
 const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 

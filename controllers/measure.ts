@@ -5,7 +5,7 @@ import { measureRepository, environmentRepository, sensorRepository } from '../r
 import { Sensor } from '../models/interface/sensor';
 import * as measureValidator from '../validation/measure';
 import * as sensorValidator from '../validation/sensor';
-import { socketIOService } from '../services/socket-io-service';
+import { socketIOService } from '../services/socket-io.service';
 
 const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
