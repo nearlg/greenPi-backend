@@ -1,9 +1,9 @@
-import { IErrorHandler } from './interface/error-handler';
+import { ErrorHandler } from './interface/error-handler';
 import { Next } from 'restify';
 import {  InvalidCredentialsError ,UnauthorizedError, NotAuthorizedError }
     from 'restify-errors';
 
-class AuthErrorHandler implements IErrorHandler {
+class AuthErrorHandler implements ErrorHandler {
 
     handleError(err: Error, next: Next): boolean {
         switch(err.name) {

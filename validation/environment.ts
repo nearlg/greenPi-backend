@@ -1,8 +1,8 @@
-import { IEnvironment } from '../models/interface/environment';
+import { Environment } from '../models/interface/environment';
 import * as environmentRegex from './rules/environment';
 import { regexValidation, createError, rejectIfNull } from './helpers';
-import { ISensor } from '../models/interface/sensor';
-import { IPump } from '../models/interface/pump';
+import { Sensor } from '../models/interface/sensor';
+import { Pump } from '../models/interface/pump';
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, environmentRegex.NameRegex, 'The environment must have a valid name');
@@ -15,7 +15,7 @@ export function validateDescription(description: string): Promise<string>  {
     return regexValidation(description, environmentRegex.DescriptionRegex, 'The environment must have a valid description');
 }
 
-export function validateSensors(sensors: (ISensor|string)[]): Promise<(ISensor|string)[]> {
+export function validateSensors(sensors: (Sensor|string)[]): Promise<(Sensor|string)[]> {
     let types: RegExp = /^\[object (Array|Null|Undefined)\]$/;
     let type: string = Object.prototype.toString.call( sensors );
     if(types.test(type)){
@@ -25,7 +25,7 @@ export function validateSensors(sensors: (ISensor|string)[]): Promise<(ISensor|s
     return Promise.reject(err);
 }
 
-export function validatePumps(pumps: (IPump|string)[]): Promise<(IPump|string)[]> {
+export function validatePumps(pumps: (Pump|string)[]): Promise<(Pump|string)[]> {
     let types: RegExp = /^\[object (Array|Null|Undefined)\]$/;
     let type: string = Object.prototype.toString.call( pumps );
     if(types.test(type)){
@@ -43,7 +43,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(environment: IEnvironment, checkId: boolean = true): Promise<IEnvironment> {
+export function validate(environment: Environment, checkId: boolean = true): Promise<Environment> {
     return rejectIfNull(environment, 'Environment is null or undefined')
     .then(() => validateName(environment.name))
     .then(() => validateDescription(environment.description))

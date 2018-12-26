@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as sensorTypeValidator from '../../validation/sensor-type';
-import { IUnit } from '../../models/interface/unit';
+import { Unit } from '../../models/interface/unit';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
@@ -53,7 +53,7 @@ describe('Sensor type validation', () => {
     });
 
     describe('Unit validation', () => {
-        let u: IUnit = <IUnit>{};
+        let u: Unit = <Unit>{};
         it('Unit without name and description', () => {
             return expect(sensorTypeValidator.validateUnit(u))
             .to.be.rejected;

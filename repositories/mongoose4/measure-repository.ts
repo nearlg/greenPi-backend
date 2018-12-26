@@ -1,10 +1,10 @@
 import mongoose = require('mongoose');
 import { rejectIfNull, normalizeData, getSearchingObject } from './helpers';
-import { IMeasureRepository } from '../../shared/measure-repository';
-import { IMeasure } from '../../../../interface/measure';
-import { ISensor } from '../../../../interface/sensor';
+import { MeasureRepository } from '../interface/measure-repository';
+import { Measure } from '../../models/interface/measure';
+import { Sensor } from '../../models/interface/sensor';
 
-export interface IMeasureModel extends IMeasure, mongoose.Document {
+interface MeasureModel extends Measure, mongoose.Document {
 }
 
 const measureSchema = new mongoose.Schema({
@@ -24,11 +24,11 @@ const measureSchema = new mongoose.Schema({
     }
 });
 
-const MeasureModel = mongoose.model<IMeasureModel>('Measure', measureSchema);
+const MeasureModel = mongoose.model<MeasureModel>('Measure', measureSchema);
 
-export class MeasureRepository implements IMeasureRepository {
+export class MeasureMongooseRepository implements MeasureRepository {
 
-    findLastsBySensorIds(sensorIds: string[]): Promise<IMeasure[]> {
+    findLastsBySensorIds(sensorIds: string[]): Promise<Measure[]> {
         // If it can not find a measure,
         // it will be undefined in the 'measures' array
         const measures = sensorIds.map(sensorId =>
@@ -40,7 +40,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(measures => measures.filter(m => m != undefined));
     }
 
-    findLastBySensorId(sensorId: string): Promise<IMeasure> {
+    findLastBySensorId(sensorId: string): Promise<Measure> {
         const searchingObject = { sensor: sensorId };
         return MeasureModel.find(searchingObject)
         .sort({date: -1})
@@ -53,7 +53,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(doc => doc[0]);
     }
 
-    findAllByTypeIds(sensorTypeIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IMeasure[]> {
+    findAllByTypeIds(sensorTypeIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<Measure[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['sensor.type'] = { $in: sensorTypeIds };
         return MeasureModel.find(searchingObject)
@@ -64,7 +64,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    findAllByTypeId(sensorTypeId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<IMeasure[]> {
+    findAllByTypeId(sensorTypeId: string, sortBy?: string, gte?: Date, lte?: Date): Promise<Measure[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['sensor.type'] = sensorTypeId;
         return MeasureModel.find(searchingObject)
@@ -75,7 +75,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    findAllBySensorIds(sensorIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<IMeasure[]> {
+    findAllBySensorIds(sensorIds: string[], sortBy?: string, gte?: Date, lte?: Date): Promise<Measure[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['sensor'] = { $in: sensorIds };
         return MeasureModel.find(searchingObject)
@@ -86,12 +86,12 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    findAllBySensors(sensors: ISensor[], sortBy?: string, gte?: Date, lte?: Date): Promise<IMeasure[]> {
+    findAllBySensors(sensors: Sensor[], sortBy?: string, gte?: Date, lte?: Date): Promise<Measure[]> {
         let sensorIds: string[] = sensors.map(sensor => sensor.id);
         return this.findAllBySensorIds(sensorIds, sortBy, gte, lte);
     }
 
-    findAllBySensorId(sensorId: string, sortBy: string = 'date', gte: Date, lte: Date): Promise<null | IMeasure[]> {
+    findAllBySensorId(sensorId: string, sortBy: string = 'date', gte: Date, lte: Date): Promise<null | Measure[]> {
         const searchingObject = getSearchingObject(gte, lte);
         searchingObject['sensor'] = sensorId;
         return MeasureModel.find(searchingObject)
@@ -102,11 +102,11 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    findAllBySensor(sensor: ISensor, sortBy?: string, gte?: Date, lte?: Date): Promise<null|IMeasure[]> {
+    findAllBySensor(sensor: Sensor, sortBy?: string, gte?: Date, lte?: Date): Promise<null|Measure[]> {
         return this.findAllBySensorId(sensor.id, sortBy, gte, lte);
     }
 
-    create(document: IMeasure): Promise<IMeasure> {
+    create(document: Measure): Promise<Measure> {
         return MeasureModel.create(document)
         .then(measure => MeasureModel.populate(measure, {
             path:'sensor',
@@ -115,7 +115,7 @@ export class MeasureRepository implements IMeasureRepository {
             }
         }))
         .then(rejectIfNull('Measure not found'))
-        .then((o: IMeasureModel) => MeasureModel.populate(o, {
+        .then((o: MeasureModel) => MeasureModel.populate(o, {
             path: 'sensor',
             populate: {
                 path: 'type'
@@ -124,7 +124,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    update(document: IMeasure): Promise<IMeasure> {
+    update(document: Measure): Promise<Measure> {
         return MeasureModel.findByIdAndUpdate(document.id, document, {'new': true})
         .populate({path:'sensor', populate: {
             path: 'type'
@@ -134,14 +134,14 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    remove(id: string): Promise<IMeasure> {
+    remove(id: string): Promise<Measure> {
         return MeasureModel.findByIdAndRemove(id)
         .exec()
         .then(rejectIfNull('Measure not found'))
         .then(normalizeData);
     }
 
-    findAll(): Promise<IMeasure[]> {
+    findAll(): Promise<Measure[]> {
         return MeasureModel.find()
         .sort({date: 1})
         .populate({path:'sensor', populate: {
@@ -151,7 +151,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    findAllDistinct(): Promise<IMeasure[]> {
+    findAllDistinct(): Promise<Measure[]> {
         return MeasureModel.find()
         .sort({date: -1})
         .distinct('sensor')
@@ -162,7 +162,7 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 
-    find(id: string): Promise<IMeasure> {
+    find(id: string): Promise<Measure> {
         return MeasureModel.findById(id)
         .populate({path:'sensor', populate: {
             path: 'type'
@@ -172,5 +172,3 @@ export class MeasureRepository implements IMeasureRepository {
         .then(normalizeData);
     }
 }
-
-export const measureRepository = new MeasureRepository();

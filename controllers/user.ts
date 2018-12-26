@@ -2,7 +2,7 @@ import { Request, Response, Next } from 'restify';
 import bcrypt = require('bcrypt');
 import { handleJsonData, handleErrors } from './helpers';
 import * as userValidator from '../validation/user';
-import { userRepository } from '../models/database/repository/implementation/mongoose4/user-repository';
+import { userRepository } from '../repositories';
 import { createToken, verifyTokenFromRequest } from '../services/jwt.service';
 import { RoleName } from '../services/authz.service/role-name';
 

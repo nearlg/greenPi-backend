@@ -1,4 +1,4 @@
-import { IPump } from '../models/interface/pump';
+import { Pump } from '../models/interface/pump';
 import * as pumpRegex from './rules/pump';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 
@@ -30,7 +30,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(pump: IPump, checkId: boolean = true): Promise<IPump> {
+export function validate(pump: Pump, checkId: boolean = true): Promise<Pump> {
     return rejectIfNull(pump, 'Pump is null or undefined')
     .then(() => validateName(pump.name))
     .then(() => validateDescription(pump.description))

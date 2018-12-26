@@ -1,8 +1,8 @@
-import { IErrorHandler } from './interface/error-handler';
+import { ErrorHandler } from './interface/error-handler';
 import { Next } from 'restify';
 import { InvalidArgumentError, HttpError, MissingParameterError } from 'restify-errors';//TODO: find error type for queries
 
-class QueryErrorHandler implements IErrorHandler {
+class QueryErrorHandler implements ErrorHandler {
 
     handleError(err: Error, next: Next): boolean {
         switch(err.name) {

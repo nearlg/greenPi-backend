@@ -1,7 +1,7 @@
-import { IMeasure } from '../models/interface/measure';
+import { Measure } from '../models/interface/measure';
 import * as measureRegex from './rules/measure';
 import { regexValidation, createError, rejectIfNull } from './helpers';
-import { ISensor } from '../models/interface/sensor';
+import { Sensor } from '../models/interface/sensor';
 import { validateId as sensorIdValidator} from './sensor';
 
 export function validateDate(date: Date): Promise<Date>  {
@@ -15,7 +15,7 @@ export function validateValue(value: number): Promise<number>  {
     return regexValidation(value, measureRegex.ValueRegex, 'The measure must have a valid value');
 }
 
-export function validateSensor(sensor: ISensor | string): Promise<ISensor | string> {
+export function validateSensor(sensor: Sensor | string): Promise<Sensor | string> {
     if(sensor) {
         if('object' === typeof sensor) {
             return Promise.resolve(sensor);
@@ -34,7 +34,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(measure: IMeasure, checkId: boolean = true): Promise<IMeasure> {
+export function validate(measure: Measure, checkId: boolean = true): Promise<Measure> {
     return rejectIfNull(measure, 'Measure is null or undefined')
     .then(() => validateDate(measure.date))
     .then(() => validateValue(measure.value))

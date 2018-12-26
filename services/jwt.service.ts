@@ -1,9 +1,9 @@
 import jwt = require('jsonwebtoken');
-import { IUser } from '../models/interface/user';
+import { User } from '../models/interface/user';
 import { Security } from '../config';
 import { Request } from 'restify';
 
-function createToken(user: IUser): string {
+function createToken(user: User): string {
     const payload = {
         sub: user.email
     };

@@ -1,5 +1,5 @@
-import { IPumpHistorical, State } from '../models/interface/pump-historical';
-import { IPump } from '../models/interface/pump';
+import { PumpHistorical, State } from '../models/interface/pump-historical';
+import { Pump } from '../models/interface/pump';
 import * as pumpHistoricalRegex from './rules/pump-historical';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 import { validateId as pumpIdValidator } from './pump'
@@ -16,7 +16,7 @@ export function validateState(state: State): Promise<number>  {
     return regexValidation(state, pumpHistoricalRegex.StateRegex, 'The pump-historical must have a valid state');
 }
 
-export function validatePump(pump: IPump | string): Promise<IPump | string> {
+export function validatePump(pump: Pump | string): Promise<Pump | string> {
     if(pump) {
         if('object' === typeof pump){
             return Promise.resolve(pump);
@@ -35,7 +35,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err)
 }
 
-export function validate(pumpHistorical: IPumpHistorical, checkId: boolean = true): Promise<IPumpHistorical> {
+export function validate(pumpHistorical: PumpHistorical, checkId: boolean = true): Promise<PumpHistorical> {
     return rejectIfNull(pumpHistorical, 'Pump historical is null or undefined')
     .then(() => validateDate(pumpHistorical.date))
     .then(() => validateState(pumpHistorical.state))

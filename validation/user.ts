@@ -1,4 +1,4 @@
-import { IUser } from '../models/interface/user';
+import { User } from '../models/interface/user';
 import * as userRegex from './rules/user';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 import { RoleName } from '../services/authz.service/role-name';
@@ -46,8 +46,8 @@ Promise<RoleName> {
     return Promise.reject(err);
 }
 
-export function validate(user: IUser):
-Promise<IUser> {
+export function validate(user: User):
+Promise<User> {
     return rejectIfNull(user, 'User is null or undefined')
     .then(() => validateName(user.name))
     .then(() => validateEmail(user.email))

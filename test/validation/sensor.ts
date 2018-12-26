@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as sensorValidator from '../../validation/sensor';
-import { ISensorType } from '../../models/interface/sensor-type';
+import { SensorType } from '../../models/interface/sensor-type';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
@@ -54,7 +54,7 @@ describe('Sensor validation', () => {
 
     describe('Type validation', () => {
         it('Type can be an object', () => {
-            return expect(sensorValidator.validateType(<ISensorType>{}))
+            return expect(sensorValidator.validateType(<SensorType>{}))
             .to.be.fulfilled;
         });
 

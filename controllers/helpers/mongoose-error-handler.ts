@@ -1,10 +1,10 @@
-import { IErrorHandler } from './interface/error-handler';
+import { ErrorHandler } from './interface/error-handler';
 import { MongoError } from 'mongodb';
 import { ValidationError, CastError } from 'mongoose';
 import { Next } from 'restify';
 import { BadRequestError, InvalidArgumentError } from 'restify-errors';
 
-class MongooseErrorHandler implements IErrorHandler {
+class MongooseErrorHandler implements ErrorHandler {
 
     handleError(err: Error, next: Next): boolean {
         switch(err.name) {

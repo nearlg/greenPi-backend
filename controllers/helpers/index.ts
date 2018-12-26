@@ -1,9 +1,9 @@
 import { Next, Response, Request } from 'restify';
-import { IErrorHandler } from './interface/error-handler';
+import { ErrorHandler } from './interface/error-handler';
 import { dataHandler } from './data-handler';
 import { InternalServerError } from 'restify-errors';
 
-let errorHandlers: IErrorHandler[] = new Array<IErrorHandler>();
+let errorHandlers: ErrorHandler[] = new Array<ErrorHandler>();
 
 export function checkQuery(query: string[], querySended: object)
 : Promise<void | Error> {
@@ -39,6 +39,6 @@ export function handleErrors(err: Error, next: Next) {
     return next(new InternalServerError(err));
 }
 
-export function addErrorHandler(handler: IErrorHandler) {
+export function addErrorHandler(handler: ErrorHandler) {
     errorHandlers.push(handler);
 }

@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as pumpHistoricalValidator from '../../validation/pump-historical';
-import { IPumpHistorical } from '../../models/interface/pump-historical';
-import { IPump } from '../../models/interface/pump';
+import { PumpHistorical } from '../../models/interface/pump-historical';
+import { Pump } from '../../models/interface/pump';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
@@ -33,7 +33,7 @@ describe('Pump historical validation', () => {
 
     describe('Pump validation', () => {
         it('Pump can be an object', () => {
-            return expect(pumpHistoricalValidator.validatePump(<IPump>{}))
+            return expect(pumpHistoricalValidator.validatePump(<Pump>{}))
             .to.be.fulfilled;
         });
 

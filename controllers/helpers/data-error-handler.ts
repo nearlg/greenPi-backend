@@ -1,9 +1,9 @@
-import { IErrorHandler } from './interface/error-handler';
+import { ErrorHandler } from './interface/error-handler';
 import { Next } from 'restify';
 import { NotFoundError, BadRequestError } from 'restify-errors';
 import { ValidationError } from 'mongoose';
 
-class DataErrorHandler implements IErrorHandler {
+class DataErrorHandler implements ErrorHandler {
 
     handleError(err: Error, next: Next): boolean {
         switch(err.name) {

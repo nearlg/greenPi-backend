@@ -1,7 +1,7 @@
 import { Request, Response, Next } from 'restify';
 import { handleJsonData, handleErrors } from './helpers';
 import * as sensorTypeValidator from '../validation/sensor-type';
-import { sensorTypeRepository } from '../models/database/repository/implementation/mongoose4/sensor-type-repository'
+import { sensorTypeRepository } from '../repositories';
 
 export function addSensorType(req: Request, res: Response, next: Next) {
     req.body.unit = {

@@ -1,9 +1,9 @@
 import mongoose = require('mongoose');
 import { rejectIfNull, normalizeData } from './helpers';
-import { ISensorRepository } from '../../shared/sensor-repository';
-import { ISensor } from '../../../../interface/sensor';
+import { SensorRepository } from '../interface/sensor-repository';
+import { Sensor } from '../../models/interface/sensor';
 
-export interface ISensorModel extends ISensor, mongoose.Document {
+interface SensorModel extends Sensor, mongoose.Document {
 }
 
 const sensorSchema = new mongoose.Schema({
@@ -20,45 +20,43 @@ const sensorSchema = new mongoose.Schema({
     connectionPorts: [Number]
 });
 
-const SensorModel = mongoose.model<ISensorModel>('Sensor', sensorSchema);
+const SensorModel = mongoose.model<SensorModel>('Sensor', sensorSchema);
 
-export class SensorRepository implements ISensorRepository {
+export class SensorMongooseRepository implements SensorRepository {
 
-    create(document: ISensor): Promise<ISensor> {
+    create(document: Sensor): Promise<Sensor> {
         return SensorModel.create(document)
         .then(rejectIfNull('Sensor not found'))
-        .then((o: ISensorModel) => SensorModel.populate(o, {
+        .then((o: SensorModel) => SensorModel.populate(o, {
             path: 'type'
         }))
         .then(normalizeData);
     }
 
-    update(document: ISensor): Promise<ISensor> {
+    update(document: Sensor): Promise<Sensor> {
         return SensorModel.findByIdAndUpdate(document.id, document,
             {'new': true}).exec()
         .then(rejectIfNull('Sensor not found'))
         .then(normalizeData);
     }
 
-    remove(id: string): Promise<ISensor> {
+    remove(id: string): Promise<Sensor> {
         return SensorModel.findByIdAndRemove(id).exec()
         .then(rejectIfNull('Sensor not found'))
         .then(normalizeData);
     }
 
-    findAll(): Promise<ISensor[]> {
+    findAll(): Promise<Sensor[]> {
         return SensorModel.find()
         .populate('type')
         .exec()
         .then(normalizeData);
     }
 
-    find(id: string): Promise<ISensor> {
+    find(id: string): Promise<Sensor> {
         return SensorModel.findById(id)
         .populate('type')
         .then(rejectIfNull('Sensor not found'))
         .then(normalizeData);
     }
 }
-
-export const sensorRepository = new SensorRepository();

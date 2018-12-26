@@ -1,25 +1,23 @@
 import { Request, Response, Next } from 'restify';
 import { handleJsonData, handleErrors, checkQuery } from './helpers';
-import { IPumpHistorical } from '../models/interface/pump-historical';
-import { pumpHistoricalRepository } from '../models/database/repository/implementation/mongoose4/pump-historical-repository'
-import { environmentRepository } from '../models/database/repository/implementation/mongoose4/environment-repository'
-import { IPump } from '../models/interface/pump';
-import { pumpRepository } from '../models/database/repository/implementation/mongoose4/pump-repository';
+import { PumpHistorical } from '../models/interface/pump-historical';
+import { pumpHistoricalRepository, environmentRepository, pumpRepository } from '../repositories';
+import { Pump } from '../models/interface/pump';
 import * as pumpValidator from '../validation/pump';
 import * as pumpHistoricalValidator from '../validation/pump-historical';
-import { socketIOService } from '../services/socket-io.service';
+import { socketIOService } from '../services/socket-io-service';
 
 const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
-function validateDependencies(pumpHistorical: IPumpHistorical): Promise<IPumpHistorical> {
-    const pumpId: string = (<IPump>pumpHistorical.pump).id ||
+function validateDependencies(pumpHistorical: PumpHistorical): Promise<PumpHistorical> {
+    const pumpId: string = (<Pump>pumpHistorical.pump).id ||
         <string>pumpHistorical.pump;
     return pumpRepository.find(pumpId)
     .then(() => pumpHistorical);
 }
 
 function byEnvironmentId(req: Request, res: Response, next: Next):
-Promise<IPumpHistorical[]> {
+Promise<PumpHistorical[]> {
     let commQuery: string[] = commonQuery;
     commQuery.push('byEnvironmentId');
     return checkQuery(commQuery, req.query)
@@ -30,12 +28,12 @@ Promise<IPumpHistorical[]> {
         let environmentId: string = req.query.byEnvironmentId;
         return environmentRepository.find(environmentId)
         .then(environment => pumpHistoricalRepository
-            .findAllByPumps(<Array<IPump>>environment.pumps, sortBy, gte, lte));
+            .findAllByPumps(<Array<Pump>>environment.pumps, sortBy, gte, lte));
     });
 }
 
 function byPumpId(req: Request, res: Response, next: Next):
-Promise<IPumpHistorical[]> {
+Promise<PumpHistorical[]> {
     let commQuery: string[] = commonQuery;
     commQuery.push('byPumpId');
     return checkQuery(commQuery, req.query)
@@ -50,7 +48,7 @@ Promise<IPumpHistorical[]> {
 }
 
 function byPump(req: Request, res: Response, next: Next):
-Promise<IPumpHistorical[]> {
+Promise<PumpHistorical[]> {
     let commQuery: string[] = commonQuery;
     commQuery.push('byPump');
     return checkQuery(commQuery, req.query)
@@ -65,7 +63,7 @@ Promise<IPumpHistorical[]> {
 }
 
 export function getPumpHistoricals(req: Request, res: Response, next: Next) {
-    let queryResult: Promise<IPumpHistorical[]> = null;
+    let queryResult: Promise<PumpHistorical[]> = null;
     if(req.query.byEnvironmentId){
         queryResult = byEnvironmentId(req, res, next);
     } else if(req.query.byPumpId){

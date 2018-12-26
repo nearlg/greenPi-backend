@@ -1,8 +1,8 @@
-import { IUnit } from './unit';
+import { Unit } from './unit';
 
-export interface ISensorType {
+export interface SensorType {
     id?: any;
     name: string;
     description: string;
-    unit: IUnit;
+    unit: Unit;
 }

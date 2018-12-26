@@ -1,13 +1,13 @@
-import { IPump } from './pump';
+import { Pump } from './pump';
 
 export const enum State {
     Off = 0,
     On = 1
 };
 
-export interface IPumpHistorical {
+export interface PumpHistorical {
     id?: any,
     date: Date,
-    pump: IPump | string,
+    pump: Pump | string,
     state: State
 }
