@@ -7,7 +7,7 @@ import { IPump } from '../models/interface/pump';
 import { pumpRepository } from '../models/database/repository/implementation/mongoose4/pump-repository';
 import * as pumpValidator from '../validation/pump';
 import * as pumpHistoricalValidator from '../validation/pump-historical';
-import { socketIOService } from '../services/socket-io-service';
+import { socketIOService } from '../services/socket-io.service';
 
 const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 

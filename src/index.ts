@@ -14,7 +14,7 @@ import { addErrorHandler } from '../controllers/helpers';
 import { errorHandler as DataErrorHandler } from '../controllers/helpers/data-error-handler';
 import { errorHandler as MongooseErrorHandler } from '../controllers/helpers/mongoose-error-handler';
 import { errorHandler as AuthErrorHandler } from '../controllers/helpers/auth-error-handler';
-import { socketIOService } from '../services/socket-io-service';
+import { socketIOService } from '../services/socket-io.service';
 import { requestAuthz } from '../plugins/authorization';
 
 

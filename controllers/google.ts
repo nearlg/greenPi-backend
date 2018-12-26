@@ -1,10 +1,10 @@
 import { Request, Response, Next } from 'restify';
 import { userRepository } from '../models/database/repository/implementation/mongoose4/user-repository';
-import { createToken } from '../services/jwt-service';
+import { createToken } from '../services/jwt.service';
 import * as userValidator from '../validation/user';
 import { verify } from '../services/google-auth.service';
 import { IUser } from '../models/interface/user';
-import { RoleName } from '../services/authz-service/role-name';
+import { RoleName } from '../services/authz.service/role-name';
 import { handleJsonData, handleErrors } from './helpers';
 
 export function signInGoogle(req: Request, res: Response, next: Next) {
