@@ -26,17 +26,17 @@ class AuthErrorHandler implements IErrorHandler {
         return false;
     }
 
-    private handleInvalidCredentialsError(err: Error, next: Next): void {
+    private handleInvalidCredentialsError(err: Error, next: Next) {
         let error = new InvalidCredentialsError(err);
         return next(error);
     }
 
-    private handleUnauthorizedError(err: Error, next: Next): void {
+    private handleUnauthorizedError(err: Error, next: Next) {
         let error = new UnauthorizedError(err);
         return next(error);
     }
 
-    private handleNotAuthorizedError(err: Error, next: Next): void {
+    private handleNotAuthorizedError(err: Error, next: Next) {
         let error = new NotAuthorizedError(err);
         return next(error);
     }

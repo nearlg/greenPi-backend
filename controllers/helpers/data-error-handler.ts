@@ -17,13 +17,13 @@ class DataErrorHandler implements IErrorHandler {
         return false;
     }
 
-    private handleValidationError(err: Error, next: Next): void {
+    private handleValidationError(err: Error, next: Next) {
         let validationError: ValidationError = <ValidationError>err;
         let error: BadRequestError = new BadRequestError(validationError);
         return next(error);
     }
 
-    private handleDataNotFoundError(err: Error, next: Next): void {
+    private handleDataNotFoundError(err: Error, next: Next) {
         let error: NotFoundError = new NotFoundError(err);
         return next(error);
     }

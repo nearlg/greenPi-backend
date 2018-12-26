@@ -16,7 +16,7 @@ class QueryErrorHandler implements IErrorHandler {
         return false;
     }
 
-    private handleQueryError<T extends HttpError>(err: Error, next: Next): void {
+    private handleQueryError<T extends HttpError>(err: Error, next: Next) {
         let error: T = err as T;
         return next(error);
     }

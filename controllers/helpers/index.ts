@@ -27,7 +27,7 @@ data: T): Promise<T> {
     return Promise.resolve(data);
 }
 
-export function handleErrors(err: Error, next: Next): void {
+export function handleErrors(err: Error, next: Next) {
     if(!err){
         return next();
     }
@@ -39,6 +39,6 @@ export function handleErrors(err: Error, next: Next): void {
     return next(new InternalServerError(err));
 }
 
-export function addErrorHandler(handler: IErrorHandler): void {
+export function addErrorHandler(handler: IErrorHandler) {
     errorHandlers.push(handler);
 }
