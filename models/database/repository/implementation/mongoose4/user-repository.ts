@@ -4,7 +4,7 @@ import { rejectIfNull, normalizeData } from './helpers';
 import { IUser } from '../../../../interface/user';
 import { IUserRepository } from '../../shared/user-repository';
 import { Security } from '../../../../../config';
-import { RoleName } from '../../../../../services/authz-service/role-name';
+import { RoleName } from '../../../../../services/authz.service/role-name';
 
 export interface IUserModel extends IUser, mongoose.Document {
 }

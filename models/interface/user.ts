@@ -1,4 +1,4 @@
-import { RoleName } from '../../services/authz-service/role-name';
+import { RoleName } from '../../services/authz.service/role-name';
 
 export interface IUser {
     name: string;

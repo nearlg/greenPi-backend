@@ -3,7 +3,7 @@ import { Subscriber } from 'rxjs';
 import { IPumpHistorical } from '../models/interface/pump-historical';
 
 import { pumpHistoricalRepository } from '../models/database/repository/implementation/mongoose4/pump-historical-repository';
-import { SIOService } from './sio-service';
+import { SIOService } from './sio.service';
 
 const enum NamespaceNames {
     LastPumpHistoricals = '/pumps/last-historicals'

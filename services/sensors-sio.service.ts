@@ -1,7 +1,7 @@
 import { Subscriber } from 'rxjs';
 
 import { measureRepository } from '../models/database/repository/implementation/mongoose4/measure-repository';
-import { SIOService } from './sio-service';
+import { SIOService } from './sio.service';
 import { IMeasure } from '../models/interface/measure';
 
 const enum NamespaceNames {

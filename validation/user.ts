@@ -1,7 +1,7 @@
 import { IUser } from '../models/interface/user';
 import * as userRegex from './rules/user';
 import { regexValidation, createError, rejectIfNull } from './helpers';
-import { RoleName } from '../services/authz-service/role-name';
+import { RoleName } from '../services/authz.service/role-name';
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, userRegex.NameRegex, 'The user must have a valid name');

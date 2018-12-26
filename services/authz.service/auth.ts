@@ -1,10 +1,10 @@
-import { Rule } from './rule';
-import { RoleName } from './role-name';
+import { Rule } from "./rule";
+import { RoleName } from "./role-name";
+import { HttpMethod } from "./http-method";
+import { rulesData } from "./rules-data";
 import * as Config from '../../config';
-import { HttpMethod } from './http-method';
-import { rulesData } from './rules-data';
 
-class Authz {
+export class Authz {
 
     private rules: Map<string, Rule[]>;
 
@@ -54,5 +54,3 @@ class Authz {
         return apiRoute;
     }
 }
-
-export const authzService = new Authz();
