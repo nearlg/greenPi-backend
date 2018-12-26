@@ -69,8 +69,8 @@ export class UserMongooseRepository implements UserRepository {
         .then(normalizeData);
     }
 
-    remove(email: string): Promise<User> {
-        return UserModel.findOneAndRemove({email: email})
+    remove(id: string): Promise<User> {
+        return UserModel.findByIdAndRemove(id)
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData);
@@ -81,15 +81,22 @@ export class UserMongooseRepository implements UserRepository {
         .then(normalizeData);
     }
 
-    find(email: string): Promise<User> {
+    find(id: string): Promise<User> {
+        return UserModel.findById(id)
+        .exec()
+        .then(rejectIfNull('User not found'))
+        .then(normalizeData);
+    }
+
+    findByEmail(email: string): Promise<User> {
         return UserModel.findOne({ email: email })
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData);
     }
 
-    getRoleName(email: string): Promise<RoleName> {
-        return UserModel.findOne({ email: email })
+    getRoleName(id: string): Promise<RoleName> {
+        return UserModel.findById(id)
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData)

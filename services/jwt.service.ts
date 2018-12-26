@@ -5,7 +5,7 @@ import { Request } from 'restify';
 
 function createToken(user: User): string {
     const payload = {
-        sub: user.email
+        sub: user.id
     };
     const options: jwt.SignOptions = {
         expiresIn: '1h'
