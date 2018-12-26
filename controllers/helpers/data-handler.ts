@@ -2,7 +2,7 @@ import { Next, Response } from 'restify';
 import { HttpMethod } from '../../services/authz-service/http-method';
 
 class DataHandler {
-    handleJson(res: Response, next: Next, httpMethod: string, data: any): void {
+    handleJson(res: Response, next: Next, httpMethod: string, data: any) {
         let status = 200;
         if(!data){
             status = 204;

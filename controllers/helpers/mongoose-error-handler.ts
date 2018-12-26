@@ -21,19 +21,19 @@ class MongooseErrorHandler implements IErrorHandler {
         return false;
     }
 
-    private handleValidationError(err: Error, next: Next): void {
+    private handleValidationError(err: Error, next: Next) {
         let validationError: ValidationError = <ValidationError>err;
         let error: BadRequestError = new BadRequestError(validationError);
         return next(error);
     }
 
-    private handleCastError(err: Error, next: Next): void {
+    private handleCastError(err: Error, next: Next) {
         let castError: CastError = <CastError>err;
         let error: BadRequestError = new BadRequestError(castError);
         return next(error);
     }
 
-    private handleMongoError(err: Error, next: Next): void {
+    private handleMongoError(err: Error, next: Next) {
         let mongoError: MongoError = <MongoError>err;
         switch (mongoError.code) {
             case 11000:
@@ -43,7 +43,7 @@ class MongooseErrorHandler implements IErrorHandler {
         }
     }
 
-    private handleMongoDuplicateValidationError(err: Error, next: Next): void {
+    private handleMongoDuplicateValidationError(err: Error, next: Next) {
         let mongoError: MongoError = <MongoError>err;
         let error: InvalidArgumentError = new InvalidArgumentError(mongoError);
         return next(error);

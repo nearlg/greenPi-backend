@@ -2,7 +2,7 @@ import * as restify from 'restify';
 import * as controller from '../controllers/user';
 import * as gController from '../controllers/google';
 
-export function routes(server: restify.Server, mainPath: string = ''): void{
+export function routes(server: restify.Server, mainPath: string = '') {
     // User profile
     server.post(mainPath + '/profile/sign-in/local', controller.signInLocal);
     server.post(mainPath + '/profile/sign-in/google', gController.signInGoogle);

@@ -96,7 +96,13 @@ export const rulesData = new Map([
             roleNames: [ RoleName.NonRegistered ]
         }
     ]],
-    ['/users/profile/sign-in', [
+    ['/users/profile/sign-in/local', [
+        {
+            httpMethod: HttpMethod.Post,
+            roleNames: [ RoleName.NonRegistered ]
+        }
+    ]],
+    ['/users/profile/sign-in/google', [
         {
             httpMethod: HttpMethod.Post,
             roleNames: [ RoleName.NonRegistered ]
