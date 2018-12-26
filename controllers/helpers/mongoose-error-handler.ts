@@ -6,44 +6,44 @@ import { BadRequestError, InvalidArgumentError } from 'restify-errors';
 
 class MongooseErrorHandler implements ErrorHandler {
 
-    handleError(err: Error, next: Next): boolean {
+    handleError(next: Next, err: Error): boolean {
         switch(err.name) {
             case 'ValidationError':
-                this.handleValidationError(err, next);
+                this.handleValidationError(next, err);
                 return true;
             case 'CastError':
-                this.handleCastError(err, next);
+                this.handleCastError(next, err);
                 return true;
             case 'MongoError':
-                this.handleMongoError(err, next);
+                this.handleMongoError(next, err);
                 return true;
         }
         return false;
     }
 
-    private handleValidationError(err: Error, next: Next) {
+    private handleValidationError(next: Next, err: Error) {
         let validationError: ValidationError = <ValidationError>err;
         let error: BadRequestError = new BadRequestError(validationError);
         return next(error);
     }
 
-    private handleCastError(err: Error, next: Next) {
+    private handleCastError(next: Next, err: Error) {
         let castError: CastError = <CastError>err;
         let error: BadRequestError = new BadRequestError(castError);
         return next(error);
     }
 
-    private handleMongoError(err: Error, next: Next) {
+    private handleMongoError(next: Next, err: Error) {
         let mongoError: MongoError = <MongoError>err;
         switch (mongoError.code) {
             case 11000:
-                return this.handleMongoDuplicateValidationError(mongoError, next);
+                return this.handleMongoDuplicateValidationError(next, mongoError);
             default:
                 return next(mongoError);
         }
     }
 
-    private handleMongoDuplicateValidationError(err: Error, next: Next) {
+    private handleMongoDuplicateValidationError(next: Next, err: Error) {
         let mongoError: MongoError = <MongoError>err;
         let error: InvalidArgumentError = new InvalidArgumentError(mongoError);
         return next(error);

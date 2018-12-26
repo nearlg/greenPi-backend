@@ -69,7 +69,7 @@ export function getMeasures(req: Request, res: Response, next: Next) {
         queryResult = bySensor(req, res, next);
     }
     queryResult.then(measure => handleJsonData(req, res, next, measure))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function addMeasure(req: Request, res: Response, next: Next) {
@@ -81,7 +81,7 @@ export function addMeasure(req: Request, res: Response, next: Next) {
     .then(measureRepository.create)
     .then(measure => handleJsonData<Measure>(req, res, next, measure))
     .then(socketIOService.sensorsSIOService.emitLastMeasure)
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function updateMeasure(req: Request, res: Response, next: Next) {
@@ -90,23 +90,23 @@ export function updateMeasure(req: Request, res: Response, next: Next) {
     .then(validateDependencies)
     .then(measureRepository.update)
     .then(measure => handleJsonData(req, res, next, measure))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function deleteMeasure(req: Request, res: Response, next: Next) {
     measureRepository.remove(req.params.id)
     .then(measure => handleJsonData(req, res, next, measure))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function fetchMeasures(req: Request, res: Response, next: Next) {
     measureRepository.findAll()
     .then(measures => handleJsonData(req, res, next, measures))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function getMeasure(req: Request, res: Response, next: Next) {
     measureRepository.find(req.params.id)
     .then(measure => handleJsonData(req, res, next, measure))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }

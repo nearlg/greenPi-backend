@@ -5,38 +5,38 @@ import {  InvalidCredentialsError ,UnauthorizedError, NotAuthorizedError }
 
 class AuthErrorHandler implements ErrorHandler {
 
-    handleError(err: Error, next: Next): boolean {
+    handleError(next: Next, err: Error): boolean {
         switch(err.name) {
             // http code: 401
             case 'InvalidCredentialsError':
-                this.handleInvalidCredentialsError(err, next);
+                this.handleInvalidCredentialsError(next, err);
                 return true;
             // Authentication is required
             // or error for the authentication
             // http code: 401
             case 'UnauthorizedError':
-                this.handleUnauthorizedError(err, next);
+                this.handleUnauthorizedError(next, err);
                 return true;
             // The user might not have the necessary permissions for a resource
             // http code: 403
             case 'NotAuthorizedError':
-                this.handleNotAuthorizedError(err, next);
+                this.handleNotAuthorizedError(next, err);
                 return true;
         }
         return false;
     }
 
-    private handleInvalidCredentialsError(err: Error, next: Next) {
+    private handleInvalidCredentialsError(next: Next, err: Error) {
         let error = new InvalidCredentialsError(err);
         return next(error);
     }
 
-    private handleUnauthorizedError(err: Error, next: Next) {
+    private handleUnauthorizedError(next: Next, err: Error) {
         let error = new UnauthorizedError(err);
         return next(error);
     }
 
-    private handleNotAuthorizedError(err: Error, next: Next) {
+    private handleNotAuthorizedError(next: Next, err: Error) {
         let error = new NotAuthorizedError(err);
         return next(error);
     }

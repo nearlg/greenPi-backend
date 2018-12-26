@@ -72,7 +72,7 @@ export function getPumpHistoricals(req: Request, res: Response, next: Next) {
         queryResult = byPump(req, res, next);
     }
     queryResult.then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function addPumpHistorical(req: Request, res: Response, next: Next) {
@@ -84,7 +84,7 @@ export function addPumpHistorical(req: Request, res: Response, next: Next) {
     .then(pumpHistoricalRepository.create)
     .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
     .then(socketIOService.pumpsSIOService.emitLastPumpHistorical)
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function updatePumpHistorical(req: Request, res: Response, next: Next) {
@@ -93,23 +93,23 @@ export function updatePumpHistorical(req: Request, res: Response, next: Next) {
     .then(validateDependencies)
     .then(pumpHistorical => pumpHistoricalRepository.update(pumpHistorical))
     .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function deletePumpHistorical(req: Request, res: Response, next: Next) {
     return pumpHistoricalRepository.remove(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function fetchPumpHistoricals(req: Request, res: Response, next: Next) {
     return pumpHistoricalRepository.findAll()
     .then(pumpHistoricals => handleJsonData(req, res, next, pumpHistoricals))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function getPumpHistorical(req: Request, res: Response, next: Next) {
     pumpHistoricalRepository.find(req.params.id)
     .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }

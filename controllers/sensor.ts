@@ -17,7 +17,7 @@ export function addSensor(req: Request, res: Response, next: Next) {
     .then(validateDependencies)
     .then(sensorRepository.create)
     .then(sensor => handleJsonData(req, res, next, sensor))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function updateSensor(req: Request, res: Response, next: Next) {
@@ -26,23 +26,23 @@ export function updateSensor(req: Request, res: Response, next: Next) {
     .then(validateDependencies)
     .then(sensorRepository.update)
     .then(sensor => handleJsonData(req, res, next, sensor))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function deleteSensor(req: Request, res: Response, next: Next) {
     sensorRepository.remove(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function fetchSensors(req: Request, res: Response, next: Next) {
     sensorRepository.findAll()
     .then(sensors => handleJsonData(req, res, next, sensors))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function getSensor(req: Request, res: Response, next: Next) {
     sensorRepository.find(req.params.id)
     .then(sensor => handleJsonData(req, res, next, sensor))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }

@@ -11,7 +11,7 @@ export function addSensorType(req: Request, res: Response, next: Next) {
     sensorTypeValidator.validate(req.body, false)
     .then(sensorTypeRepository.create)
     .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function updateSensorType(req: Request, res: Response, next: Next) {
@@ -23,23 +23,23 @@ export function updateSensorType(req: Request, res: Response, next: Next) {
     sensorTypeValidator.validate(req.body)
     .then(sensorTypeRepository.update)
     .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function deleteSensorType(req: Request, res: Response, next: Next) {
     sensorTypeRepository.remove(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function fetchSensorTypes(req: Request, res: Response, next: Next) {
     sensorTypeRepository.findAll()
     .then(sensorTypes => handleJsonData(req, res, next, sensorTypes))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function getSensorType(req: Request, res: Response, next: Next) {
     sensorTypeRepository.find(req.params.id)
     .then(sensorType => handleJsonData(req, res, next, sensorType))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }

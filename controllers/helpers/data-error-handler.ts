@@ -5,25 +5,25 @@ import { ValidationError } from 'mongoose';
 
 class DataErrorHandler implements ErrorHandler {
 
-    handleError(err: Error, next: Next): boolean {
+    handleError(next: Next, err: Error): boolean {
         switch(err.name) {
             case 'DataNotFoundError':
-                this.handleDataNotFoundError(err, next);
+                this.handleDataNotFoundError(next, err);
                 return true;
             case 'DataValidationError':
-                this.handleValidationError(err, next);
+                this.handleValidationError(next, err);
                 return true;
         }
         return false;
     }
 
-    private handleValidationError(err: Error, next: Next) {
+    private handleValidationError(next: Next, err: Error) {
         let validationError: ValidationError = <ValidationError>err;
         let error: BadRequestError = new BadRequestError(validationError);
         return next(error);
     }
 
-    private handleDataNotFoundError(err: Error, next: Next) {
+    private handleDataNotFoundError(next: Next, err: Error) {
         let error: NotFoundError = new NotFoundError(err);
         return next(error);
     }

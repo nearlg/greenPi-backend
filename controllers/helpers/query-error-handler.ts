@@ -4,19 +4,19 @@ import { InvalidArgumentError, HttpError, MissingParameterError } from 'restify-
 
 class QueryErrorHandler implements ErrorHandler {
 
-    handleError(err: Error, next: Next): boolean {
+    handleError(next: Next, err: Error): boolean {
         switch(err.name) {
             case 'InvalidArgumentError':
-                this.handleQueryError<InvalidArgumentError>(err, next);
+                this.handleQueryError<InvalidArgumentError>(next, err);
                 return true;
             case 'MissingParameterError':
-                this.handleQueryError<MissingParameterError>(err, next);
+                this.handleQueryError<MissingParameterError>(next, err);
                 return true;
         }
         return false;
     }
 
-    private handleQueryError<T extends HttpError>(err: Error, next: Next) {
+    private handleQueryError<T extends HttpError>(next: Next, err: Error) {
         let error: T = err as T;
         return next(error);
     }
