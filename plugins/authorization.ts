@@ -3,7 +3,7 @@ import { verifyTokenFromRequest } from '../services/jwt.service';
 import { handleErrors } from '../controllers/helpers';
 import { RoleName } from '../services/authz.service/role-name';
 import { authzService } from '../services/authz.service';
-import { userRepository } from '../models/database/repository/implementation/mongoose4/user-repository';
+import { userRepository } from '../repositories';
 
 /**
  * Check if the user role can have access to the path

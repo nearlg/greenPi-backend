@@ -1,7 +1,7 @@
-import { ISensorType } from '../models/interface/sensor-type';
+import { SensorType } from '../models/interface/sensor-type';
 import * as sensorTypeRegex from './rules/sensor-type';
 import { regexValidation, createError, rejectIfNull } from './helpers';
-import { IUnit } from '../models/interface/unit';
+import { Unit } from '../models/interface/unit';
 
 export function validateName(name: string): Promise<string>  {
     return regexValidation(name, sensorTypeRegex.NameRegex, 'The sensor type must have a valid name');
@@ -14,7 +14,7 @@ export function validateDescription(description: string): Promise<string>  {
     return regexValidation(description, sensorTypeRegex.DescriptionRegex, 'The sensor type must have a valid description');
 }
 
-export function validateUnit(unit: IUnit): Promise<IUnit> {
+export function validateUnit(unit: Unit): Promise<Unit> {
     if(unit) {
         return regexValidation(unit.name, sensorTypeRegex.UnitNameRegex, 'The sensor type must have a valid unit name')
         .then(() => {
@@ -36,7 +36,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err);
 }
 
-export function validate(sensorType: ISensorType, checkId: boolean = true): Promise<ISensorType> {
+export function validate(sensorType: SensorType, checkId: boolean = true): Promise<SensorType> {
     return rejectIfNull(sensorType, 'Sensor type is null or undefined')
     .then(() => validateName(sensorType.name))
     .then(() => validateDescription(sensorType.description))

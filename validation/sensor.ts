@@ -1,5 +1,5 @@
-import { ISensor } from '../models/interface/sensor';
-import { ISensorType } from '../models/interface/sensor-type';
+import { Sensor } from '../models/interface/sensor';
+import { SensorType } from '../models/interface/sensor-type';
 import * as sensorRegex from './rules/sensor';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 import { validateId as sensorTypeIdValidator} from './sensor-type';
@@ -24,7 +24,7 @@ export function validatePorts(ports: number[]): Promise<number[]> {
     return Promise.reject(err);
 }
 
-export function validateType(sensorType: ISensorType | string): Promise<ISensorType | string> {
+export function validateType(sensorType: SensorType | string): Promise<SensorType | string> {
     if(sensorType) {
         if('object' === typeof sensorType){
             return Promise.resolve(sensorType);
@@ -43,7 +43,7 @@ export function validateId(id: string): Promise<string> {
     return Promise.reject(err)
 }
 
-export function validate(sensor: ISensor, checkId: boolean = true): Promise<ISensor> {
+export function validate(sensor: Sensor, checkId: boolean = true): Promise<Sensor> {
     return rejectIfNull(sensor, 'Sensor is null or undefined')
     .then(() => validateName(sensor.name))
     .then(() => validateDescription(sensor.description))

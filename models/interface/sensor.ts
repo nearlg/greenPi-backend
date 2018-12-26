@@ -1,9 +1,9 @@
-import { ISensorType } from './sensor-type';
+import { SensorType } from './sensor-type';
 
-export interface ISensor {
+export interface Sensor {
     id?: any;
     name: string;
     description: string;
-    type: ISensorType | string;
+    type: SensorType | string;
     connectionPorts: number[];
 }

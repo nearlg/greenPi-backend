@@ -1,9 +1,9 @@
 import mongoose = require('mongoose');
 import { rejectIfNull, normalizeData } from './helpers';
-import { IEnvironmentRepository } from '../../shared/environment-repository';
-import { IEnvironment } from '../../../../interface/environment';
+import { EnvironmentRepository } from '../interface/environment-repository';
+import { Environment } from '../../models/interface/environment';
 
-export interface IEnvironmentModel extends IEnvironment, mongoose.Document {
+interface EnvironmentModel extends Environment, mongoose.Document {
 }
 
 const EnvironmentSchema = new mongoose.Schema({
@@ -22,16 +22,16 @@ const EnvironmentSchema = new mongoose.Schema({
     }],
 });
 
-const EnvironmentModel = mongoose.model<IEnvironmentModel>('Environment', EnvironmentSchema);
+const EnvironmentModel = mongoose.model<EnvironmentModel>('Environment', EnvironmentSchema);
 
-export class EnvironmentRepository implements IEnvironmentRepository {
+export class EnvironmentMongooseRepository implements EnvironmentRepository {
 
-    create(document: IEnvironment): Promise<IEnvironment> {
+    create(document: Environment): Promise<Environment> {
         return EnvironmentModel.create(document)
         .then(rejectIfNull('Environment not found'))
-        .then((o: IEnvironmentModel) => EnvironmentModel.populate(o, {
+        .then((o: EnvironmentModel) => EnvironmentModel.populate(o, {
             path: 'pumps'}))
-        .then((o: IEnvironmentModel) =>
+        .then((o: EnvironmentModel) =>
             EnvironmentModel.populate(o, {
                 path: 'sensors',
                 populate: {
@@ -42,7 +42,7 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         .then(normalizeData);
     }
 
-    update(document: IEnvironment): Promise<IEnvironment> {
+    update(document: Environment): Promise<Environment> {
         return EnvironmentModel.findByIdAndUpdate(document.id, document,
             {'new': true})
         .populate('pumps')
@@ -54,13 +54,13 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         .then(normalizeData);
     }
 
-    remove(id: string): Promise<IEnvironment> {
+    remove(id: string): Promise<Environment> {
         return EnvironmentModel.findByIdAndRemove(id)
         .exec()
         .then(normalizeData);
     }
 
-    findAll(): Promise<IEnvironment[]> {
+    findAll(): Promise<Environment[]> {
         return EnvironmentModel.find()
         .populate('pumps')
         .populate({path:'sensors', populate: {
@@ -70,7 +70,7 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         .then(normalizeData);
     }
 
-    find(id: string): Promise<IEnvironment> {
+    find(id: string): Promise<Environment> {
         return EnvironmentModel.findById(id)
         .populate('pumps')
         .populate({path:'sensors', populate: {
@@ -81,5 +81,3 @@ export class EnvironmentRepository implements IEnvironmentRepository {
         .then(normalizeData);
     }
 }
-
-export const environmentRepository = new EnvironmentRepository();

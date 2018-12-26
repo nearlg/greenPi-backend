@@ -1,6 +1,6 @@
 import { RoleName } from '../../services/authz.service/role-name';
 
-export interface IUser {
+export interface User {
     name: string;
     email: string;
     roleName: RoleName;

@@ -1,5 +1,5 @@
 import { Request, Response, Next } from 'restify';
-import { environmentRepository } from '../models/database/repository/implementation/mongoose4/environment-repository'
+import { environmentRepository } from '../repositories';
 import * as environmentValidator from '../validation/environment';
 import { handleJsonData, handleErrors } from './helpers';
 

@@ -1,13 +1,12 @@
 import { Request, Response, Next } from 'restify';
 import { handleJsonData, handleErrors } from './helpers';
-import { ISensor } from '../models/interface/sensor';
+import { Sensor } from '../models/interface/sensor';
 import * as sensorValidator from '../validation/sensor';
-import { sensorRepository } from '../models/database/repository/implementation/mongoose4/sensor-repository'
-import { sensorTypeRepository } from '../models/database/repository/implementation/mongoose4/sensor-type-repository'
-import { ISensorType } from '../models/interface/sensor-type';
+import { sensorRepository, sensorTypeRepository } from '../repositories';
+import { SensorType } from '../models/interface/sensor-type';
 
-function validateDependencies(sensor: ISensor): Promise<ISensor> {
-    const sensorTypeId: string = (<ISensorType>sensor.type).name ||
+function validateDependencies(sensor: Sensor): Promise<Sensor> {
+    const sensorTypeId: string = (<SensorType>sensor.type).name ||
         <string>sensor.type;
     return sensorTypeRepository.find(sensorTypeId)
     .then(() => sensor);

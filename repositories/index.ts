@@ -1,0 +1,22 @@
+import { UserMongooseRepository } from "./mongoose4/user-repository";
+import { UserRepository } from "./interface/user-repository";
+import { SensorTypeMongooseRepository } from "./mongoose4/sensor-type-repository";
+import { SensorTypeRepository } from "./interface/sensor-type-repository";
+import { SensorRepository } from "./interface/sensor-repository";
+import { PumpRepository } from "./interface/pump-repository";
+import { PumpHistoricalRepository } from "./interface/pump-historical-repository";
+import { MeasureRepository } from "./interface/measure-repository";
+import { EnvironmentRepository } from "./interface/environment-repository";
+import { SensorMongooseRepository } from "./mongoose4/sensor-repository";
+import { PumpMongooseRepository } from "./mongoose4/pump-repository";
+import { PumpHistoricalMongooseRepository } from "./mongoose4/pump-historical-repository";
+import { MeasureMongooseRepository } from "./mongoose4/measure-repository";
+import { EnvironmentMongooseRepository } from "./mongoose4/environment-repository";
+
+export const userRepository: UserRepository = new UserMongooseRepository();
+export const sensorTypeRepository: SensorTypeRepository = new SensorTypeMongooseRepository();
+export const sensorRepository: SensorRepository = new SensorMongooseRepository();
+export const pumpRepository: PumpRepository = new PumpMongooseRepository();
+export const pumpHistoricalRepository: PumpHistoricalRepository = new PumpHistoricalMongooseRepository();
+export const measureRepository: MeasureRepository = new MeasureMongooseRepository();
+export const environmentRepository: EnvironmentRepository = new EnvironmentMongooseRepository();

@@ -1,18 +1,16 @@
 import { Request, Response, Next } from 'restify';
 import { handleJsonData, handleErrors, checkQuery } from './helpers';
-import { IMeasure } from '../models/interface/measure';
-import { measureRepository } from '../models/database/repository/implementation/mongoose4/measure-repository'
-import { environmentRepository } from '../models/database/repository/implementation/mongoose4/environment-repository'
-import { ISensor } from '../models/interface/sensor';
+import { Measure } from '../models/interface/measure';
+import { measureRepository, environmentRepository, sensorRepository } from '../repositories';
+import { Sensor } from '../models/interface/sensor';
 import * as measureValidator from '../validation/measure';
 import * as sensorValidator from '../validation/sensor';
-import { sensorRepository } from '../models/database/repository/implementation/mongoose4/sensor-repository';
 import { socketIOService } from '../services/socket-io.service';
 
 const commonQuery: string[] = ['gte', 'lte', 'sortBy'];
 
-function validateDependencies(measure: IMeasure): Promise<IMeasure> {
-    const sensorId: string = (<ISensor>measure.sensor).id ||
+function validateDependencies(measure: Measure): Promise<Measure> {
+    const sensorId: string = (<Sensor>measure.sensor).id ||
         <string>measure.sensor;
     return sensorRepository.find(sensorId)
     .then(() => measure);
@@ -29,7 +27,7 @@ function byEnvironmentId(req: Request, res: Response, next: Next) {
         let environmentId: string = req.query.byEnvironmentId;
         return environmentRepository.find(environmentId)
         .then(environment => measureRepository
-            .findAllBySensors(<Array<ISensor>>environment.sensors, sortBy, gte, lte));
+            .findAllBySensors(<Array<Sensor>>environment.sensors, sortBy, gte, lte));
     });
 }
 
@@ -62,7 +60,7 @@ function bySensor(req: Request, res: Response, next: Next) {
 }
 
 export function getMeasures(req: Request, res: Response, next: Next) {
-    let queryResult: Promise<IMeasure[]> = null;
+    let queryResult: Promise<Measure[]> = null;
     if(req.query.byEnvironmentId){
         queryResult = byEnvironmentId(req, res, next);
     } else if(req.query.bySensorId){
@@ -81,7 +79,7 @@ export function addMeasure(req: Request, res: Response, next: Next) {
     measureValidator.validate(req.body, false)
     .then(validateDependencies)
     .then(measureRepository.create)
-    .then(measure => handleJsonData<IMeasure>(req, res, next, measure))
+    .then(measure => handleJsonData<Measure>(req, res, next, measure))
     .then(socketIOService.sensorsSIOService.emitLastMeasure)
     .catch(err => handleErrors(err, next));
 }

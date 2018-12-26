@@ -1,4 +1,4 @@
-export interface IPump {
+export interface Pump {
     id?: any;
     name: string;
     description: string;

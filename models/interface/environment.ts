@@ -1,10 +1,10 @@
-import { ISensor } from './sensor';
-import { IPump } from './pump';
+import { Sensor } from './sensor';
+import { Pump } from './pump';
 
-export interface IEnvironment {
+export interface Environment {
     id?: any;
     name: string,
     description: string,
-    sensors: ISensor[] | string[];
-    pumps: IPump[] | string[];
+    sensors: Sensor[] | string[];
+    pumps: Pump[] | string[];
 }

@@ -1,12 +1,12 @@
 import mongoose = require('mongoose');
 import bcrypt = require('bcrypt');
 import { rejectIfNull, normalizeData } from './helpers';
-import { IUser } from '../../../../interface/user';
-import { IUserRepository } from '../../shared/user-repository';
-import { Security } from '../../../../../config';
-import { RoleName } from '../../../../../services/authz.service/role-name';
+import { User } from '../../models/interface/user';
+import { UserRepository } from '../interface/user-repository';
+import { Security } from '../../config';
+import { RoleName } from '../../services/authz.service/role-name';
 
-export interface IUserModel extends IUser, mongoose.Document {
+interface UserModel extends User, mongoose.Document {
 }
 
 const userSchema = new mongoose.Schema({
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
 
 // Encrypt user's password before saving it to the database
 userSchema.pre('save', function (next) {
-    const user: IUserModel = this;
+    const user: UserModel = this;
     if (!user.password || !user.isModified('password')) {
         return next();
     }
@@ -52,36 +52,36 @@ userSchema.pre('save', function (next) {
 });
 
 
-const UserModel = mongoose.model<IUserModel>('User', userSchema);
+const UserModel = mongoose.model<UserModel>('User', userSchema);
 
-export class UserRepository implements IUserRepository {
+export class UserMongooseRepository implements UserRepository {
 
-    create(document: IUser): Promise<IUser> {
+    create(document: User): Promise<User> {
         return UserModel.create(document)
         .then(rejectIfNull('User not found'))
         .then(normalizeData);
     }
 
-    update(document: IUser): Promise<IUser> {
+    update(document: User): Promise<User> {
         return UserModel.findOneAndUpdate({email: document.email}, document)
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData);
     }
 
-    remove(email: string): Promise<IUser> {
+    remove(email: string): Promise<User> {
         return UserModel.findOneAndRemove({email: email})
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData);
     }
 
-    findAll(): Promise<IUser[]> {
+    findAll(): Promise<User[]> {
         return UserModel.find().exec()
         .then(normalizeData);
     }
 
-    find(email: string): Promise<IUser> {
+    find(email: string): Promise<User> {
         return UserModel.findOne({ email: email })
         .exec()
         .then(rejectIfNull('User not found'))
@@ -93,15 +93,13 @@ export class UserRepository implements IUserRepository {
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData)
-        .then((user: IUser) => user.roleName);
+        .then((user: User) => user.roleName);
     }
 
-    findByGoogleId(id: string): Promise<IUser> {
+    findByGoogleId(id: string): Promise<User> {
         return UserModel.findOne({ 'googleId': id })
         .exec()
         .then(rejectIfNull('User not found'))
         .then(normalizeData);
     }
 }
-
-export const userRepository = new UserRepository();

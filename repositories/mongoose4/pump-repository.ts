@@ -1,9 +1,9 @@
 import mongoose = require('mongoose');
 import { rejectIfNull, normalizeData } from './helpers';
-import { IPumpRepository } from '../../shared/pump-repository';
-import { IPump } from '../../../../interface/pump';
+import { PumpRepository } from '../interface/pump-repository';
+import { Pump } from '../../models/interface/pump';
 
-export interface IPumpModel extends IPump, mongoose.Document {
+interface PumpModel extends Pump, mongoose.Document {
 }
 
 const pumpSchema = new mongoose.Schema({
@@ -15,39 +15,37 @@ const pumpSchema = new mongoose.Schema({
     connectionPorts: [Number]
 });
 
-const PumpModel = mongoose.model<IPumpModel>('Pump', pumpSchema);
+const PumpModel = mongoose.model<PumpModel>('Pump', pumpSchema);
 
-export class PumpRepository implements IPumpRepository {
+export class PumpMongooseRepository implements PumpRepository {
 
-    create(document: IPump): Promise<IPump> {
+    create(document: Pump): Promise<Pump> {
         return PumpModel.create(document)
         .then(rejectIfNull('Pump not found'))
         .then(normalizeData);
     }
 
-    update(document: IPump): Promise<IPump> {
+    update(document: Pump): Promise<Pump> {
         return PumpModel.findByIdAndUpdate(document.id, document,
             {'new': true}).exec()
         .then(rejectIfNull('Pump not found'))
         .then(normalizeData);
     }
 
-    remove(id: string): Promise<IPump> {
+    remove(id: string): Promise<Pump> {
         return PumpModel.findByIdAndRemove(id).exec()
         .then(rejectIfNull('Pump not found'))
         .then(normalizeData);
     }
 
-    findAll(): Promise<IPump[]> {
+    findAll(): Promise<Pump[]> {
         return PumpModel.find().exec()
         .then(normalizeData);
     }
 
-    find(id: string): Promise<IPump> {
+    find(id: string): Promise<Pump> {
         return PumpModel.findById(id).exec()
         .then(rejectIfNull('Pump not found'))
         .then(normalizeData);
     }
 }
-
-export const pumpRepository = new PumpRepository();

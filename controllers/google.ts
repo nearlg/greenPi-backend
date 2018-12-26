@@ -1,9 +1,9 @@
 import { Request, Response, Next } from 'restify';
-import { userRepository } from '../models/database/repository/implementation/mongoose4/user-repository';
+import { userRepository } from '../repositories';
 import { createToken } from '../services/jwt.service';
 import * as userValidator from '../validation/user';
 import { verify } from '../services/google-auth.service';
-import { IUser } from '../models/interface/user';
+import { User } from '../models/interface/user';
 import { RoleName } from '../services/authz.service/role-name';
 import { handleJsonData, handleErrors } from './helpers';
 
@@ -14,7 +14,7 @@ export function signInGoogle(req: Request, res: Response, next: Next) {
         const userId = payload.sub;
         return userRepository.findByGoogleId(userId)
         .catch(() => {
-            const newUser = <IUser>{
+            const newUser = <User>{
                 name: payload.name,
                 email: payload.email,
                 roleName: RoleName.Observer,
