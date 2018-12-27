@@ -41,5 +41,5 @@ export function requestAuthz(req: Request,
 res: Response, next: Next) {
     requestIsAuthorized(req)
     .then(() => next())
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }

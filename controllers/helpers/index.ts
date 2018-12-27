@@ -27,12 +27,12 @@ data: T): Promise<T> {
     return Promise.resolve(data);
 }
 
-export function handleErrors(err: Error, next: Next) {
+export function handleErrors(next: Next, err: Error) {
     if(!err){
         return next();
     }
     errorHandlers.forEach(handler => {
-        if(handler.handleError(err, next)) {
+        if(handler.handleError(next, err)) {
             return;
         }
     });

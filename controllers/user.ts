@@ -13,7 +13,7 @@ export function addUser(req: Request, res: Response, next: Next) {
     userValidator.validate(req.body, false)
     .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function updateUser(req: Request, res: Response, next: Next) {
@@ -21,25 +21,25 @@ export function updateUser(req: Request, res: Response, next: Next) {
     userValidator.validate(req.body)
     .then(userRepository.update)
     .then(user => handleJsonData(req, res, next, user))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function deleteUser(req: Request, res: Response, next: Next) {
     userRepository.remove(req.params.id)
     .then(() => handleJsonData(req, res, next, null))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function fetchUsers(req: Request, res: Response, next: Next) {
     userRepository.findAll()
     .then(users => handleJsonData(req, res, next, users))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function getUser(req: Request, res: Response, next: Next) {
     userRepository.find(req.params.id)
     .then(user => handleJsonData(req, res, next, user))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function signUp(req: Request, res: Response, next: Next) {
@@ -49,7 +49,7 @@ export function signUp(req: Request, res: Response, next: Next) {
     userValidator.validate(req.body, false)
     .then(userRepository.create)
     .then(user => handleJsonData(req, res, next, user))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function signInLocal(req: Request, res: Response, next: Next) {
@@ -77,14 +77,14 @@ export function signInLocal(req: Request, res: Response, next: Next) {
         });
     })
     .then(token => handleJsonData(req, res, next, token))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function getProfile(req: Request, res: Response, next: Next) {
     verifyTokenFromRequest(req)
     .then(validToken => userRepository.find(validToken.sub))
     .then(user => handleJsonData(req, res, next, user))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
 
 export function editProfile(req: Request, res: Response, next: Next) {
@@ -103,5 +103,5 @@ export function editProfile(req: Request, res: Response, next: Next) {
     })
     .then(userRepository.update)
     .then(user => handleJsonData(req, res, next, user))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }

@@ -29,5 +29,5 @@ export function signInGoogle(req: Request, res: Response, next: Next) {
         return Promise.resolve(token);
     })
     .then(token => handleJsonData(req, res, next, token))
-    .catch(err => handleErrors(err, next));
+    .catch(err => handleErrors(next, err));
 }
