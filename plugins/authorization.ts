@@ -37,8 +37,7 @@ function requestIsAuthorized(req: Request)
     });
 }
 
-export function requestAuthz(req: Request,
-res: Response, next: Next) {
+export function requestAuthz(req: Request, res: Response, next: Next) {
     requestIsAuthorized(req)
     .then(() => next())
     .catch(err => handleErrors(next, err));
