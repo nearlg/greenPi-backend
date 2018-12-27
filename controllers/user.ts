@@ -8,7 +8,7 @@ import { RoleName } from '../services/authz.service/role-name';
 
 export function addUser(req: Request, res: Response, next: Next) {
     if (req.body) {
-        req.body.rolName = RoleName.Observer;
+        req.body.roleName = RoleName.Observer;
     }
     userValidator.validate(req.body, false)
     .then(userRepository.create)
@@ -44,7 +44,7 @@ export function getUser(req: Request, res: Response, next: Next) {
 
 export function signUp(req: Request, res: Response, next: Next) {
     if (req.body) {
-        req.body.rolName = RoleName.Observer;
+        req.body.roleName = RoleName.Observer;
     }
     userValidator.validate(req.body, false)
     .then(userRepository.create)
