@@ -1,8 +1,8 @@
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
-import * as measureValidator from "../../validation/measure";
-import { IMeasure } from "../../models/interface/measure";
-import { ISensor } from "../../models/interface/sensor";
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
+import * as measureValidator from '../../validation/measure';
+import { Measure } from '../../models/interface/measure';
+import { Sensor } from '../../models/interface/sensor';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
@@ -33,7 +33,7 @@ describe('Measure validation', () => {
 
     describe('Sensor validation', () => {
         it('Sensor can be an object', () => {
-            return expect(measureValidator.validateSensor(<ISensor>{}))
+            return expect(measureValidator.validateSensor(<Sensor>{}))
             .to.be.fulfilled;
         });
 

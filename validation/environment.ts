@@ -1,21 +1,21 @@
-import { IEnvironment } from "../models/interface/environment";
-import { NameRegex, DescriptionRegex, IdRegex } from "./rules/common";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { ISensor } from "../models/interface/sensor";
-import { IPump } from "../models/interface/pump";
+import { Environment } from '../models/interface/environment';
+import * as environmentRegex from './rules/environment';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { Sensor } from '../models/interface/sensor';
+import { Pump } from '../models/interface/pump';
 
 export function validateName(name: string): Promise<string>  {
-    return regexValidation(name, NameRegex, 'The environment must have a valid name');
+    return regexValidation(name, environmentRegex.NameRegex, 'The environment must have a valid name');
 }
 
 export function validateDescription(description: string): Promise<string>  {
     if(!description){
         return Promise.resolve(null);
     }
-    return regexValidation(description, DescriptionRegex, 'The environment must have a valid description');
+    return regexValidation(description, environmentRegex.DescriptionRegex, 'The environment must have a valid description');
 }
 
-export function validateSensors(sensors: (ISensor|string)[]): Promise<(ISensor|string)[]> {
+export function validateSensors(sensors: (Sensor|string)[]): Promise<(Sensor|string)[]> {
     let types: RegExp = /^\[object (Array|Null|Undefined)\]$/;
     let type: string = Object.prototype.toString.call( sensors );
     if(types.test(type)){
@@ -25,7 +25,7 @@ export function validateSensors(sensors: (ISensor|string)[]): Promise<(ISensor|s
     return Promise.reject(err);
 }
 
-export function validatePumps(pumps: (IPump|string)[]): Promise<(IPump|string)[]> {
+export function validatePumps(pumps: (Pump|string)[]): Promise<(Pump|string)[]> {
     let types: RegExp = /^\[object (Array|Null|Undefined)\]$/;
     let type: string = Object.prototype.toString.call( pumps );
     if(types.test(type)){
@@ -36,21 +36,21 @@ export function validatePumps(pumps: (IPump|string)[]): Promise<(IPump|string)[]
 }
 
 export function validateId(id: string): Promise<string> {
-    if(id && IdRegex.test(id)) {
+    if(id && environmentRegex.IdRegex.test(id)) {
         return Promise.resolve(id);
     }
     let err: Error = createError('Invalid environment id');
     return Promise.reject(err);
 }
 
-export function validate(environment: IEnvironment, checkId: boolean = false): Promise<IEnvironment> {
+export function validate(environment: Environment, checkId: boolean = true): Promise<Environment> {
     return rejectIfNull(environment, 'Environment is null or undefined')
     .then(() => validateName(environment.name))
-    .then(()=> validateDescription(environment.description))
-    .then(()=> validateSensors(environment.sensors))
-    .then(()=> validatePumps(environment.pumps))
+    .then(() => validateDescription(environment.description))
+    .then(() => validateSensors(environment.sensors))
+    .then(() => validatePumps(environment.pumps))
     .then(() => checkId? validateId(environment.id) : Promise.resolve(null))
-    .then(()=> Promise.resolve(environment))
+    .then(() => Promise.resolve(environment))
     .catch(err => {
         err.message = 'Invalid environment: ' + err.message;
         return Promise.reject(err);

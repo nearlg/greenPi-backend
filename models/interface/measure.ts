@@ -1,8 +1,8 @@
-import { ISensor } from "./sensor";
+import { Sensor } from './sensor';
 
-export interface IMeasure {
+export interface Measure {
     id?: any;
     date: Date;
-    sensor: ISensor | string;
+    sensor: Sensor | string;
     value: number;
 }

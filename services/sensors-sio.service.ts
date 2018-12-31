@@ -1,8 +1,8 @@
-import { Subscriber } from "rxjs";
+import { Subscriber } from 'rxjs';
 
-import { measureRepository } from "../models/database/repository/implementation/mongoose4/measure-repository";
-import { SIOService } from "./sio-service";
-import { IMeasure } from "../models/interface/measure";
+import { measureRepository } from '../repositories';
+import { SIOService } from './sio.service';
+import { Measure } from '../models/interface/measure';
 
 const enum NamespaceNames {
     LastMeasures = '/sensors/last-measures'
@@ -16,14 +16,14 @@ const enum EventNames {
 export class SensorsSIOService implements SIOService {
 
     private io: SocketIO.Server;
-    private lastMeasure$: Subscriber<IMeasure>;
+    private lastMeasure$: Subscriber<Measure>;
 
     constructor(io: SocketIO.Server) {
         this.io = io;
         this.setUpSubscribers();
     }
 
-    emitLastMeasure(measure: IMeasure): Promise<IMeasure> {
+    emitLastMeasure(measure: Measure): Promise<Measure> {
         this.lastMeasure$.next(measure);
         return Promise.resolve(measure);
     }

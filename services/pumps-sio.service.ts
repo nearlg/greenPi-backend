@@ -1,9 +1,9 @@
-import { Subscriber } from "rxjs";
+import { Subscriber } from 'rxjs';
 
-import { IPumpHistorical } from "../models/interface/pump-historical";
+import { PumpHistorical } from '../models/interface/pump-historical';
 
-import { pumpHistoricalRepository } from "../models/database/repository/implementation/mongoose4/pump-historical-repository";
-import { SIOService } from "./sio-service";
+import { pumpHistoricalRepository } from '../repositories';
+import { SIOService } from './sio.service';
 
 const enum NamespaceNames {
     LastPumpHistoricals = '/pumps/last-historicals'
@@ -17,14 +17,14 @@ const enum EventNames {
 export class PumpsSIOService implements SIOService {
 
     private io: SocketIO.Server;
-    private lastPumpHistoricals$: Subscriber<IPumpHistorical>;
+    private lastPumpHistoricals$: Subscriber<PumpHistorical>;
 
     constructor(io: SocketIO.Server) {
         this.io = io;
         this.setUpSubscribers();
     }
 
-    emitLastPumpHistorical(pumpHistorical: IPumpHistorical): Promise<IPumpHistorical> {
+    emitLastPumpHistorical(pumpHistorical: PumpHistorical): Promise<PumpHistorical> {
         this.lastPumpHistoricals$.next(pumpHistorical);
         return Promise.resolve(pumpHistorical);
     }
