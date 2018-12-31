@@ -20,7 +20,7 @@ export function updateEnvironment(req: Request, res: Response, next: Next) {
 
 export function deleteEnvironment(req: Request, res: Response, next: Next) {
     return environmentRepository.remove(req.params.id)
-    .then(() => handleJsonData(null, res, next, req))
+    .then(environment => handleJsonData(req, res, next, environment))
     .catch(err => handleErrors(next, err));
 }
 

@@ -98,7 +98,7 @@ export function updatePumpHistorical(req: Request, res: Response, next: Next) {
 
 export function deletePumpHistorical(req: Request, res: Response, next: Next) {
     return pumpHistoricalRepository.remove(req.params.id)
-    .then(() => handleJsonData(req, res, next, null))
+    .then(pumpHistorical => handleJsonData(req, res, next, pumpHistorical))
     .catch(err => handleErrors(next, err));
 }
 

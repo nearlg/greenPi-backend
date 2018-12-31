@@ -34,24 +34,28 @@ export class SensorTypeMongooseRepository implements SensorTypeRepository {
 
     update(document: SensorType): Promise<SensorType> {
         return SensorTypeModel.findByIdAndUpdate(document.id, document,
-            {'new': true}).exec()
+            {'new': true})
+        .exec()
         .then(rejectIfNull('Sensor type not found'))
         .then(normalizeData);
     }
 
     remove(id: string): Promise<SensorType> {
-        return SensorTypeModel.findByIdAndRemove(id).exec()
+        return SensorTypeModel.findByIdAndRemove(id)
+        .exec()
         .then(rejectIfNull('Sensor type not found'))
         .then(normalizeData);
     }
 
     findAll(): Promise<SensorType[]> {
-        return SensorTypeModel.find().exec()
+        return SensorTypeModel.find()
+        .exec()
         .then(normalizeData);
     }
 
     find(id: string): Promise<SensorType> {
-        return SensorTypeModel.findById(id).exec()
+        return SensorTypeModel.findById(id)
+        .exec()
         .then(rejectIfNull('Sensor type not found'))
         .then(normalizeData);
     }

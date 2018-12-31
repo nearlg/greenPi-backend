@@ -27,24 +27,28 @@ export class PumpMongooseRepository implements PumpRepository {
 
     update(document: Pump): Promise<Pump> {
         return PumpModel.findByIdAndUpdate(document.id, document,
-            {'new': true}).exec()
+            {'new': true})
+        .exec()
         .then(rejectIfNull('Pump not found'))
         .then(normalizeData);
     }
 
     remove(id: string): Promise<Pump> {
-        return PumpModel.findByIdAndRemove(id).exec()
+        return PumpModel.findByIdAndRemove(id)
+        .exec()
         .then(rejectIfNull('Pump not found'))
         .then(normalizeData);
     }
 
     findAll(): Promise<Pump[]> {
-        return PumpModel.find().exec()
+        return PumpModel.find()
+        .exec()
         .then(normalizeData);
     }
 
     find(id: string): Promise<Pump> {
-        return PumpModel.findById(id).exec()
+        return PumpModel.findById(id)
+        .exec()
         .then(rejectIfNull('Pump not found'))
         .then(normalizeData);
     }

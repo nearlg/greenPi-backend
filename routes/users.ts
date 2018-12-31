@@ -5,6 +5,7 @@ import * as gController from '../controllers/google';
 export function routes(server: restify.Server, mainPath: string = '') {
     // User profile
     server.post(mainPath + '/profile/sign-in/local', controller.signInLocal);
+    server.get(mainPath + '/profile/sign-in/google', gController.authUrl);
     server.post(mainPath + '/profile/sign-in/google', gController.signInGoogle);
     server.post(mainPath + '/profile', controller.signUp);
     server.get(mainPath + '/profile', controller.getProfile);

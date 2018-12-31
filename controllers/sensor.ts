@@ -31,7 +31,7 @@ export function updateSensor(req: Request, res: Response, next: Next) {
 
 export function deleteSensor(req: Request, res: Response, next: Next) {
     sensorRepository.remove(req.params.id)
-    .then(() => handleJsonData(req, res, next, null))
+    .then(sensor => handleJsonData(req, res, next, sensor))
     .catch(err => handleErrors(next, err));
 }
 

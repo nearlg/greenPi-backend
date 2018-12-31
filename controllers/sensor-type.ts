@@ -28,7 +28,7 @@ export function updateSensorType(req: Request, res: Response, next: Next) {
 
 export function deleteSensorType(req: Request, res: Response, next: Next) {
     sensorTypeRepository.remove(req.params.id)
-    .then(() => handleJsonData(req, res, next, null))
+    .then(sensorType => handleJsonData(req, res, next, sensorType))
     .catch(err => handleErrors(next, err));
 }
 
