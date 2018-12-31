@@ -26,7 +26,7 @@ export function updateUser(req: Request, res: Response, next: Next) {
 
 export function deleteUser(req: Request, res: Response, next: Next) {
     userRepository.remove(req.params.id)
-    .then(() => handleJsonData(req, res, next, null))
+    .then(user => handleJsonData(req, res, next, user))
     .catch(err => handleErrors(next, err));
 }
 

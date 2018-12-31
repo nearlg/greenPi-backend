@@ -25,10 +25,14 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     facebookId: {
-        type: String
+        type: String,
+        index: { unique: true },
+        sparse: true
     },
     googleId: {
-        type: String
+        type: String,
+        index: { unique: true },
+        sparse: true
     },
     roleName: {
         type: String,

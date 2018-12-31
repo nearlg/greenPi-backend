@@ -35,13 +35,15 @@ export class SensorMongooseRepository implements SensorRepository {
 
     update(document: Sensor): Promise<Sensor> {
         return SensorModel.findByIdAndUpdate(document.id, document,
-            {'new': true}).exec()
+            {'new': true})
+        .exec()
         .then(rejectIfNull('Sensor not found'))
         .then(normalizeData);
     }
 
     remove(id: string): Promise<Sensor> {
-        return SensorModel.findByIdAndRemove(id).exec()
+        return SensorModel.findByIdAndRemove(id)
+        .exec()
         .then(rejectIfNull('Sensor not found'))
         .then(normalizeData);
     }

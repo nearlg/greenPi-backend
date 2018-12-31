@@ -2,14 +2,23 @@ import { Request, Response, Next } from 'restify';
 import { userRepository } from '../repositories';
 import { createToken } from '../services/jwt.service';
 import * as userValidator from '../validation/user';
-import { verify } from '../services/google-auth.service';
+import { verify, getAuthUrl, getIdToken } from '../services/google-auth.service';
 import { User } from '../models/interface/user';
 import { RoleName } from '../services/authz.service/role-name';
 import { handleJsonData, handleErrors } from './helpers';
 
+export function authUrl(req: Request, res: Response, next: Next) {
+    getAuthUrl()
+    .then(authUrl => handleJsonData(req, res, next, authUrl))
+    .catch(err => handleErrors(next, err));
+}
+
 export function signInGoogle(req: Request, res: Response, next: Next) {
-    const idToken: string = req.body.idToken;
-    verify(idToken)
+    const code: string = req.body.code;
+    getIdToken(code)
+    .then(token => {
+        return verify(token)}
+    )
     .then(payload => {
         const userId = payload.sub;
         return userRepository.findByGoogleId(userId)
@@ -20,7 +29,7 @@ export function signInGoogle(req: Request, res: Response, next: Next) {
                 roleName: RoleName.Observer,
                 googleId: payload.sub
             };
-            return userValidator.validate(newUser)
+            return userValidator.validate(newUser, false)
             .then(userRepository.create);
         });
     })

@@ -20,7 +20,7 @@ export function updatePump(req: Request, res: Response, next: Next) {
 
 export function deletePump(req: Request, res: Response, next: Next) {
     pumpRepository.remove(req.params.id)
-    .then(() => handleJsonData(req, res, next, null))
+    .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(next, err));
 }
 
