@@ -1,10 +1,21 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
-    "sourceMap": true
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@repositories": ["repositories"],
+      "@repositories/*": ["repositories/*"],
+      "@services/*": ["services/*"],
+      "@models/*": ["models/*"],
+      "@validation/*": ["validation/*"],
+      "@routes/*": ["routes/*"],
+      "@plugins/*": ["plugins/*"],
+      "@config": ["config"]
+    }
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
