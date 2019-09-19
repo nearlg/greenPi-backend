@@ -1,7 +1,7 @@
-import { RoleName } from './role-name';
-import { HttpMethod } from './http-method';
+import { RoleName } from "@/services/authz.service/role-name";
+import { HttpMethod } from "@/services/authz.service/http-method";
 
 export interface Rule {
-    httpMethod: HttpMethod,
-    roleNames: RoleName[]
+  httpMethod: HttpMethod;
+  roleNames: RoleName[];
 }

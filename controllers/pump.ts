@@ -1,37 +1,42 @@
-import { Request, Response, Next } from 'restify';
-import * as pumpValidator from '../validation/pump';
-import { pumpRepository } from '../repositories';
-import { handleJsonData, handleErrors } from './helpers';
+import { Request, Response, Next } from "restify";
+import * as pumpValidator from "@/validation/pump";
+import { pumpRepository } from "@/repositories";
+import { handleJsonData, handleErrors } from "@/controllers/helpers";
 
 export function addPump(req: Request, res: Response, next: Next) {
-    pumpValidator.validate(req.body, false)
+  pumpValidator
+    .validate(req.body, false)
     .then(pumpRepository.create)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(next, err));
 }
 
 export function updatePump(req: Request, res: Response, next: Next) {
-    req.body.id = req.params.id;
-    pumpValidator.validate(req.body)
+  req.body.id = req.params.id;
+  pumpValidator
+    .validate(req.body)
     .then(pumpRepository.update)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(next, err));
 }
 
 export function deletePump(req: Request, res: Response, next: Next) {
-    pumpRepository.remove(req.params.id)
+  pumpRepository
+    .remove(req.params.id)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(next, err));
 }
 
 export function fetchPumps(req: Request, res: Response, next: Next) {
-    pumpRepository.findAll()
+  pumpRepository
+    .findAll()
     .then(pumps => handleJsonData(req, res, next, pumps))
     .catch(err => handleErrors(next, err));
 }
 
 export function getPump(req: Request, res: Response, next: Next) {
-    pumpRepository.find(req.params.id)
+  pumpRepository
+    .find(req.params.id)
     .then(pump => handleJsonData(req, res, next, pump))
     .catch(err => handleErrors(next, err));
 }

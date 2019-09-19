@@ -1,4 +1,4 @@
-import * as common from './common';
+import * as common from "@/validation/rules/common";
 
 export const IdRegex = common.IdRegex;
 export const NameRegex = /^[A-Za-z0-9_ .,-\[\]]+[ªº]?[A-Za-z0-9_ .,-\[\]]*$/;
