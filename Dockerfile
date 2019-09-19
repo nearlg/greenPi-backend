@@ -8,11 +8,12 @@ ARG google_redir_url
 
 RUN apt-get update && \
     apt-get install -y \
-        gcc \
-        g++ \
-        make \
-        python && \
-    apt-get clean
+    gcc \
+    g++ \
+    make \
+    python && \
+    apt-get clean && \
+    npm install -g yarn
 
 WORKDIR /backend
 
@@ -26,7 +27,7 @@ ENV DATABASE_URI="mongodb://mongo/greenpi" \
     GOOGLE_CLIENT_SECRET=${google_client_secret} \
     GOOGLE_REDIR_URL=${google_redir_url}
 
-RUN npm install && \
-    npm run compile
+RUN yarn && \
+    yarn compile
 
 CMD node src/index.js
