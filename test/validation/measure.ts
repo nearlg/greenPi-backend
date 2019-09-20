@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as measureValidator from '../../validation/measure';
-import { Measure } from '../../models/interface/measure';
-import { Sensor } from '../../models/interface/sensor';
+import * as measureValidator from '../../src/validation/measure';
+import { Measure } from '../../src/models/interface/measure';
+import { Sensor } from '../../src/models/interface/sensor';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
