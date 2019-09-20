@@ -30,4 +30,4 @@ ENV DATABASE_URI="mongodb://mongo/greenpi" \
 RUN yarn && \
     yarn compile
 
-CMD node src/index.js
+CMD node dist/src/index.js
