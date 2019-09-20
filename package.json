@@ -4,7 +4,7 @@
   "description": "Save measures and configuration of greenPi project",
   "main": "dist/src/index.js",
   "scripts": {
-    "test": "tsc && mocha --recursive --exit",
+    "test": "yarn compile && mocha --recursive --exit ./dist/test",
     "start": "node ./dist/src/index.js",
     "compile": "tsc"
   },
