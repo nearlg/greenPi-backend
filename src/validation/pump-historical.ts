@@ -1,49 +1,64 @@
-import { PumpHistorical, State } from '../models/interface/pump-historical';
-import { Pump } from '../models/interface/pump';
-import * as pumpHistoricalRegex from './rules/pump-historical';
-import { regexValidation, createError, rejectIfNull } from './helpers';
-import { validateId as pumpIdValidator } from './pump'
+import { PumpHistorical, State } from "../models/interface/pump-historical";
+import { Pump } from "../models/interface/pump";
+import * as pumpHistoricalRegex from "./rules/pump-historical";
+import { regexValidation, createError, rejectIfNull } from "./helpers";
+import { validateId as pumpIdValidator } from "./pump";
 
-export function validateDate(date: Date): Promise<Date>  {
-     let dateString: string = date && typeof date.toISOString === 'function'?
-    date.toISOString() : date + '';
-    return regexValidation(dateString, pumpHistoricalRegex.DateRegex,
-        'The pump-historical must have a valid date')
-    .then(() => Promise.resolve(date));
+export async function validateDate(date: Date) {
+  const dateString =
+    date && typeof date.toISOString === "function"
+      ? date.toISOString()
+      : date + "";
+  await regexValidation(
+    dateString,
+    pumpHistoricalRegex.DateRegex,
+    "The pump-historical must have a valid date"
+  );
+  return date;
 }
 
-export function validateState(state: State): Promise<number>  {
-    return regexValidation(state, pumpHistoricalRegex.StateRegex, 'The pump-historical must have a valid state');
+export function validateState(state: State) {
+  return regexValidation(
+    state,
+    pumpHistoricalRegex.StateRegex,
+    "The pump-historical must have a valid state"
+  );
 }
 
-export function validatePump(pump: Pump | string): Promise<Pump | string> {
-    if(pump) {
-        if('object' === typeof pump){
-            return Promise.resolve(pump);
-        }
-        return pumpIdValidator(pump);
+export async function validatePump(pump: Pump | string) {
+  if (!pump) {
+    const err = createError("The pump-historical must have a valid pump");
+    throw err;
+  }
+  if ("object" === typeof pump) {
+    return pump;
+  }
+  return pumpIdValidator(pump);
+}
+
+export async function validateId(id: string) {
+  if (!id || !pumpHistoricalRegex.IdRegex.test(id)) {
+    const err = createError("Invalid pump-historical id");
+    throw err;
+  }
+  return id;
+}
+
+export async function validate(
+  pumpHistorical: PumpHistorical,
+  checkId: boolean = true
+) {
+  try {
+    await rejectIfNull(pumpHistorical, "Pump historical is null or undefined");
+    await validateDate(pumpHistorical.date);
+    await validateState(pumpHistorical.state);
+    await validatePump(pumpHistorical.pump);
+    if (checkId) {
+      await validateId(pumpHistorical.id);
     }
-    let err: Error = createError('The pump-historical must have a valid pump');
-    return Promise.reject(err);
-}
-
-export function validateId(id: string): Promise<string> {
-    if(id && pumpHistoricalRegex.IdRegex.test(id)) {
-        return Promise.resolve(id);
-    }
-    let err: Error = createError('Invalid pump-historical id');
-    return Promise.reject(err)
-}
-
-export function validate(pumpHistorical: PumpHistorical, checkId: boolean = true): Promise<PumpHistorical> {
-    return rejectIfNull(pumpHistorical, 'Pump historical is null or undefined')
-    .then(() => validateDate(pumpHistorical.date))
-    .then(() => validateState(pumpHistorical.state))
-    .then(() => validatePump(pumpHistorical.pump))
-    .then(() => checkId? validateId(pumpHistorical.id) : Promise.resolve(null))
-    .then(() => Promise.resolve(pumpHistorical))
-    .catch(err => {
-        err.message = 'Invalid pump historical: ' + err.message;
-        return Promise.reject(err);
-    });
+  } catch (err) {
+    err.message = "Invalid pump historical: " + err.message;
+    throw err;
+  }
+  return pumpHistorical;
 }

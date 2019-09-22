@@ -1,44 +1,58 @@
-import { Pump } from '../models/interface/pump';
-import * as pumpRegex from './rules/pump';
-import { regexValidation, createError, rejectIfNull } from './helpers';
+import { Pump } from "../models/interface/pump";
+import * as pumpRegex from "./rules/pump";
+import { regexValidation, createError, rejectIfNull } from "./helpers";
 
-export function validateName(name: string): Promise<string>  {
-    return regexValidation(name, pumpRegex.NameRegex, 'The pump must have a valid name');
+export function validateName(name: string) {
+  return regexValidation(
+    name,
+    pumpRegex.NameRegex,
+    "The pump must have a valid name"
+  );
 }
 
-export function validateDescription(description: string): Promise<string>  {
-    if(!description){
-        return Promise.resolve(null);
+export async function validateDescription(description: string) {
+  if (!description) {
+    return;
+  }
+  return regexValidation(
+    description,
+    pumpRegex.DescriptionRegex,
+    "The pump must have a valid description"
+  );
+}
+
+export async function validatePorts(ports: number[]) {
+  if (
+    ports === null ||
+    ports === undefined ||
+    ports.every(port => pumpRegex.ConnectionPortRegex.test(port + ""))
+  ) {
+    return ports;
+  }
+  const err = createError("The pump must have valid port numbers");
+  throw err;
+}
+
+export async function validateId(id: string) {
+  if (!id || !pumpRegex.IdRegex.test(id)) {
+    const err = createError("Invalid pump id");
+    throw err;
+  }
+  return id;
+}
+
+export async function validate(pump: Pump, checkId: boolean = true) {
+  try {
+    await rejectIfNull(pump, "Pump is null or undefined");
+    await validateName(pump.name);
+    await validateDescription(pump.description);
+    await validatePorts(pump.connectionPorts);
+    if (checkId) {
+      await validateId(pump.id);
     }
-    return regexValidation(description, pumpRegex.DescriptionRegex, 'The pump must have a valid description');
-}
-
-export function validatePorts(ports: number[]): Promise<number[]> {
-    if(ports === null || ports === undefined ||ports.every(port =>
-        pumpRegex.ConnectionPortRegex.test(port + ''))) {
-            return Promise.resolve(ports);
-        }
-    let err: Error = createError('The pump must have valid port numbers');
-    return Promise.reject(err);
-}
-
-export function validateId(id: string): Promise<string> {
-    if(id && pumpRegex.IdRegex.test(id)) {
-        return Promise.resolve(id);
-    }
-    let err: Error = createError('Invalid pump id');
-    return Promise.reject(err);
-}
-
-export function validate(pump: Pump, checkId: boolean = true): Promise<Pump> {
-    return rejectIfNull(pump, 'Pump is null or undefined')
-    .then(() => validateName(pump.name))
-    .then(() => validateDescription(pump.description))
-    .then(() => validatePorts(pump.connectionPorts))
-    .then(() => checkId? validateId(pump.id) : Promise.resolve(null))
-    .then(() => Promise.resolve(pump))
-    .catch(err => {
-        err.message = 'Invalid pump: ' + err.message;
-        return Promise.reject(err);
-    });
+  } catch (err) {
+    err.message = "Invalid pump: " + err.message;
+    throw err;
+  }
+  return pump;
 }
