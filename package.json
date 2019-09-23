@@ -2,10 +2,10 @@
   "name": "green-pi-backend",
   "version": "0.0.0",
   "description": "Save measures and configuration of greenPi project",
-  "main": "src/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
-    "test": "tsc && mocha --recursive --exit",
-    "start": "node ./src/index.js",
+    "test": "yarn compile && mocha --recursive --exit ./dist/test",
+    "start": "node ./dist/src/index.js",
     "compile": "tsc"
   },
   "author": "nearlg",
@@ -44,6 +44,6 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "mocha": "^5.2.0",
-    "typescript": "^2.9.2"
+    "typescript": "^3.6"
   }
 }

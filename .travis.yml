@@ -1,16 +1,18 @@
 language: node_js
 node_js:
-- '10'
-dist: trusty
+  - "12"
+dist: bionic
 os: linux
+cache:
+  yarn: true
 install:
-- npm install
+  - yarn
 script:
-- npm test
+  - yarn test
 branches:
   only:
-  - master
-  - develop
+    - master
+    - develop
 deploy:
   provider: heroku
   api_key:

@@ -2,10 +2,10 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { ObjectID } from 'mongodb';
 import mongoose = require('mongoose');
-import * as Config from '../../../../../../config';
-import { SensorType } from '../../../../../../models/interface/sensor-type';
-import { Unit } from '../../../../../../models/interface/unit';
-import { sensorTypeRepository } from '../../../../../../repositories';
+import * as Config from '../../../../../../src/config';
+import { SensorType } from '../../../../../../src/models/interface/sensor-type';
+import { Unit } from '../../../../../../src/models/interface/unit';
+import { sensorTypeRepository } from '../../../../../../src/repositories';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;

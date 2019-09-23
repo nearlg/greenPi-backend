@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-import * as environmentValidator from '../../validation/environment';
-import { Sensor } from '../../models/interface/sensor';
-import { Pump } from '../../models/interface/pump';
+import * as environmentValidator from '../../src/validation/environment';
+import { Sensor } from '../../src/models/interface/sensor';
+import { Pump } from '../../src/models/interface/pump';
 
 chai.use(chaiAsPromised);
 let expect = chai.expect;
