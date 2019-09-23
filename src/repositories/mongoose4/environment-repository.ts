@@ -1,83 +1,98 @@
-import mongoose = require('mongoose');
-import { rejectIfNull, normalizeData } from './helpers';
-import { EnvironmentRepository } from '../interface/environment-repository';
-import { Environment } from '../../models/interface/environment';
+import mongoose = require("mongoose");
+import { rejectIfNull, normalizeData } from "./helpers";
+import { EnvironmentRepository } from "../interface/environment-repository";
+import { Environment } from "../../models/interface/environment";
 
-interface EnvironmentModel extends Environment, mongoose.Document {
-}
+interface EnvironmentModel extends Environment, mongoose.Document {}
 
 const EnvironmentSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, 'An environment must have a name']
-    },
-    description: String,
-    sensors: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Sensor'
-    }],
-    pumps: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pump'
-    }],
+  name: {
+    type: String,
+    required: [true, "An environment must have a name"]
+  },
+  description: String,
+  sensors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Sensor"
+    }
+  ],
+  pumps: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Pump"
+    }
+  ]
 });
 
-const EnvironmentModel = mongoose.model<EnvironmentModel>('Environment', EnvironmentSchema);
+const EnvironmentModel = mongoose.model<EnvironmentModel>(
+  "Environment",
+  EnvironmentSchema
+);
 
 export class EnvironmentMongooseRepository implements EnvironmentRepository {
+  async create(document: Environment): Promise<Environment> {
+    let doc = await EnvironmentModel.create(document);
+    rejectIfNull("Environment not found", doc);
+    doc = await EnvironmentModel.populate(doc, {
+      path: "pumps"
+    });
+    doc = await EnvironmentModel.populate(doc, {
+      path: "sensors",
+      populate: {
+        path: "type"
+      }
+    });
+    return normalizeData(doc);
+  }
 
-    create(document: Environment): Promise<Environment> {
-        return EnvironmentModel.create(document)
-        .then(rejectIfNull('Environment not found'))
-        .then((o: EnvironmentModel) => EnvironmentModel.populate(o, {
-            path: 'pumps'}))
-        .then((o: EnvironmentModel) =>
-            EnvironmentModel.populate(o, {
-                path: 'sensors',
-                populate: {
-                    path: 'type'
-                }
-            })
-        )
-        .then(normalizeData);
-    }
+  async update(document: Environment): Promise<Environment> {
+    const doc = await EnvironmentModel.findByIdAndUpdate(
+      document.id,
+      document,
+      { new: true }
+    )
+      .populate("pumps")
+      .populate({
+        path: "sensors",
+        populate: {
+          path: "type"
+        }
+      })
+      .exec();
+    rejectIfNull("Environment not found", doc);
+    return normalizeData(doc);
+  }
 
-    update(document: Environment): Promise<Environment> {
-        return EnvironmentModel.findByIdAndUpdate(document.id, document,
-            {'new': true})
-        .populate('pumps')
-        .populate({path:'sensors', populate: {
-            path: 'type'
-        }})
-        .exec()
-        .then(rejectIfNull('Environment not found'))
-        .then(normalizeData);
-    }
+  async remove(id: string): Promise<Environment> {
+    const doc = await EnvironmentModel.findByIdAndRemove(id).exec();
+    return normalizeData(doc);
+  }
 
-    remove(id: string): Promise<Environment> {
-        return EnvironmentModel.findByIdAndRemove(id)
-        .exec()
-        .then(normalizeData);
-    }
+  async findAll(): Promise<Environment[]> {
+    const docs = await EnvironmentModel.find()
+      .populate("pumps")
+      .populate({
+        path: "sensors",
+        populate: {
+          path: "type"
+        }
+      })
+      .exec();
+    return normalizeData(docs);
+  }
 
-    findAll(): Promise<Environment[]> {
-        return EnvironmentModel.find()
-        .populate('pumps')
-        .populate({path:'sensors', populate: {
-            path: 'type'
-        }})
-        .exec()
-        .then(normalizeData);
-    }
-
-    find(id: string): Promise<Environment> {
-        return EnvironmentModel.findById(id)
-        .populate('pumps')
-        .populate({path:'sensors', populate: {
-            path: 'type'
-        }})
-        .exec()
-        .then(rejectIfNull('Environment not found'))
-        .then(normalizeData);
-    }
+  async find(id: string): Promise<Environment> {
+    const doc = await EnvironmentModel.findById(id)
+      .populate("pumps")
+      .populate({
+        path: "sensors",
+        populate: {
+          path: "type"
+        }
+      })
+      .exec();
+    rejectIfNull("Environment not found", doc);
+    return normalizeData(doc);
+  }
 }

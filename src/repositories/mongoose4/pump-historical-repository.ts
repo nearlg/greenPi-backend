@@ -1,124 +1,144 @@
-import mongoose = require('mongoose');
-import { rejectIfNull, normalizeData, getSearchingObject } from './helpers';
-import { PumpHistoricalRepository } from '../interface/pump-historical-repository';
-import { PumpHistorical } from '../../models/interface/pump-historical';
-import { Pump } from '../../models/interface/pump';
+import mongoose = require("mongoose");
+import { rejectIfNull, normalizeData, getSearchingObject } from "./helpers";
+import { PumpHistoricalRepository } from "../interface/pump-historical-repository";
+import { PumpHistorical } from "../../models/interface/pump-historical";
+import { Pump } from "../../models/interface/pump";
 
-interface PumpHistoricalModel extends PumpHistorical, mongoose.Document {
-}
+interface PumpHistoricalModel extends PumpHistorical, mongoose.Document {}
 
 const pumpHistoricalSchema = new mongoose.Schema({
-    date: {
-        type: Date,
-        default: Date.now(),
-        required: [true, 'A pump historical must have a date']
-    },
-    pump: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Pump',
-        required: [true, 'A pump historical must have a pump']
-    },
-    state: {
-        type: Number,
-        required: [true, 'A pump historical must have the state']
-    }
+  date: {
+    type: Date,
+    default: Date.now(),
+    required: [true, "A pump historical must have a date"]
+  },
+  pump: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Pump",
+    required: [true, "A pump historical must have a pump"]
+  },
+  state: {
+    type: Number,
+    required: [true, "A pump historical must have the state"]
+  }
 });
 
-const PumpHistoricalModel = mongoose.model<PumpHistoricalModel>('PumpHistorical', pumpHistoricalSchema);
+const PumpHistoricalModel = mongoose.model<PumpHistoricalModel>(
+  "PumpHistorical",
+  pumpHistoricalSchema
+);
 
-export class PumpHistoricalMongooseRepository implements PumpHistoricalRepository {
+export class PumpHistoricalMongooseRepository
+  implements PumpHistoricalRepository {
+  async findLastsByPumpIds(pumpIds: string[]): Promise<PumpHistoricalModel[]> {
+    // If it can not find a measure,
+    // it will be undefined in the 'measures' array
+    const pumpHistoricalsPromises = pumpIds.map(pumpId =>
+      this.findLastByPumpId(pumpId).catch(error => undefined)
+    );
+    // Remove all the undefined elements from the array
+    const pumpHistoricals = await Promise.all(pumpHistoricalsPromises);
+    return pumpHistoricals.filter(p => p != undefined);
+  }
 
-    findLastsByPumpIds(pumpIds: string[]): Promise<PumpHistoricalModel[]> {
-        // If it can not find a measure,
-        // it will be undefined in the 'measures' array
-        const pumpHistoricals = pumpIds.map(pumpId =>
-            this.findLastByPumpId(pumpId)
-            .catch(error => undefined)
-        );
-        // Remove all the undefined elements from the array
-        return Promise.all(pumpHistoricals)
-        .then(p => p.filter(p => p != undefined));
-    }
+  async findLastByPumpId(pumpId: string): Promise<PumpHistoricalModel> {
+    const searchingObject = { pump: pumpId };
+    const doc = await PumpHistoricalModel.find(searchingObject)
+      .sort({ date: -1 })
+      .limit(1)
+      .populate("pump");
+    rejectIfNull("Measure not found", doc);
+    return normalizeData(doc[0]);
+  }
 
-    findLastByPumpId(pumpId: string): Promise<PumpHistoricalModel> {
-        const searchingObject = { pump: pumpId };
-        return PumpHistoricalModel.find(searchingObject)
-        .sort({date: -1})
-        .limit(1)
-        .populate('pump')
-        .then(rejectIfNull('Measure not found'))
-        .then(normalizeData)
-        .then(doc => doc[0]);
-    }
+  async findAllByPumpIds(
+    pumpIds: string[],
+    sortBy?: string,
+    gte?: Date,
+    lte?: Date
+  ): Promise<PumpHistorical[]> {
+    const searchingObject = getSearchingObject(gte, lte);
+    searchingObject["pump"] = { $in: pumpIds };
+    const doc = await PumpHistoricalModel.find(searchingObject)
+      .populate("pump")
+      .sort(sortBy);
+    return normalizeData(doc);
+  }
 
-    findAllByPumpIds(pumpIds: string[], sortBy?: string, gte?: Date, lte?: Date):
-    Promise<PumpHistorical[]> {
-        const searchingObject = getSearchingObject(gte, lte);
-        searchingObject['pump'] = { $in: pumpIds };
-        return PumpHistoricalModel.find(searchingObject)
-        .populate('pump')
-        .sort(sortBy)
-        .then(normalizeData);
-    }
+  async findAllByPumps(
+    pumps: Pump[],
+    sortBy?: string,
+    gte?: Date,
+    lte?: Date
+  ): Promise<PumpHistorical[]> {
+    let pumpIds: string[] = pumps.map(pump => pump.id);
+    return this.findAllByPumpIds(pumpIds, sortBy, gte, lte);
+  }
 
-    findAllByPumps(pumps: Pump[], sortBy?: string, gte?: Date, lte?: Date): Promise<PumpHistorical[]> {
-        let pumpIds: string[] = pumps.map(pump => pump.id);
-        return this.findAllByPumpIds(pumpIds, sortBy, gte, lte);
-    }
+  async findAllByPumpId(
+    pumpId: string,
+    sortBy: string = "date",
+    gte?: Date,
+    lte?: Date
+  ): Promise<null | PumpHistorical[]> {
+    const searchingObject = getSearchingObject(gte, lte);
+    searchingObject["pump"] = pumpId;
+    const doc = await PumpHistoricalModel.find(searchingObject)
+      .populate("pump")
+      .sort(sortBy);
+    return normalizeData(doc);
+  }
 
-    findAllByPumpId(pumpId: string, sortBy: string = 'date', gte?: Date, lte?: Date): Promise<null | PumpHistorical[]> {
-        const searchingObject = getSearchingObject(gte, lte);
-        searchingObject['pump'] = pumpId;
-        return PumpHistoricalModel.find(searchingObject)
-        .populate('pump')
-        .sort(sortBy)
-        .then(normalizeData);
-    }
+  async findAllByPump(
+    pump: Pump,
+    sortBy?: string,
+    gte?: Date,
+    lte?: Date
+  ): Promise<null | PumpHistorical[]> {
+    return this.findAllByPumpId(pump.id, sortBy, gte, lte);
+  }
 
-    findAllByPump(pump: Pump, sortBy?: string, gte?: Date, lte?: Date): Promise<null | PumpHistorical[]> {
-        return this.findAllByPumpId(pump.id, sortBy, gte, lte);
-    }
+  async create(document: PumpHistorical): Promise<PumpHistorical> {
+    let doc = await PumpHistoricalModel.create(document);
+    doc = await PumpHistoricalModel.populate(doc, {
+      path: "pump"
+    });
+    doc = await PumpHistoricalModel.populate(doc, {
+      path: "pump"
+    });
+    return normalizeData(doc);
+  }
 
-    create(document: PumpHistorical): Promise<PumpHistorical> {
-        return PumpHistoricalModel.create(document)
-        .then(pumpHistorical => PumpHistoricalModel.populate(pumpHistorical, {
-            path: 'pump'
-        }))
-        .then(rejectIfNull('Pump historical not found'))
-        .then((o: PumpHistoricalModel) => PumpHistoricalModel.populate(o, {
-            path: 'pump'
-        }))
-        .then(normalizeData);
-    }
+  async update(document: PumpHistorical): Promise<PumpHistorical> {
+    const doc = await PumpHistoricalModel.findByIdAndUpdate(
+      document.id,
+      document,
+      { new: true }
+    )
+      .populate("pump")
+      .exec();
+    rejectIfNull("Pump historical not found", doc);
+    return normalizeData(doc);
+  }
 
-    update(document: PumpHistorical): Promise<PumpHistorical> {
-        return PumpHistoricalModel.findByIdAndUpdate(document.id, document,
-            {'new': true})
-        .populate('pump')
-        .exec()
-        .then(rejectIfNull('Pump historical not found'))
-        .then(normalizeData);
-    }
+  async remove(id: string): Promise<PumpHistorical> {
+    const doc = await PumpHistoricalModel.findByIdAndRemove(id).exec();
+    rejectIfNull("Pump historical not found", doc);
+    return normalizeData(doc);
+  }
 
-    remove(id: string): Promise<PumpHistorical> {
-        return PumpHistoricalModel.findByIdAndRemove(id)
-        .exec()
-        .then(rejectIfNull('Pump historical not found'))
-        .then(normalizeData);
-    }
+  async findAll(): Promise<PumpHistorical[]> {
+    const docs = await PumpHistoricalModel.find()
+      .populate("pump")
+      .exec();
+    return normalizeData(docs);
+  }
 
-    findAll(): Promise<PumpHistorical[]> {
-        return PumpHistoricalModel.find()
-        .populate('pump')
-        .exec()
-        .then(normalizeData);
-    }
-
-    find(id: string): Promise<PumpHistorical> {
-        return PumpHistoricalModel.findById(id)
-        .populate('pump')
-        .exec()
-        .then(rejectIfNull('Pump historical not found'))
-        .then(normalizeData);
-    }
+  async find(id: string): Promise<PumpHistorical> {
+    const doc = await PumpHistoricalModel.findById(id)
+      .populate("pump")
+      .exec();
+    rejectIfNull("Pump historical not found", doc);
+    return normalizeData(doc);
+  }
 }
