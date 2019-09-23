@@ -1,50 +1,70 @@
-import { SensorType } from '../models/interface/sensor-type';
-import * as sensorTypeRegex from './rules/sensor-type';
-import { regexValidation, createError, rejectIfNull } from './helpers';
-import { Unit } from '../models/interface/unit';
+import { SensorType } from "../models/interface/sensor-type";
+import * as sensorTypeRegex from "./rules/sensor-type";
+import { regexValidation, createError, rejectIfNull } from "./helpers";
+import { Unit } from "../models/interface/unit";
 
-export function validateName(name: string): Promise<string>  {
-    return regexValidation(name, sensorTypeRegex.NameRegex, 'The sensor type must have a valid name');
+export function validateName(name: string) {
+  return regexValidation(
+    name,
+    sensorTypeRegex.NameRegex,
+    "The sensor type must have a valid name"
+  );
 }
 
-export function validateDescription(description: string): Promise<string>  {
-    if(!description){
-        return Promise.resolve(null);
+export async function validateDescription(description: string) {
+  if (!description) {
+    return;
+  }
+  return regexValidation(
+    description,
+    sensorTypeRegex.DescriptionRegex,
+    "The sensor type must have a valid description"
+  );
+}
+
+export async function validateUnit(unit: Unit) {
+  if (!unit) {
+    const err = createError("The sensor type must have an unit: " + unit);
+    throw err;
+  }
+  await regexValidation(
+    unit.name,
+    sensorTypeRegex.UnitNameRegex,
+    "The sensor type must have a valid unit name"
+  );
+  if (unit.description) {
+    await regexValidation(
+      unit.description,
+      sensorTypeRegex.DescriptionRegex,
+      "The sensor type must have a valid unit description"
+    );
+  }
+  return unit;
+}
+
+export async function validateId(id: string) {
+  if (!id || !sensorTypeRegex.IdRegex.test(id)) {
+    const err = createError("Invalid sensor type id");
+    throw err;
+  }
+  return id;
+}
+
+export async function validate(
+  sensorType: SensorType,
+  checkId: boolean = true
+) {
+  try {
+    await rejectIfNull(sensorType, "Sensor type is null or undefined");
+    await validateName(sensorType.name);
+    await validateDescription(sensorType.description);
+    await validateUnit(sensorType.unit);
+    if (checkId) {
+      await validateId(sensorType.id);
     }
-    return regexValidation(description, sensorTypeRegex.DescriptionRegex, 'The sensor type must have a valid description');
-}
-
-export function validateUnit(unit: Unit): Promise<Unit> {
-    if(unit) {
-        return regexValidation(unit.name, sensorTypeRegex.UnitNameRegex, 'The sensor type must have a valid unit name')
-        .then(() => {
-            unit.description?
-            regexValidation(unit.description, sensorTypeRegex.DescriptionRegex, 'The sensor type must have a valid unit description') :
-            Promise.resolve(null)
-        })
-        .then(() => Promise.resolve(unit))
-    }
-    let err: Error = createError('The sensor type must have an unit: ' + unit);
-    return Promise.reject(err);
-}
-
-export function validateId(id: string): Promise<string> {
-    if(id && sensorTypeRegex.IdRegex.test(id)) {
-        return Promise.resolve(id);
-    }
-    let err: Error = createError('Invalid sensor type id');
-    return Promise.reject(err);
-}
-
-export function validate(sensorType: SensorType, checkId: boolean = true): Promise<SensorType> {
-    return rejectIfNull(sensorType, 'Sensor type is null or undefined')
-    .then(() => validateName(sensorType.name))
-    .then(() => validateDescription(sensorType.description))
-    .then(() => validateUnit(sensorType.unit))
-    .then(() => checkId? validateId(sensorType.id) : Promise.resolve(null))
-    .then(() => Promise.resolve(sensorType))
-    .catch(err => {
-        err.message = 'Invalid sensor type: ' + err.message;
-        return Promise.reject(err);
-    });
+  } catch (err) {
+    err.message = "Invalid sensor type: " + err.message;
+    throw err;
+  }
+  return sensorType;
 }

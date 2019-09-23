@@ -1,37 +1,52 @@
-import { Request, Response, Next } from 'restify';
-import * as pumpValidator from '../validation/pump';
-import { pumpRepository } from '../repositories';
-import { handleJsonData, handleErrors } from './helpers';
+import { Request, Response, Next } from "restify";
+import * as pumpValidator from "../validation/pump";
+import { pumpRepository } from "../repositories";
+import { handleJsonData, handleErrors } from "./helpers";
 
-export function addPump(req: Request, res: Response, next: Next) {
-    pumpValidator.validate(req.body, false)
-    .then(pumpRepository.create)
-    .then(pump => handleJsonData(req, res, next, pump))
-    .catch(err => handleErrors(next, err));
+export async function addPump(req: Request, res: Response, next: Next) {
+  try {
+    const pump = await pumpValidator.validate(req.body, false);
+    await pumpRepository.create(pump);
+    await handleJsonData(req, res, next, pump);
+  } catch (err) {
+    handleErrors(next, err);
+  }
 }
 
-export function updatePump(req: Request, res: Response, next: Next) {
+export async function updatePump(req: Request, res: Response, next: Next) {
+  try {
     req.body.id = req.params.id;
-    pumpValidator.validate(req.body)
-    .then(pumpRepository.update)
-    .then(pump => handleJsonData(req, res, next, pump))
-    .catch(err => handleErrors(next, err));
+    const pump = await pumpValidator.validate(req.body);
+    await pumpRepository.update(pump);
+    await handleJsonData(req, res, next, pump);
+  } catch (err) {
+    handleErrors(next, err);
+  }
 }
 
-export function deletePump(req: Request, res: Response, next: Next) {
-    pumpRepository.remove(req.params.id)
-    .then(pump => handleJsonData(req, res, next, pump))
-    .catch(err => handleErrors(next, err));
+export async function deletePump(req: Request, res: Response, next: Next) {
+  try {
+    const pump = await pumpRepository.remove(req.params.id);
+    await handleJsonData(req, res, next, pump);
+  } catch (err) {
+    handleErrors(next, err);
+  }
 }
 
-export function fetchPumps(req: Request, res: Response, next: Next) {
-    pumpRepository.findAll()
-    .then(pumps => handleJsonData(req, res, next, pumps))
-    .catch(err => handleErrors(next, err));
+export async function fetchPumps(req: Request, res: Response, next: Next) {
+  try {
+    const pumps = await pumpRepository.findAll();
+    await handleJsonData(req, res, next, pumps);
+  } catch (err) {
+    handleErrors(next, err);
+  }
 }
 
-export function getPump(req: Request, res: Response, next: Next) {
-    pumpRepository.find(req.params.id)
-    .then(pump => handleJsonData(req, res, next, pump))
-    .catch(err => handleErrors(next, err));
+export async function getPump(req: Request, res: Response, next: Next) {
+  try {
+    const pump = await pumpRepository.find(req.params.id);
+    await handleJsonData(req, res, next, pump);
+  } catch (err) {
+    handleErrors(next, err);
+  }
 }

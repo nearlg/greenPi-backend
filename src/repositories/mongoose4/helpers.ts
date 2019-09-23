@@ -6,7 +6,7 @@ function normalizeDocuments(documents: any[]): any[] {
   return documents.map(normalizeFieldNames);
 }
 
-function normalizeDocument(document: any): any {
+function normalizeDocument(document: any) {
   if (typeof document !== "object") {
     return document;
   }
@@ -28,27 +28,23 @@ function toObject(documents: any) {
     : toObjectDocument(documents);
 }
 
-function normalizeFieldNames(document: any): any {
+function normalizeFieldNames(document: any) {
   return Array.isArray(document)
     ? normalizeDocuments(document)
     : normalizeDocument(document);
 }
 
-export function normalizeData(data: any): any {
+export function normalizeData(data: any) {
   data = toObject(data);
   return normalizeFieldNames(data);
 }
 
-export function rejectIfNull(errorMsg: string) {
-  return function(document: any) {
-    if (!document) {
-      let err: Error = new Error(errorMsg);
-      err.name = "DataNotFoundError";
-      throw err;
-    } else {
-      return document;
-    }
-  };
+export function rejectIfNull(errorMsg: string, document: any) {
+  if (!document) {
+    const err = new Error(errorMsg);
+    err.name = "DataNotFoundError";
+    throw err;
+  }
 }
 
 export function getSearchingObject(gte?: Date, lte?: Date): Object {

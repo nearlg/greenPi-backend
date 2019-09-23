@@ -1,46 +1,44 @@
-import jwt = require('jsonwebtoken');
-import { User } from '../models/interface/user';
-import { Security } from '../config';
-import { Request } from 'restify';
+import jwt = require("jsonwebtoken");
+import { User } from "../models/interface/user";
+import { Security } from "../config";
+import { Request } from "restify";
+import { isString } from "util";
 
 function createToken(user: User): string {
-    const payload = {
-        sub: user.id
-    };
-    const options: jwt.SignOptions = {
-        expiresIn: '1h'
-    };
-    return jwt.sign(payload, Security.JWT_SECRET, options);
+  const payload = {
+    sub: user.id
+  };
+  const options: jwt.SignOptions = {
+    expiresIn: "1h"
+  };
+  return jwt.sign(payload, Security.JWT_SECRET, options);
 }
 
-function verifyEncodedToken(encodedToken: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-        try {
-            if(!encodedToken) {
-                const error =  new Error();
-                error.name = 'UnauthorizedError';
-                return reject(error);
-            }
-            const decodedToken = jwt.verify(encodedToken, Security.JWT_SECRET);
-            if (!decodedToken['sub']) {
-                throw new Error();
-            }
-            resolve(decodedToken);
-        } catch (err) {
-            const error: Error = new Error('Invalid token');
-            error.name = 'InvalidCredentialsError';
-            reject(error);
-        }
-    });
+function verifyEncodedToken(encodedToken: string) {
+  if (!encodedToken) {
+    const error = new Error();
+    error.name = "UnauthorizedError";
+    throw error;
+  }
+  try {
+    const decodedToken = jwt.verify(encodedToken, Security.JWT_SECRET);
+    if (isString(decodedToken) || !decodedToken["sub"]) {
+      throw new Error();
+    }
+    return decodedToken;
+  } catch (err) {
+    const error: Error = new Error("Invalid token");
+    error.name = "InvalidCredentialsError";
+    throw error;
+  }
 }
 
-function verifyTokenFromRequest(req: Request): Promise<any> {
-    const encodedToken = req.headers.authorization ?
-        req.headers.authorization.split(' ')[1] : '';
-    return verifyEncodedToken(encodedToken);
+function verifyTokenFromRequest(req: Request) {
+  const encodedToken = req.headers.authorization
+    ? req.headers.authorization.split(" ")[1]
+    : "";
+  const validToken = verifyEncodedToken(encodedToken);
+  return validToken;
 }
 
-export {
-    createToken,
-    verifyTokenFromRequest
-};
+export { createToken, verifyTokenFromRequest };

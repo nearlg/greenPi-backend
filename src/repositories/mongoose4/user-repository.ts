@@ -41,75 +41,70 @@ const userSchema = new mongoose.Schema({
 });
 
 // Encrypt user's password before saving it to the database
-userSchema.pre("save", function(next) {
+userSchema.pre("save", async function(next) {
   const user: UserModel = this;
   if (!user.password || !user.isModified("password")) {
     return next();
   }
-  bcrypt
-    .hash(user.password, Security.BCRYPT_SALT_ROUNDS)
-    .then(hash => {
-      user.password = hash;
-      return next();
-    })
-    .catch(err => next(err));
+  try {
+    const hash = await bcrypt.hash(user.password, Security.BCRYPT_SALT_ROUNDS);
+    user.password = hash;
+    return next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 const UserModel = mongoose.model<UserModel>("User", userSchema);
 
 export class UserMongooseRepository implements UserRepository {
-  create(document: User): Promise<User> {
-    return UserModel.create(document)
-      .then(rejectIfNull("User not found"))
-      .then(normalizeData);
+  async create(document: User): Promise<User> {
+    const doc = await UserModel.create(document);
+    return normalizeData(doc);
   }
 
-  update(document: User): Promise<User> {
-    return UserModel.findOneAndUpdate({ email: document.email }, document)
-      .exec()
-      .then(rejectIfNull("User not found"))
-      .then(normalizeData);
+  async update(document: User): Promise<User> {
+    const doc = await UserModel.findOneAndUpdate(
+      { email: document.email },
+      document
+    ).exec();
+    rejectIfNull("User not found", doc);
+    return normalizeData(doc);
   }
 
-  remove(id: string): Promise<User> {
-    return UserModel.findByIdAndRemove(id)
-      .exec()
-      .then(rejectIfNull("User not found"))
-      .then(normalizeData);
+  async remove(id: string): Promise<User> {
+    const doc = await UserModel.findByIdAndRemove(id).exec();
+    rejectIfNull("User not found", doc);
+    return normalizeData(doc);
   }
 
-  findAll(): Promise<User[]> {
-    return UserModel.find()
-      .exec()
-      .then(normalizeData);
+  async findAll(): Promise<User[]> {
+    const docs = await UserModel.find().exec();
+    return normalizeData(docs);
   }
 
-  find(id: string): Promise<User> {
-    return UserModel.findById(id)
-      .exec()
-      .then(rejectIfNull("User not found"))
-      .then(normalizeData);
+  async find(id: string): Promise<User> {
+    const doc = await UserModel.findById(id).exec();
+    rejectIfNull("User not found", doc);
+    return normalizeData(doc);
   }
 
-  findByEmail(email: string): Promise<User> {
-    return UserModel.findOne({ email: email })
-      .exec()
-      .then(rejectIfNull("User not found"))
-      .then(normalizeData);
+  async findByEmail(email: string): Promise<User> {
+    const doc = await UserModel.findOne({ email: email }).exec();
+    rejectIfNull("User not found", doc);
+    return normalizeData(doc);
   }
 
-  getRoleName(id: string): Promise<RoleName> {
-    return UserModel.findById(id)
-      .exec()
-      .then(rejectIfNull("User not found"))
-      .then(normalizeData)
-      .then((user: User) => user.roleName);
+  async getRoleName(id: string) {
+    const doc = await UserModel.findById(id).exec();
+    rejectIfNull("User not found", doc);
+    const user: User = normalizeData(doc);
+    return user.roleName;
   }
 
-  findByGoogleId(id: string): Promise<User> {
-    return UserModel.findOne({ googleId: id })
-      .exec()
-      .then(rejectIfNull("User not found"))
-      .then(normalizeData);
+  async findByGoogleId(id: string): Promise<User> {
+    const doc = await UserModel.findOne({ googleId: id }).exec();
+    rejectIfNull("User not found", doc);
+    return normalizeData(doc);
   }
 }
