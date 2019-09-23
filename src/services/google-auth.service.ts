@@ -27,7 +27,7 @@ async function getIdToken(code: string) {
     redirectUris[0]
   );
   const res = await oAuth2Client.getToken(code);
-  const idToken = res.tokens.id_token;
+  const idToken: string = res.tokens.id_token;
   return idToken;
 }
 
