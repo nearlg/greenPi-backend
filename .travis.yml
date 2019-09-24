@@ -9,13 +9,14 @@ install:
   - yarn
 script:
   - yarn test
+  - export BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 branches:
   only:
     - master
     - develop
 before_deploy:
   - chmod +x increment-version.sh
-  - BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - echo "BRANCH- $BRANCH"
   - echo $TRAVIS_BRANCH $TRAVIS_PULL_REQUEST_BRANCH
   - echo $TRAVIS_COMMIT
   - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
