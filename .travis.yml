@@ -11,7 +11,7 @@ before_script:
   - chmod +x new-version.sh
 script:
   - yarn test
-  - ./new-version.sh
+  - ./new-version.sh :branch :head_branch
 branches:
   only:
     - master

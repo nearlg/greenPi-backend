@@ -4,6 +4,8 @@
 #     cp -r !(deploy|README.md|node_modules|composer.*) deploy/;
 #     zip -r deploy.zip deploy;
 # fi
+echo "$1 ---- base branch!!"
+echo "$2 ---- head branch!!"
 BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
 if [ "$TRAVIS_BRANCH" != "master" ]; then
