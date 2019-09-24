@@ -9,6 +9,7 @@ install:
   - yarn
 script:
   - yarn test
+  - ./new-version.sh
 branches:
   only:
     - master
