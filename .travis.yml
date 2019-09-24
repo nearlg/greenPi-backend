@@ -13,6 +13,10 @@ branches:
   only:
     - master
     - develop
+before_deploy:
+  - chmod +x increment-version.sh
+  - BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
+  - ./increment-version.sh $TRAVIS_BRANCH $BRANCH
 deploy:
   provider: heroku
   api_key:
