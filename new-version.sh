@@ -6,7 +6,7 @@
 # fi
 BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)
 echo "TRAVIS_BRANCH=$TRAVIS_BRANCH, PR=$PR, BRANCH=$BRANCH"
-if [ "$TRAVIS_BRANCH" != "develop" ]; then
+if [ "$TRAVIS_BRANCH" != "master" ]; then
     exit 0
 fi
 echo "HERE!!"
