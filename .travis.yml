@@ -21,9 +21,10 @@ before_deploy:
   - git config --global user.email "travis@travis-ci.org"
   - git config --global user.name "Travis CI"
   - yarn version --patch
-  - git remote add origin-version https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
-  - git push --set-upstream origin-version develop
-  - git push --tags origin-version develop
+  - git push origin HEAD:master
+  # - git remote add origin-version https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
+  # - git push --set-upstream origin-version
+  # - git push --tags origin-version develop
 deploy:
   provider: heroku
   api_key:
