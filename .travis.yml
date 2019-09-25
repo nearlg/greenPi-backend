@@ -26,6 +26,4 @@ deploy:
   app:
     master: greenpi-backend
     develop: greenpi-backend-dev
-  skip_cleanup: true
-  on:
-    tags: true
+  skip_cleanup: true 
