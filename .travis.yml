@@ -21,7 +21,7 @@ before_deploy:
   - git config --global user.email "travis@travis-ci.org"
   - git config --global user.name "Travis CI"
   - yarn version --patch
-  - git push origin HEAD:master
+  - git push origin HEAD:develop
   # - git remote add origin-version https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
   # - git push --set-upstream origin-version
   # - git push --tags origin-version develop
