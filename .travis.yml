@@ -19,7 +19,7 @@ before_deploy:
   - echo $TRAVIS_COMMIT
   - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
   - yarn version --patch
-  - git push
+  - git push origin HEAD:master
 deploy:
   provider: heroku
   api_key:
