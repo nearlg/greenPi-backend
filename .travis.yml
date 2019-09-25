@@ -19,6 +19,7 @@ before_deploy:
   - echo $TRAVIS_COMMIT
   - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
   - yarn version --patch
+  - git push
 deploy:
   provider: heroku
   api_key:
@@ -26,4 +27,4 @@ deploy:
   app:
     master: greenpi-backend
     develop: greenpi-backend-dev
-  skip_cleanup: true 
+  skip_cleanup: true
