@@ -18,7 +18,10 @@ before_deploy:
   - echo $TRAVIS_BRANCH $TRAVIS_PULL_REQUEST_BRANCH
   - echo $TRAVIS_COMMIT
   - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
+  - git config --global user.email "travis@travis-ci.org"
+  - git config --global user.name "Travis CI"
   - yarn version --patch
+  - git remote add origin/master https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git git
   - git push origin HEAD:master
 deploy:
   provider: heroku
