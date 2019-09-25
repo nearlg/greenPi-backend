@@ -20,8 +20,11 @@ before_deploy:
   - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
   - git config --global user.email "travis@travis-ci.org"
   - git config --global user.name "Travis CI"
+  - git stash
+  - git checkout ${TRAVIS_BRANCH}
+  - git stash pop
   - yarn version --patch
-  - git push origin HEAD:develop
+  - git push https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
   # - git remote add origin-version https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
   # - git push --set-upstream origin-version
   # - git push --tags origin-version develop
