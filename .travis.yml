@@ -22,6 +22,7 @@ before_deploy:
   - git config --global user.email "travis@travis-ci.org"
   - git config --global user.name "Travis CI"
   - git tag v-test-1
+  - git push --tags
   # - git stash
   # - git checkout ${TRAVIS_BRANCH}
   # - git stash pop
@@ -38,3 +39,5 @@ deploy:
     master: greenpi-backend
     develop: greenpi-backend-dev
   skip_cleanup: true
+  on:
+    tags: false
