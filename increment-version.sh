@@ -22,9 +22,10 @@
 
 if ! [[ $TRAVIS_TAG ]]; then
     PACKAGE_VERSION=$(node -e "console.log(require('./package.json').version)")
-    export TRAVIS_TAG="v$PACKAGE_VERSION" &&
+    export TRAVIS_TAG="v$PACKAGE_VERSION"
     git config --global user.email "travis@travis-ci.org"
     git config --global user.name "Travis CI"
+    git tag "$TRAVIS_TAG"
     git push --tags https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
     # git config --local user.name "$USER_NAME" &&
     # git config --local user.email "$USER_EMAIL" &&
