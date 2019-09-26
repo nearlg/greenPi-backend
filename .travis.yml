@@ -14,6 +14,7 @@ branches:
     - develop
 before_deploy:
   - echo "DEPLOY TIME!!"
+  - ./increment-version.sh
   # - chmod +x increment-version.sh
   # - echo "BRANCH- $BRANCH"
   # - echo $TRAVIS_BRANCH $TRAVIS_PULL_REQUEST_BRANCH
@@ -39,5 +40,3 @@ deploy:
     master: greenpi-backend
     develop: greenpi-backend-dev
   skip_cleanup: true
-  on:
-    tags: true
