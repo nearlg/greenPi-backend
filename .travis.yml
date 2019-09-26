@@ -40,4 +40,4 @@ deploy:
     develop: greenpi-backend-dev
   skip_cleanup: true
   on:
-    tags: false
+    tags: true
