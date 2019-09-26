@@ -19,10 +19,10 @@ before_deploy:
   # - echo $TRAVIS_BRANCH $TRAVIS_PULL_REQUEST_BRANCH
   # - echo $TRAVIS_COMMIT
   # - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
-  - git config --global user.email "travis@travis-ci.org"
-  - git config --global user.name "Travis CI"
-  - git tag v-test-1
-  - git push --tags
+  # - git config --global user.email "travis@travis-ci.org"
+  # - git config --global user.name "Travis CI"
+  # - git tag v-test-1
+  # - git push --tags
   # - git stash
   # - git checkout ${TRAVIS_BRANCH}
   # - git stash pop
