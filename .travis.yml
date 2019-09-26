@@ -13,18 +13,19 @@ branches:
     - master
     - develop
 before_deploy:
-  - chmod +x increment-version.sh
-  - echo "BRANCH- $BRANCH"
-  - echo $TRAVIS_BRANCH $TRAVIS_PULL_REQUEST_BRANCH
-  - echo $TRAVIS_COMMIT
-  - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
-  - git config --global user.email "travis@travis-ci.org"
-  - git config --global user.name "Travis CI"
-  - git stash
-  - git checkout ${TRAVIS_BRANCH}
-  - git stash pop
-  - yarn version --patch
-  - git push https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
+  - echo "DEPLOY TIME!!"
+  # - chmod +x increment-version.sh
+  # - echo "BRANCH- $BRANCH"
+  # - echo $TRAVIS_BRANCH $TRAVIS_PULL_REQUEST_BRANCH
+  # - echo $TRAVIS_COMMIT
+  # - bash increment-version.sh $TRAVIS_BRANCH $BRANCH
+  # - git config --global user.email "travis@travis-ci.org"
+  # - git config --global user.name "Travis CI"
+  # - git stash
+  # - git checkout ${TRAVIS_BRANCH}
+  # - git stash pop
+  # - yarn version --patch
+  # - git push https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
   # - git remote add origin-version https://${GITHUB_TOKEN}@github.com/gabrielmdc/greenpi-backend.git
   # - git push --set-upstream origin-version
   # - git push --tags origin-version develop
@@ -36,3 +37,5 @@ deploy:
     master: greenpi-backend
     develop: greenpi-backend-dev
   skip_cleanup: true
+  on:
+    tags: true
