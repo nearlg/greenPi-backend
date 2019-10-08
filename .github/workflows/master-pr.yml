@@ -1,0 +1,17 @@
+name: Master Pullrequest
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Test the code
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Intall node modules
+      run: yarn
+    - name: Test the code
+      run: yarn test
