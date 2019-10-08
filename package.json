@@ -4,19 +4,22 @@
   "description": "Save measures and configuration of greenPi project",
   "main": "dist/src/index.js",
   "scripts": {
+    "compile": "tsc",
     "test": "yarn compile && mocha --recursive --exit ./dist/test",
     "start": "node ./dist/src/index.js",
-    "compile": "tsc"
+    "build": "yarn compile && ./scripts/build-docker-image.sh",
+    "deploy": "./scripts/deploy-docker-image.sh",
+    "release": "./scripts/incr-version.sh"
   },
-  "author": "nearlg",
-  "homepage": "https://github.com/nearlg/greenPi-backend",
+  "author": "gabrielmdc",
+  "homepage": "https://github.com/gabrielmdc/greenPi-backend",
   "bugs": {
-    "url": "https://github.com/nearlg/greenPi-backend/issues",
-    "email": "nearlg@gmail.com"
+    "url": "https://github.com/gabrielmdc/greenPi-backend/issues",
+    "email": "gmdcwork@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "github.com:nearlg/greenPi-backend.git"
+    "url": "github.com:gabrielmdc/greenPi-backend.git"
   },
   "license": "MIT",
   "dependencies": {
