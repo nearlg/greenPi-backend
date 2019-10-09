@@ -15,16 +15,6 @@ jobs:
       run: yarn
     - name: Test the code
       run: yarn test
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: dist
-        path: dist
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v1
-      with:
-        name: node_modules
-        path: node_modules
 
   deploy:
     name: Build the Docker container
