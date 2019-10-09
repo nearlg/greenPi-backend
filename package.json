@@ -1,5 +1,5 @@
 {
-  "name": "green-pi-backend",
+  "name": "greenpi-backend",
   "version": "0.0.0",
   "description": "Save measures and configuration of greenPi project",
   "main": "dist/src/index.js",
@@ -12,14 +12,14 @@
     "release": "./scripts/incr-version.sh"
   },
   "author": "gabrielmdc",
-  "homepage": "https://github.com/gabrielmdc/greenPi-backend",
+  "homepage": "https://github.com/gabrielmdc/greenpi-backend",
   "bugs": {
-    "url": "https://github.com/gabrielmdc/greenPi-backend/issues",
+    "url": "https://github.com/gabrielmdc/greenpi-backend/issues",
     "email": "gmdcwork@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "github.com:gabrielmdc/greenPi-backend.git"
+    "url": "github.com:gabrielmdc/greenpi-backend.git"
   },
   "license": "MIT",
   "dependencies": {
