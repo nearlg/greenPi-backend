@@ -14,4 +14,4 @@ yarn install
 
 ---
 
-![Build status](https://github.com/gabrielmdc/greenpi-backend/workflows/master-push/badge.svg)
+![Build status](https://github.com/gabrielmdc/greenpi-backend/workflows/Master%20push/badge.svg)
