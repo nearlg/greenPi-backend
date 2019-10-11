@@ -1,32 +1,31 @@
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
-import { ObjectID } from 'mongodb';
-import mongoose = require('mongoose');
-import * as Config from '../../../../../../src/config';
-import { SensorType } from '../../../../../../src/models/interface/sensor-type';
-import { Unit } from '../../../../../../src/models/interface/unit';
-import { sensorTypeRepository } from '../../../../../../src/repositories';
+import chai = require("chai");
+import chaiAsPromised = require("chai-as-promised");
+import { ObjectID } from "mongodb";
+import mongoose = require("mongoose");
+import * as Config from "../../../../../../src/config";
+import { SensorType } from "../../../../../../src/models/interface/sensor-type";
+import { Unit } from "../../../../../../src/models/interface/unit";
+import { sensorTypeRepository } from "../../../../../../src/repositories";
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 // const mockgoose: Mockgoose;
 
-describe('Sensor type repository validation', () => {
+describe("Sensor type repository validation", () => {
+  let sensorType: SensorType;
+  let unit: Unit;
 
-    const sensorType: SensorType;
-    const unit: Unit;
+  // mongoose.Promise = Promise;
+  //     const options    = {promiseLibrary: Promise};
+  //     mockgoose = new Mockgoose(mongoose);
+  // mockgoose.prepareStorage().then(() => {
+  //         mongoose.connect(Config.Database.URI_TEST, { useMongoClient: true });
+  //         mongoose.connection.on('connected', () => {
+  //         console.log('db connection is now open');
+  //         });
+  //     });
 
-    // mongoose.Promise = Promise;
-    //     const options    = {promiseLibrary: Promise};
-    //     mockgoose = new Mockgoose(mongoose);
-    // mockgoose.prepareStorage().then(() => {
-    //         mongoose.connect(Config.Database.URI_TEST, { useMongoClient: true });
-    //         mongoose.connection.on('connected', () => {
-    //         console.log('db connection is now open');
-    //         });
-    //     });
-
-    /*before(() => {
+  /*before(() => {
         mongoose.Promise = Promise;
         const options    = {promiseLibrary: Promise};
         mockgoose = new Mockgoose(mongoose);
@@ -41,7 +40,7 @@ describe('Sensor type repository validation', () => {
                 }));
             });*/
 
-        /*return mockgoose.prepareStorage().then(() => {
+  /*return mockgoose.prepareStorage().then(() => {
             mongoose.connect(Config.Database.URI_TEST);
             mongoose.connection.on('connected', () => {
             console.log('db connection is now open');
@@ -50,11 +49,11 @@ describe('Sensor type repository validation', () => {
         .catch(err => console.log(err));
     });*/
 
-    // after(() => {
-    //     return mongoose.disconnect();
-    // });
+  // after(() => {
+  //     return mongoose.disconnect();
+  // });
 
-    /*beforeEach((done) => {
+  /*beforeEach((done) => {
 
         unit = {
             name: 'ºC',
@@ -70,7 +69,7 @@ describe('Sensor type repository validation', () => {
         return mockgoose.helper.reset().then(() => done());
     });*/
 
-    /*describe('#create', () => {
+  /*describe('#create', () => {
         it('DB test', () => {
             return expect(4).to.be.equal(4);
         });
