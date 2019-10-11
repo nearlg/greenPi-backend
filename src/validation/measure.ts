@@ -5,7 +5,7 @@ import { Sensor } from "../models/interface/sensor";
 import { validateId as sensorIdValidator } from "./sensor";
 
 export async function validateDate(date: Date) {
-  let dateString: string =
+  const dateString: string =
     date && typeof date.toISOString === "function"
       ? date.toISOString()
       : date + "";

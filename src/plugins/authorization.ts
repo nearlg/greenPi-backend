@@ -31,7 +31,7 @@ async function requestIsAuthorized(req: Request) {
   const method = req.method;
   const path = req.getRoute().path.toString();
   // Get the role name depending on the authorization header key
-  let roleName = await getRoleNameByRequest(req);
+  const roleName = await getRoleNameByRequest(req);
   // If the rolename is NOT authorize for the giving path and method,
   // It creates an error
   const isAuthorized = await authzService.isAuthorized(roleName, path, method);

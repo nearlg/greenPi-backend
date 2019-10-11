@@ -10,7 +10,7 @@ export async function regexValidation<T>(
   if (!["string", "number"].find(t => paramType === t)) {
     throw err;
   }
-  let toTest: string = typeof param === "string" ? param : param + "";
+  const toTest: string = typeof param === "string" ? param : param + "";
   if (!regex.test(toTest)) {
     throw err;
   }

@@ -3,7 +3,7 @@ import * as chaiAsPromised from 'chai-as-promised';
 import * as pumpValidator from '../../src/validation/pump';
 
 chai.use(chaiAsPromised);
-let expect = chai.expect;
+const expect = chai.expect;
 
 describe('Pump type validation', () => {
     describe('Name validation', () => {
@@ -63,19 +63,19 @@ describe('Pump type validation', () => {
         });
 
         it('Ports could be empty', () => {
-            let ports: number[] = [];
+            const ports: number[] = [];
             return expect(pumpValidator.validatePorts(ports))
             .to.be.fulfilled;
         });
 
         it('Ports can not be an array of characters', () => {
-            let ports: any[] = ['a', 'd', 'f'];
+            const ports: any[] = ['a', 'd', 'f'];
             return expect(pumpValidator.validatePorts(ports))
             .to.be.rejected;
         });
 
         it('Ports as a number array', () => {
-            let ports: number[] = [2, 3, 4];
+            const ports: number[] = [2, 3, 4];
             return expect(pumpValidator.validatePorts(ports))
             .to.be.fulfilled;
         });

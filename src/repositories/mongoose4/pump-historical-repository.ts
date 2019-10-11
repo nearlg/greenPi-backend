@@ -71,7 +71,7 @@ export class PumpHistoricalMongooseRepository
     gte?: Date,
     lte?: Date
   ): Promise<PumpHistorical[]> {
-    let pumpIds: string[] = pumps.map(pump => pump.id);
+    const pumpIds: string[] = pumps.map(pump => pump.id);
     return this.findAllByPumpIds(pumpIds, sortBy, gte, lte);
   }
 

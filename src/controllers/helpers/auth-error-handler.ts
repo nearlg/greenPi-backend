@@ -27,17 +27,17 @@ class AuthErrorHandler implements ErrorHandler {
     }
 
     private handleInvalidCredentialsError(next: Next, err: Error) {
-        let error = new InvalidCredentialsError(err);
+        const error = new InvalidCredentialsError(err);
         return next(error);
     }
 
     private handleUnauthorizedError(next: Next, err: Error) {
-        let error = new UnauthorizedError(err);
+        const error = new UnauthorizedError(err);
         return next(error);
     }
 
     private handleNotAuthorizedError(next: Next, err: Error) {
-        let error = new NotAuthorizedError(err);
+        const error = new NotAuthorizedError(err);
         return next(error);
     }
 }

@@ -5,7 +5,7 @@ import { Measure } from '../../src/models/interface/measure';
 import { Sensor } from '../../src/models/interface/sensor';
 
 chai.use(chaiAsPromised);
-let expect = chai.expect;
+const expect = chai.expect;
 
 describe('Measure validation', () => {
     describe('Date validation', () => {
@@ -15,7 +15,7 @@ describe('Measure validation', () => {
         });
 
         it('Date can not be an invalid object', () => {
-            let val: any = 'random';
+            const val: any = 'random';
             return expect(measureValidator.validateDate(val))
             .to.be.rejected;
         });
@@ -60,7 +60,7 @@ describe('Measure validation', () => {
 
     describe('Value validation', () => {
         it('Value must be a valid number', () => {
-            let val: any = 'random';
+            const val: any = 'random';
             return expect(measureValidator.validateValue(val))
             .to.be.rejected;
         });

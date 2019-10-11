@@ -8,13 +8,13 @@ import { Unit } from '../../../../../../src/models/interface/unit';
 import { sensorTypeRepository } from '../../../../../../src/repositories';
 
 chai.use(chaiAsPromised);
-let expect = chai.expect;
-// let mockgoose: Mockgoose;
+const expect = chai.expect;
+// const mockgoose: Mockgoose;
 
 describe('Sensor type repository validation', () => {
 
-    let sensorType: SensorType;
-    let unit: Unit;
+    const sensorType: SensorType;
+    const unit: Unit;
 
     // mongoose.Promise = Promise;
     //     const options    = {promiseLibrary: Promise};

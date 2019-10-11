@@ -17,7 +17,7 @@ class QueryErrorHandler implements ErrorHandler {
     }
 
     private handleQueryError<T extends HttpError>(next: Next, err: Error) {
-        let error: T = err as T;
+        const error: T = err as T;
         return next(error);
     }
 }

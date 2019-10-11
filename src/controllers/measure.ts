@@ -21,14 +21,14 @@ async function validateDependencies(measure: Measure): Promise<Measure> {
 }
 
 async function byEnvironmentId(req: Request, res: Response, next: Next) {
-  let commQuery: string[] = commonQuery;
+  const commQuery: string[] = commonQuery;
   commQuery.push("byEnvironmentId");
   await checkQuery(commQuery, req.query);
 
-  let gte = req.query.gte ? new Date(req.query.gte) : null;
-  let lte = req.query.lte ? new Date(req.query.lte) : null;
-  let sortBy: string = req.query.sortBy;
-  let environmentId: string = req.query.byEnvironmentId;
+  const gte = req.query.gte ? new Date(req.query.gte) : null;
+  const lte = req.query.lte ? new Date(req.query.lte) : null;
+  const sortBy: string = req.query.sortBy;
+  const environmentId: string = req.query.byEnvironmentId;
   const environment = await environmentRepository.find(environmentId);
   const measures = await measureRepository.findAllBySensors(
     <Array<Sensor>>environment.sensors,
@@ -40,14 +40,14 @@ async function byEnvironmentId(req: Request, res: Response, next: Next) {
 }
 
 async function bySensorId(req: Request, res: Response, next: Next) {
-  let commQuery: string[] = commonQuery;
+  const commQuery: string[] = commonQuery;
   commQuery.push("bySensorId");
   await checkQuery(commQuery, req.query);
 
-  let gte = req.query.gte ? new Date(req.query.gte) : null;
-  let lte = req.query.lte ? new Date(req.query.lte) : null;
-  let sortBy: string = req.query.sortBy;
-  let sensorId: string = req.query.bySensorId;
+  const gte = req.query.gte ? new Date(req.query.gte) : null;
+  const lte = req.query.lte ? new Date(req.query.lte) : null;
+  const sortBy: string = req.query.sortBy;
+  const sensorId: string = req.query.bySensorId;
   await sensorRepository.find(sensorId);
   const measures = await measureRepository.findAllBySensorId(
     sensorId,
@@ -59,13 +59,13 @@ async function bySensorId(req: Request, res: Response, next: Next) {
 }
 
 async function bySensor(req: Request, res: Response, next: Next) {
-  let commQuery: string[] = commonQuery;
+  const commQuery: string[] = commonQuery;
   commQuery.push("bySensor");
   await checkQuery(commQuery, req.query);
 
-  let gte = req.query.gte ? new Date(req.query.gte) : null;
-  let lte = req.query.lte ? new Date(req.query.lte) : null;
-  let sortBy: string = req.query.sortBy;
+  const gte = req.query.gte ? new Date(req.query.gte) : null;
+  const lte = req.query.lte ? new Date(req.query.lte) : null;
+  const sortBy: string = req.query.sortBy;
   const sensor = await sensorValidator.validate(req.query.sensor, true);
   await sensorRepository.find(sensor.id);
   const measures = await measureRepository.findAllBySensor(

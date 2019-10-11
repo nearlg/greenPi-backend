@@ -5,7 +5,7 @@ import { Sensor } from '../../src/models/interface/sensor';
 import { Pump } from '../../src/models/interface/pump';
 
 chai.use(chaiAsPromised);
-let expect = chai.expect;
+const expect = chai.expect;
 
 describe('Environment validation', () => {
     describe('Name validation', () => {

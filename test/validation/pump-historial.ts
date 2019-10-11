@@ -5,7 +5,7 @@ import { PumpHistorical } from '../../src/models/interface/pump-historical';
 import { Pump } from '../../src/models/interface/pump';
 
 chai.use(chaiAsPromised);
-let expect = chai.expect;
+const expect = chai.expect;
 
 describe('Pump historical validation', () => {
     describe('Date validation', () => {
@@ -15,7 +15,7 @@ describe('Pump historical validation', () => {
         });
 
         it('Date can not be an invalid object', () => {
-            let val: any = 'random';
+            const val: any = 'random';
             return expect(pumpHistoricalValidator.validateDate(val))
             .to.be.rejected;
         });

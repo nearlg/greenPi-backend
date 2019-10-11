@@ -18,13 +18,13 @@ class DataErrorHandler implements ErrorHandler {
     }
 
     private handleValidationError(next: Next, err: Error) {
-        let validationError: ValidationError = <ValidationError>err;
-        let error: BadRequestError = new BadRequestError(validationError);
+        const validationError: ValidationError = <ValidationError>err;
+        const error: BadRequestError = new BadRequestError(validationError);
         return next(error);
     }
 
     private handleDataNotFoundError(next: Next, err: Error) {
-        let error: NotFoundError = new NotFoundError(err);
+        const error: NotFoundError = new NotFoundError(err);
         return next(error);
     }
 }

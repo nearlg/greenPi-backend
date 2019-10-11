@@ -22,19 +22,19 @@ class MongooseErrorHandler implements ErrorHandler {
     }
 
     private handleValidationError(next: Next, err: Error) {
-        let validationError: ValidationError = <ValidationError>err;
-        let error: BadRequestError = new BadRequestError(validationError);
+        const validationError: ValidationError = <ValidationError>err;
+        const error: BadRequestError = new BadRequestError(validationError);
         return next(error);
     }
 
     private handleCastError(next: Next, err: Error) {
-        let castError: CastError = <CastError>err;
-        let error: BadRequestError = new BadRequestError(castError);
+        const castError: CastError = <CastError>err;
+        const error: BadRequestError = new BadRequestError(castError);
         return next(error);
     }
 
     private handleMongoError(next: Next, err: Error) {
-        let mongoError: MongoError = <MongoError>err;
+        const mongoError: MongoError = <MongoError>err;
         switch (mongoError.code) {
             case 11000:
                 return this.handleMongoDuplicateValidationError(next, mongoError);
@@ -44,8 +44,8 @@ class MongooseErrorHandler implements ErrorHandler {
     }
 
     private handleMongoDuplicateValidationError(next: Next, err: Error) {
-        let mongoError: MongoError = <MongoError>err;
-        let error: InvalidArgumentError = new InvalidArgumentError(mongoError);
+        const mongoError: MongoError = <MongoError>err;
+        const error: InvalidArgumentError = new InvalidArgumentError(mongoError);
         return next(error);
     }
 }

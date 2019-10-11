@@ -43,8 +43,8 @@ server.use(restify.plugins.bodyParser());
 server.use(requestAuthz);
 
 // Set routes
-let apiVersion = Config.Server.VERSION.split(".");
-let apiRoute = "/api/v" + apiVersion[0];
+const apiVersion = Config.Server.VERSION.split(".");
+const apiRoute = "/api/v" + apiVersion[0];
 MeasureRoutes.routes(server, apiRoute + "/measures");
 PumpRoutes.routes(server, apiRoute + "/pumps");
 PumpHistoricalsRoutes.routes(server, apiRoute + "/pump-historicals");

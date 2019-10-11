@@ -3,7 +3,7 @@ import { ErrorHandler } from "./interface/error-handler";
 import { dataHandler } from "./data-handler";
 import { InternalServerError } from "restify-errors";
 
-let errorHandlers: ErrorHandler[] = new Array<ErrorHandler>();
+const errorHandlers: ErrorHandler[] = new Array<ErrorHandler>();
 
 export function checkQuery(query: string[], querySended: object) {
   if (!querySended) {
@@ -12,7 +12,7 @@ export function checkQuery(query: string[], querySended: object) {
     error.message = "Missing query parameter";
     throw error;
   }
-  let element: string = Object.keys(querySended).find(q => {
+  const element: string = Object.keys(querySended).find(q => {
     return q! in query;
   });
   if (element === undefined) {

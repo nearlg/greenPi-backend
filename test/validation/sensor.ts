@@ -4,7 +4,7 @@ import * as sensorValidator from '../../src/validation/sensor';
 import { SensorType } from '../../src/models/interface/sensor-type';
 
 chai.use(chaiAsPromised);
-let expect = chai.expect;
+const expect = chai.expect;
 
 describe('Sensor validation', () => {
     describe('Name validation', () => {

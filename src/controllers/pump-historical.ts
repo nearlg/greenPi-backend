@@ -27,13 +27,13 @@ async function byEnvironmentId(
   res: Response,
   next: Next
 ): Promise<PumpHistorical[]> {
-  let commQuery: string[] = commonQuery;
+  const commQuery: string[] = commonQuery;
   commQuery.push("byEnvironmentId");
   await checkQuery(commQuery, req.query);
-  let gte = req.query.gte ? new Date(req.query.gte) : null;
-  let lte = req.query.lte ? new Date(req.query.lte) : null;
-  let sortBy: string = req.query.sortBy;
-  let environmentId: string = req.query.byEnvironmentId;
+  const gte = req.query.gte ? new Date(req.query.gte) : null;
+  const lte = req.query.lte ? new Date(req.query.lte) : null;
+  const sortBy: string = req.query.sortBy;
+  const environmentId: string = req.query.byEnvironmentId;
   const environment = await environmentRepository.find(environmentId);
   const pumpHistoricals = pumpHistoricalRepository.findAllByPumps(
     <Array<Pump>>environment.pumps,
@@ -49,13 +49,13 @@ async function byPumpId(
   res: Response,
   next: Next
 ): Promise<PumpHistorical[]> {
-  let commQuery: string[] = commonQuery;
+  const commQuery: string[] = commonQuery;
   commQuery.push("byPumpId");
   await checkQuery(commQuery, req.query);
-  let gte = req.query.gte ? new Date(req.query.gte) : null;
-  let lte = req.query.lte ? new Date(req.query.lte) : null;
-  let sortBy: string = req.query.sortBy;
-  let pumpId: string = req.query.byPumpId;
+  const gte = req.query.gte ? new Date(req.query.gte) : null;
+  const lte = req.query.lte ? new Date(req.query.lte) : null;
+  const sortBy: string = req.query.sortBy;
+  const pumpId: string = req.query.byPumpId;
   await pumpRepository.find(pumpId);
   const pumpHistoricals = await pumpHistoricalRepository.findAllByPumpId(
     pumpId,
@@ -71,12 +71,12 @@ async function byPump(
   res: Response,
   next: Next
 ): Promise<PumpHistorical[]> {
-  let commQuery: string[] = commonQuery;
+  const commQuery: string[] = commonQuery;
   commQuery.push("byPump");
   await checkQuery(commQuery, req.query);
-  let gte = req.query.gte ? new Date(req.query.gte) : null;
-  let lte = req.query.lte ? new Date(req.query.lte) : null;
-  let sortBy: string = req.query.sortBy;
+  const gte = req.query.gte ? new Date(req.query.gte) : null;
+  const lte = req.query.lte ? new Date(req.query.lte) : null;
+  const sortBy: string = req.query.sortBy;
   const doc = await pumpValidator.validate(req.query.pump, true);
   const pump = await pumpRepository.find(doc.id);
   const pumpHistoricals = await pumpHistoricalRepository.findAllByPump(

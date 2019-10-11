@@ -23,7 +23,7 @@ const SensorModel = mongoose.model<SensorModel>("Sensor", sensorSchema);
 
 export class SensorMongooseRepository implements SensorRepository {
   async create(document: Sensor): Promise<Sensor> {
-    let doc = await SensorModel.create(document);
+    const doc = await SensorModel.create(document);
     doc = await SensorModel.populate(doc, {
       path: "type"
     });

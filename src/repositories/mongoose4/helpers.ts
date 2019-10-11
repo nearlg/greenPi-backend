@@ -16,7 +16,7 @@ function normalizeDocument(document: any) {
     delete document._id;
   }
   // Check all the fields
-  for (let field in document) {
+  for (const field in document) {
     normalizeFieldNames(document[field]);
   }
   return document;
