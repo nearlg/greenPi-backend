@@ -34,6 +34,7 @@
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
+    "@types/node": "^12.7.12",
     "@types/bcrypt": "^3.0.0",
     "@types/chai": "^4.1.6",
     "@types/chai-as-promised": "0.0.31",
