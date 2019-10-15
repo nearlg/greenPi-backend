@@ -33,10 +33,9 @@ _Optional:_
 
 For the develop environment, you can add a _nodemon.json_ file which is not tracked by GIT. More info [here](https://github.com/remy/nodemon/blob/master/doc/sample-nodemon.md)
 
-Example:
+Example (_nodemon.json_):
 
-```json
-# nodemon.json
+```json nodemon.json
 {
   "env": {
     "DATABASE_URI": "mongo db url",
@@ -46,7 +45,6 @@ Example:
     "SECURITY_JWT_SECRET": "xxx"
   }
 }
-
 ```
 
 ## Using the Docker image
