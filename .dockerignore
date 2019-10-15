@@ -1,5 +1,6 @@
 # User-specific stuff (IDE tasks etc..):
 
 node_modules/
+dist/
 *.js
 *.js.map
