@@ -33,6 +33,22 @@ _Optional:_
 
 For the develop environment, you can add a _nodemon.json_ file which is not tracked by GIT. More info [here](https://github.com/remy/nodemon/blob/master/doc/sample-nodemon.md)
 
+Example:
+
+```json
+# nodemon.json
+{
+  "env": {
+    "DATABASE_URI": "mongo db url",
+    "GOOGLE_CLIENT_ID": "xxx",
+    "GOOGLE_CLIENT_SECRET": "xxx",
+    "GOOGLE_REDIR_URL": "redir url",
+    "SECURITY_JWT_SECRET": "xxx"
+  }
+}
+
+```
+
 ## Using the Docker image
 
 There are some official [repositories](#Docker%20image%20repositories).
