@@ -8,7 +8,7 @@
     "test": "yarn compile && mocha --recursive --exit ./dist/test",
     "start": "node ./dist/src/index.js",
     "start:prod": "NODE_ENV=production yarn start",
-    "start:dev": "yarn compile -w & nodemon ./dist/src/index.js",
+    "start:dev": "yarn compile && (yarn compile -w & nodemon ./dist/src/index.js)",
     "build": "yarn compile && ./scripts/build-docker-image.sh",
     "deploy": "./scripts/deploy-dockerhub-image.sh; ./scripts/deploy-github-image.sh",
     "release": "./scripts/incr-version.sh release"
