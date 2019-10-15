@@ -79,6 +79,14 @@ yarn start:prod
 
 The command `yarn start` is similar but it does not set the environment variable `NODE_ENV`.
 
+## Admin user
+
+This step is only necessary for the first admin!
+
+In order to create an admin user, you must have to get access to the database and in the collection _User_, modify the field roleName to _Admin_
+
+Now the user has the _Admin_ privileges.
+
 ## Build Docker container
 
 You can use an [official docker image](#Docker%20image%20repositories) Docker image repositories:
