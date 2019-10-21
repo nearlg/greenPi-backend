@@ -1,0 +1,1 @@
+export const GenericErrorName = "Error";
