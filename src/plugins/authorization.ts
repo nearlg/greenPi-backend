@@ -4,6 +4,7 @@ import { handleErrors } from "../controllers/helpers";
 import { RoleName } from "../services/authz.service/role-name";
 import { authzService } from "../services/authz.service";
 import { userRepository } from "../repositories";
+import { AuthErrorName } from "../lib/errors/auth-error/auth-error-name";
 
 /**
  * Get the role name depending on the authorization header key
@@ -38,8 +39,8 @@ async function requestIsAuthorized(req: Request) {
   if (!isAuthorized) {
     const err = new Error();
     err.name = !req.headers.authorization
-      ? "UnauthorizedError"
-      : "NotAuthorizedError";
+      ? AuthErrorName.UnauthorizedError
+      : AuthErrorName.NotAuthorizedError;
     throw err;
   }
 }
