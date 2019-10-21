@@ -3,6 +3,7 @@ import { User } from "../models/interface/user";
 import { Security } from "../config";
 import { Request } from "restify";
 import { isString } from "util";
+import { AuthErrorName } from "../lib/errors/auth-error/auth-error-name";
 
 function createToken(user: User): string {
   const payload = {
@@ -17,7 +18,7 @@ function createToken(user: User): string {
 function verifyEncodedToken(encodedToken: string) {
   if (!encodedToken) {
     const error = new Error();
-    error.name = "UnauthorizedError";
+    error.name = AuthErrorName.UnauthorizedError;
     throw error;
   }
   try {
@@ -28,7 +29,7 @@ function verifyEncodedToken(encodedToken: string) {
     return decodedToken;
   } catch (err) {
     const error: Error = new Error("Invalid token");
-    error.name = "InvalidCredentialsError";
+    error.name = AuthErrorName.InvalidCredentialsError;
     throw error;
   }
 }
