@@ -1,4 +1,4 @@
 interface CustomError {
-  code: string;
-  message: string;
+  readonly code: string;
+  readonly message: string;
 }
