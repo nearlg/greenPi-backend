@@ -1,5 +1,5 @@
 import { Rule } from "./rule";
-import { RoleName } from "./role-name";
+import { RoleName } from "../../models/role-name";
 import { HttpMethod } from "./http-method";
 import { rulesData } from "./rules-data";
 import * as Config from "../../config";
