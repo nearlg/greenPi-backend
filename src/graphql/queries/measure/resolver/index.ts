@@ -33,8 +33,11 @@ async function fetchByEnvironmentId(
   sortBy?: string
 ) {
   const environment = await environmentRepository.find(id);
-  const measures = await measureRepository.findAllBySensors(
-    <Array<Sensor>>environment.sensors,
+  const sensorIds: string[] = (<Array<Sensor>>environment.sensors).map(
+    s => s.id
+  );
+  const measures = await measureRepository.findAllBySensorIds(
+    sensorIds,
     sortBy,
     gte,
     lte
@@ -50,7 +53,7 @@ const resolver: MeasureResolver = {
     await validateDependencies(doc);
     const measure = await measureRepository.create(doc);
     return measure;
-    // TODO
+    // TODO: implement socketIO
     // await socketIOService.sensorsSIOService.emitLastMeasure(measure);
   },
   async deleteMeasure(args, req) {
