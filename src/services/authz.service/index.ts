@@ -1,3 +1,3 @@
-import { Authz } from './auth';
+import { Authz } from "./authz";
 
 export const authzService = new Authz();
