@@ -1,6 +1,8 @@
 import * as pumpValidator from "../../../../validation/pump";
 import { PumpResolver } from "./pump-resolver";
 import { pumpRepository } from "../../../../repositories";
+import { rejectIfNotAuthorized } from "../../../helpers";
+import rules from "../authoriation-rules";
 
 const resolver: PumpResolver = {
   async addPump(args, req) {
@@ -13,6 +15,7 @@ const resolver: PumpResolver = {
     return pump;
   },
   async fetchPumps(args, req) {
+    await rejectIfNotAuthorized(req, rules, "fetchPumps");
     const pumps = await pumpRepository.findAll();
     return pumps;
   },

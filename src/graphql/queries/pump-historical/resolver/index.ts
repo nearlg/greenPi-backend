@@ -8,6 +8,7 @@ import {
 import { validateDependencies } from "./helpers";
 import { FilterBy } from "./filter-by";
 import { Pump } from "../../../../models/interface/pump";
+import { PumpMongooseRepository } from "../../../../repositories/mongoose4/pump-repository";
 // import { socketIOService } from "../../../services/socket-io.service";
 
 async function fetchByPumpId(
@@ -33,8 +34,9 @@ async function fetchByEnvironmentId(
   sortBy?: string
 ) {
   const environment = await environmentRepository.find(id);
-  const pumpHistoricals = await pumpHistoricalRepository.findAllByPumps(
-    <Array<Pump>>environment.pumps,
+  const pumpIds: string[] = (<Array<Pump>>environment.pumps).map(s => s.id);
+  const pumpHistoricals = await pumpHistoricalRepository.findAllByPumpIds(
+    pumpIds,
     sortBy,
     gte,
     lte
@@ -55,7 +57,7 @@ const resolver: PumpHistoricalResolver = {
     await validateDependencies(doc);
     const pumpHistorical = await pumpHistoricalRepository.create(doc);
     return pumpHistorical;
-    // TODO:
+    // TODO: implement socketIO
     // await socketIOService.pumpsSIOService.emitLastPumpHistorical(
     //   pumpHistorical
     // );
