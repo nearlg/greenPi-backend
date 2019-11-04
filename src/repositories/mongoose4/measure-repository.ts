@@ -109,16 +109,6 @@ export class MeasureMongooseRepository implements MeasureRepository {
     return normalizeData(docs);
   }
 
-  async findAllBySensors(
-    sensors: Sensor[],
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
-  ): Promise<Measure[]> {
-    const sensorIds: string[] = sensors.map(sensor => sensor.id);
-    return this.findAllBySensorIds(sensorIds, sortBy, gte, lte);
-  }
-
   async findAllBySensorId(
     sensorId: string,
     sortBy: string = "date",
@@ -136,15 +126,6 @@ export class MeasureMongooseRepository implements MeasureRepository {
       })
       .sort(sortBy);
     return normalizeData(docs);
-  }
-
-  async findAllBySensor(
-    sensor: Sensor,
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
-  ): Promise<null | Measure[]> {
-    return this.findAllBySensorId(sensor.id, sortBy, gte, lte);
   }
 
   async create(document: Measure): Promise<Measure> {

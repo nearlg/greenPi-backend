@@ -65,16 +65,6 @@ export class PumpHistoricalMongooseRepository
     return normalizeData(doc);
   }
 
-  async findAllByPumps(
-    pumps: Pump[],
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
-  ): Promise<PumpHistorical[]> {
-    const pumpIds: string[] = pumps.map(pump => pump.id);
-    return this.findAllByPumpIds(pumpIds, sortBy, gte, lte);
-  }
-
   async findAllByPumpId(
     pumpId: string,
     sortBy: string = "date",
@@ -87,15 +77,6 @@ export class PumpHistoricalMongooseRepository
       .populate("pump")
       .sort(sortBy);
     return normalizeData(doc);
-  }
-
-  async findAllByPump(
-    pump: Pump,
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
-  ): Promise<null | PumpHistorical[]> {
-    return this.findAllByPumpId(pump.id, sortBy, gte, lte);
   }
 
   async create(document: PumpHistorical): Promise<PumpHistorical> {
