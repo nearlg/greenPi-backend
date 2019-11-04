@@ -2,7 +2,6 @@ import mongoose = require("mongoose");
 import { rejectIfNull, normalizeData, getSearchingObject } from "./helpers";
 import { PumpHistoricalRepository } from "../interface/pump-historical-repository";
 import { PumpHistorical } from "../../entities/pump-historical";
-import { Pump } from "../../entities/pump";
 
 interface PumpHistoricalModel extends PumpHistorical, mongoose.Document {}
 

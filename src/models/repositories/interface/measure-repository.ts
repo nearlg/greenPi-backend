@@ -1,6 +1,5 @@
 import { Repository } from "./repository";
 import { Measure } from "../../entities/measure";
-import { Sensor } from "../../entities/sensor";
 
 export interface MeasureRepository extends Repository<Measure> {
   find(id: string): Promise<Measure>;
