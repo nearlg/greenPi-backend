@@ -4,11 +4,11 @@ import {
   pumpHistoricalRepository,
   pumpRepository,
   environmentRepository
-} from "../../../../repositories";
+} from "../../../../models/repositories";
 import { validateDependencies } from "./helpers";
 import { FilterBy } from "./filter-by";
-import { Pump } from "../../../../models/interface/pump";
-import { PumpMongooseRepository } from "../../../../repositories/mongoose4/pump-repository";
+import { Pump } from "../../../../models/entities/pump";
+import { PumpMongooseRepository } from "../../../../models/repositories/mongoose4/pump-repository";
 // import { socketIOService } from "../../../services/socket-io.service";
 
 async function fetchByPumpId(

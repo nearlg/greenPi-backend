@@ -1,8 +1,8 @@
-import { Environment } from "../models/interface/environment";
+import { Environment } from "../models/entities/environment";
 import * as environmentRegex from "./rules/environment";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { Sensor } from "../models/interface/sensor";
-import { Pump } from "../models/interface/pump";
+import { Sensor } from "../models/entities/sensor";
+import { Pump } from "../models/entities/pump";
 
 export function validateName(name: string) {
   return regexValidation(

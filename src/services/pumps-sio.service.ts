@@ -1,8 +1,8 @@
 import { Subscriber } from "rxjs";
 
-import { PumpHistorical } from "../models/interface/pump-historical";
+import { PumpHistorical } from "../models/entities/pump-historical";
 
-import { pumpHistoricalRepository } from "../repositories";
+import { pumpHistoricalRepository } from "../models/repositories";
 import { SIOService } from "./sio.service";
 
 const enum NamespaceNames {

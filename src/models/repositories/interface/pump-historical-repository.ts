@@ -1,6 +1,6 @@
 import { Repository } from "./repository";
-import { PumpHistorical } from "../../models/interface/pump-historical";
-import { Pump } from "../../models/interface/pump";
+import { PumpHistorical } from "../../entities/pump-historical";
+import { Pump } from "../../entities/pump";
 
 export interface PumpHistoricalRepository extends Repository<PumpHistorical> {
   find(id: string): Promise<PumpHistorical>;

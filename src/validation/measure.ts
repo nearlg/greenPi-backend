@@ -1,7 +1,7 @@
-import { Measure } from "../models/interface/measure";
+import { Measure } from "../models/entities/measure";
 import * as measureRegex from "./rules/measure";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { Sensor } from "../models/interface/sensor";
+import { Sensor } from "../models/entities/sensor";
 import { validateId as sensorIdValidator } from "./sensor";
 
 export async function validateDate(date: Date) {

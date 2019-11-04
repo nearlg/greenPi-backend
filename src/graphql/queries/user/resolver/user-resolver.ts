@@ -1,5 +1,5 @@
 import { Request } from "restify";
-import { User } from "../../../../models/interface/user";
+import { User } from "../../../../models/entities/user";
 import { SignInLocalArgs } from "./args/sign-in-local-args";
 import { EditProfileArgs } from "./args/edit-profile-args";
 import { AddUserArgs } from "./args/add-user-args";

@@ -1,8 +1,8 @@
 import mongoose = require("mongoose");
 import { rejectIfNull, normalizeData, getSearchingObject } from "./helpers";
 import { MeasureRepository } from "../interface/measure-repository";
-import { Measure } from "../../models/interface/measure";
-import { Sensor } from "../../models/interface/sensor";
+import { Measure } from "../../entities/measure";
+import { Sensor } from "../../entities/sensor";
 
 interface MeasureModel extends Measure, mongoose.Document {}
 

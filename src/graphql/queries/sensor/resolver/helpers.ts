@@ -1,6 +1,6 @@
-import { SensorType } from "../../../../models/interface/sensor-type";
-import { Sensor } from "../../../../models/interface/sensor";
-import { sensorTypeRepository } from "../../../../repositories";
+import { SensorType } from "../../../../models/entities/sensor-type";
+import { Sensor } from "../../../../models/entities/sensor";
+import { sensorTypeRepository } from "../../../../models/repositories";
 
 export async function validateDependencies(sensor: Sensor): Promise<Sensor> {
   const sensorTypeId: string =

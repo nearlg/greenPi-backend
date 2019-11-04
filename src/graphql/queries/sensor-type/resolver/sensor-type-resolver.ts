@@ -1,5 +1,5 @@
 import { Request } from "restify";
-import { SensorType } from "../../../../models/interface/sensor-type";
+import { SensorType } from "../../../../models/entities/sensor-type";
 import { AddSensorTypeArgs } from "./args/add-sensor-type-args";
 import { UpdateSensorTypeArgs } from "./args/update-sensor-type-args";
 

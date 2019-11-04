@@ -1,6 +1,6 @@
 import { Repository } from "./repository";
-import { User } from "../../models/interface/user";
-import { RoleName } from "../../models/role-name";
+import { User } from "../../entities/user";
+import { RoleName } from "../../role-name";
 
 export interface UserRepository extends Repository<User> {
   find(id: string): Promise<User>;

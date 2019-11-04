@@ -1,5 +1,5 @@
 import { Request } from "restify";
-import { Sensor } from "../../../../models/interface/sensor";
+import { Sensor } from "../../../../models/entities/sensor";
 import { AddSensorArgs } from "./args/add-sensor-args";
 import { UpdateSensorArgs } from "./args/update-sensor-args";
 

@@ -1,6 +1,6 @@
 import * as sensorValidator from "../../../../validation/sensor";
 import { SensorResolver } from "./sensor-resolver";
-import { sensorRepository } from "../../../../repositories";
+import { sensorRepository } from "../../../../models/repositories";
 import { validateDependencies } from "./helpers";
 
 const resolver: SensorResolver = {

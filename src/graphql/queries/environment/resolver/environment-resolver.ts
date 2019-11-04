@@ -1,5 +1,5 @@
 import { Request } from "restify";
-import { Environment } from "../../../../models/interface/environment";
+import { Environment } from "../../../../models/entities/environment";
 import { AddEnvironmentArgs } from "./args/add-environment-args";
 import { UpdateEnvironmentArgs } from "./args/update-environment-args";
 

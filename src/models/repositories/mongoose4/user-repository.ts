@@ -1,10 +1,10 @@
 import mongoose = require("mongoose");
 import bcrypt = require("bcrypt");
 import { rejectIfNull, normalizeData } from "./helpers";
-import { User } from "../../models/interface/user";
+import { User } from "../../entities/user";
 import { UserRepository } from "../interface/user-repository";
-import { Security } from "../../config";
-import { RoleName } from "../../models/role-name";
+import { Security } from "../../../config";
+import { RoleName } from "../../role-name";
 
 interface UserModel extends User, mongoose.Document {}
 

@@ -1,5 +1,5 @@
-import { userRepository } from "../../../../repositories";
-import { User } from "../../../../models/interface/user";
+import { userRepository } from "../../../../models/repositories";
+import { User } from "../../../../models/entities/user";
 import { RoleName } from "../../../../models/role-name";
 import * as userValidator from "../../../../validation/user";
 

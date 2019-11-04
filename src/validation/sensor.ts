@@ -1,5 +1,5 @@
-import { Sensor } from "../models/interface/sensor";
-import { SensorType } from "../models/interface/sensor-type";
+import { Sensor } from "../models/entities/sensor";
+import { SensorType } from "../models/entities/sensor-type";
 import * as sensorRegex from "./rules/sensor";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { validateId as sensorTypeIdValidator } from "./sensor-type";

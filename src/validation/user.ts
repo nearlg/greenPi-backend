@@ -1,4 +1,4 @@
-import { User } from "../models/interface/user";
+import { User } from "../models/entities/user";
 import * as userRegex from "./rules/user";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { RoleName } from "../models/role-name";

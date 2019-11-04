@@ -1,5 +1,5 @@
 import { Request } from "restify";
-import { Pump } from "../../../../models/interface/pump";
+import { Pump } from "../../../../models/entities/pump";
 import { AddPumpArgs } from "./args/add-pump-args";
 import { UpdatePumpArgs } from "./args/update-pump-args";
 

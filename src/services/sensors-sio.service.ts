@@ -1,8 +1,8 @@
 import { Subscriber } from "rxjs";
 
-import { measureRepository } from "../repositories";
+import { measureRepository } from "../models/repositories";
 import { SIOService } from "./sio.service";
-import { Measure } from "../models/interface/measure";
+import { Measure } from "../models/entities/measure";
 
 const enum NamespaceNames {
   LastMeasures = "/sensors/last-measures"

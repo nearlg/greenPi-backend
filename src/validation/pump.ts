@@ -1,4 +1,4 @@
-import { Pump } from "../models/interface/pump";
+import { Pump } from "../models/entities/pump";
 import * as pumpRegex from "./rules/pump";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
 

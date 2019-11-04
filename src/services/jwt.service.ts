@@ -1,5 +1,5 @@
 import jwt = require("jsonwebtoken");
-import { User } from "../models/interface/user";
+import { User } from "../models/entities/user";
 import { Security } from "../config";
 import { Request } from "restify";
 import { isString } from "util";

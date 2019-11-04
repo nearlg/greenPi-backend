@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import * as pumpHistoricalValidator from '../../src/validation/pump-historical';
-import { PumpHistorical } from '../../src/models/interface/pump-historical';
-import { Pump } from '../../src/models/interface/pump';
+import { PumpHistorical } from '../../src/models/entities/pump-historical';
+import { Pump } from '../../src/models/entities/pump';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

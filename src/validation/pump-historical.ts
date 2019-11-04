@@ -1,5 +1,5 @@
-import { PumpHistorical, State } from "../models/interface/pump-historical";
-import { Pump } from "../models/interface/pump";
+import { PumpHistorical, State } from "../models/entities/pump-historical";
+import { Pump } from "../models/entities/pump";
 import * as pumpHistoricalRegex from "./rules/pump-historical";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
 import { validateId as pumpIdValidator } from "./pump";

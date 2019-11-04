@@ -1,4 +1,4 @@
-import { userRepository } from "../../../../repositories";
+import { userRepository } from "../../../../models/repositories";
 import { UserResolver } from "./user-resolver";
 import { RoleName } from "../../../../models/role-name";
 import * as userValidator from "../../../../validation/user";

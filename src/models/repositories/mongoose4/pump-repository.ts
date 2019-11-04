@@ -1,7 +1,7 @@
 import mongoose = require("mongoose");
 import { rejectIfNull, normalizeData } from "./helpers";
 import { PumpRepository } from "../interface/pump-repository";
-import { Pump } from "../../models/interface/pump";
+import { Pump } from "../../entities/pump";
 
 interface PumpModel extends Pump, mongoose.Document {}
 

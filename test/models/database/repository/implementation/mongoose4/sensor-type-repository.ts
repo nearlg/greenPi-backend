@@ -3,9 +3,9 @@ import chaiAsPromised = require("chai-as-promised");
 import { ObjectID } from "mongodb";
 import mongoose = require("mongoose");
 import * as Config from "../../../../../../src/config";
-import { SensorType } from "../../../../../../src/models/interface/sensor-type";
-import { Unit } from "../../../../../../src/models/interface/unit";
-import { sensorTypeRepository } from "../../../../../../src/repositories";
+import { SensorType } from "../../../../../../src/models/entities/sensor-type";
+import { Unit } from "../../../../../../src/models/entities/unit";
+import { sensorTypeRepository } from "../../../../../../src/models/repositories";
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

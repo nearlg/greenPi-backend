@@ -1,7 +1,7 @@
 import mongoose = require("mongoose");
 import { rejectIfNull, normalizeData } from "./helpers";
 import { SensorRepository } from "../interface/sensor-repository";
-import { Sensor } from "../../models/interface/sensor";
+import { Sensor } from "../../entities/sensor";
 
 interface SensorModel extends Sensor, mongoose.Document {}
 

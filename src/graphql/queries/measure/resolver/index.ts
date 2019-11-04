@@ -5,10 +5,10 @@ import {
   measureRepository,
   sensorRepository,
   environmentRepository
-} from "../../../../repositories";
+} from "../../../../models/repositories";
 // import { socketIOService } from "../../../services/socket-io.service";
 import { FilterBy } from "./filter-by";
-import { Sensor } from "../../../../models/interface/sensor";
+import { Sensor } from "../../../../models/entities/sensor";
 
 async function fetchBySensorId(
   id: string,

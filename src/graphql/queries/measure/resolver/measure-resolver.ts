@@ -1,5 +1,5 @@
 import { Request } from "restify";
-import { Measure } from "../../../../models/interface/measure";
+import { Measure } from "../../../../models/entities/measure";
 import { AddMeasureArgs } from "./args/add-measure-args";
 import { FetchMeasuresArgs } from "./args/fetch-measures-args";
 

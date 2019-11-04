@@ -1,7 +1,7 @@
 import { Request } from "restify";
 import { RoleName } from "../../models/role-name";
-import { userRepository } from "../../repositories";
-import { User } from "../../models/interface/user";
+import { userRepository } from "../../models/repositories";
+import { User } from "../../models/entities/user";
 
 export async function setAuthRequestField(
   req: Request,

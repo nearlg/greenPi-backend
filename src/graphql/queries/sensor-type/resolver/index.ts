@@ -1,6 +1,6 @@
 import * as sensorTypeValidator from "../../../../validation/sensor-type";
 import { SensorTypeResolver } from "./sensor-type-resolver";
-import { sensorTypeRepository } from "../../../../repositories";
+import { sensorTypeRepository } from "../../../../models/repositories";
 
 const resolver: SensorTypeResolver = {
   async addSensorType(args, req) {

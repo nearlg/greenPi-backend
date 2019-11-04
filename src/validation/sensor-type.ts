@@ -1,7 +1,7 @@
-import { SensorType } from "../models/interface/sensor-type";
+import { SensorType } from "../models/entities/sensor-type";
 import * as sensorTypeRegex from "./rules/sensor-type";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { Unit } from "../models/interface/unit";
+import { Unit } from "../models/entities/unit";
 
 export function validateName(name: string) {
   return regexValidation(

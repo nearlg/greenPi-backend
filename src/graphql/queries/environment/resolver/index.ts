@@ -1,6 +1,6 @@
 import * as environmentValidator from "../../../../validation/environment";
 import { EnvironmentResolver } from "./environment-resolver";
-import { environmentRepository } from "../../../../repositories";
+import { environmentRepository } from "../../../../models/repositories";
 
 const resolver: EnvironmentResolver = {
   async addEnvironment(args, req) {

@@ -1,6 +1,6 @@
-import { PumpHistorical } from "../../../../models/interface/pump-historical";
-import { Pump } from "../../../../models/interface/pump";
-import { pumpRepository } from "../../../../repositories";
+import { PumpHistorical } from "../../../../models/entities/pump-historical";
+import { Pump } from "../../../../models/entities/pump";
+import { pumpRepository } from "../../../../models/repositories";
 
 export async function validateDependencies(
   pumpHistorical: PumpHistorical

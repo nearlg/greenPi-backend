@@ -1,5 +1,5 @@
 import { Request } from "restify";
-import { PumpHistorical } from "../../../../models/interface/pump-historical";
+import { PumpHistorical } from "../../../../models/entities/pump-historical";
 import { AddPumpHistoricalArgs } from "./args/add-pump-historical-args";
 import { FetchPumpHistoricalArgs } from "./args/fetch-pump-historical-args";
 
