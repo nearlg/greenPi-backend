@@ -10,6 +10,7 @@ import measureQueries from "./queries/measure";
 import googleQueries from "./queries/google";
 import environmentQueries from "./queries/environment";
 import { GraphqlQuery } from "./helpers/graphql-query";
+import { Server } from "../config";
 
 const graphqlQueries: GraphqlQuery[] = [
   userQueries,
@@ -29,12 +30,14 @@ export function setApiRoute(server: restify.Server, mainPath: string = "") {
   server.post(
     mainPath,
     graphqlHTTP({
-      graphiql: false,
       schema: schemas,
       rootValue: resolvers,
       customFormatErrorFn
     })
   );
+  if (Server.ENVIRONMENT === "production") {
+    return;
+  }
   server.get(
     mainPath,
     graphqlHTTP({
