@@ -1,7 +1,12 @@
 import { Next, Response } from "restify";
 import { HttpMethod } from "../../services/authz.service/http-method";
+import { DataErrorName } from "../../lib/errors/data-error";
 
 class DataHandler {
+  canBeHandled(err: Error) {
+    return err.name in DataErrorName;
+  }
+
   handleJson(res: Response, next: Next, httpMethod: string, data: any) {
     let status = 200;
     if (!data) {

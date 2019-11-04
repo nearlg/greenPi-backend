@@ -1,5 +1,6 @@
-import { Next } from 'restify';
+import { Next } from "restify";
 
 export interface ErrorHandler {
-    handleError(next: Next, err: Error): boolean;
+  canBeHandled(err: Error): boolean;
+  handleError(next: Next, err: Error);
 }

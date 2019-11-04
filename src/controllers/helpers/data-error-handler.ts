@@ -1,18 +1,21 @@
 import { ErrorHandler } from "./interface/error-handler";
 import { Next } from "restify";
 import { NotFoundError, BadRequestError } from "restify-errors";
+import { DataErrorName } from "../../lib/errors/data-error";
 
 class DataErrorHandler implements ErrorHandler {
-  handleError(next: Next, err: Error): boolean {
+  canBeHandled(err: Error) {
+    return err.name in DataErrorName;
+  }
+
+  handleError(next: Next, err: Error) {
     switch (err.name) {
-      case "DataNotFoundError":
+      case DataErrorName.DataNotFoundError:
         this.handleDataNotFoundError(next, err);
-        return true;
-      case "DataValidationError":
+        break;
+      case DataErrorName.DataValidationError:
         this.handleValidationError(next, err);
-        return true;
     }
-    return false;
   }
 
   private handleValidationError(next: Next, err: Error) {
