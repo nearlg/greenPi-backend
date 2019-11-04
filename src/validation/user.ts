@@ -1,7 +1,7 @@
 import { User } from "../models/interface/user";
 import * as userRegex from "./rules/user";
 import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { RoleName } from "../services/authz.service/role-name";
+import { RoleName } from "../models/role-name";
 
 export async function validateId(id: string) {
   if (id && userRegex.IdRegex.test(id)) {

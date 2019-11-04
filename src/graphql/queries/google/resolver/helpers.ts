@@ -1,6 +1,6 @@
 import { userRepository } from "../../../../repositories";
 import { User } from "../../../../models/interface/user";
-import { RoleName } from "../../../../services/authz.service/role-name";
+import { RoleName } from "../../../../models/role-name";
 import * as userValidator from "../../../../validation/user";
 
 export async function signInUpGoogle(payload: any) {

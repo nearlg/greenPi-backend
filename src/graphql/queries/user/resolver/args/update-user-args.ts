@@ -1,4 +1,4 @@
-import { RoleName } from "../../../../../services/authz.service/role-name";
+import { RoleName } from "../../../../../models/role-name";
 
 export interface UpdateUserArgs {
   id: string;

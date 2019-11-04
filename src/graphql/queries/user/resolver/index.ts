@@ -1,6 +1,6 @@
 import { userRepository } from "../../../../repositories";
 import { UserResolver } from "./user-resolver";
-import { RoleName } from "../../../../services/authz.service/role-name";
+import { RoleName } from "../../../../models/role-name";
 import * as userValidator from "../../../../validation/user";
 import {
   createToken,

@@ -4,7 +4,7 @@ import { handleJsonData, handleErrors } from "./helpers";
 import * as userValidator from "../validation/user";
 import { userRepository } from "../repositories";
 import { createToken, verifyTokenFromRequest } from "../services/jwt.service";
-import { RoleName } from "../services/authz.service/role-name";
+import { RoleName } from "../models/role-name";
 import { User } from "../models/interface/user";
 
 async function checkCredentials(password: string, userPassword: string) {

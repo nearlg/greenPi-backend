@@ -4,7 +4,7 @@ import { rejectIfNull, normalizeData } from "./helpers";
 import { User } from "../../models/interface/user";
 import { UserRepository } from "../interface/user-repository";
 import { Security } from "../../config";
-import { RoleName } from "../../services/authz.service/role-name";
+import { RoleName } from "../../models/role-name";
 
 interface UserModel extends User, mongoose.Document {}
 
