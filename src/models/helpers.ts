@@ -12,18 +12,6 @@ function isAuthorized(
   return authzFound;
 }
 
-// export function rejectIfNotAuthorized(
-//   rules: Map<string, Set<RoleName>>,
-//   resource: string,
-//   roleName: RoleName
-// ) {
-//   if (!isAuthorized(rules, resource, roleName)) {
-//     const err = new Error("Query not authorized");
-//     err.name = AuthErrorName.NotAuthorizedError;
-//     throw err;
-//   }
-// }
-
 export function rejectIfNotAuthorized(model: Model, resource: string) {
   const rules = model.rules;
   const roleName = model.authData.roleName;
