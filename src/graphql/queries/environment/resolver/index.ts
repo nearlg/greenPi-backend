@@ -1,35 +1,25 @@
-import * as environmentValidator from "../../../../validation/environment";
 import { EnvironmentResolver } from "./environment-resolver";
-import { environmentRepository } from "../../../../models/repositories";
 
 const resolver: EnvironmentResolver = {
-  async addEnvironment(args, req) {
-    const doc = await environmentValidator.validate(
-      args.environmentData,
-      false
-    );
-    const environment = await environmentRepository.create(doc);
-    return environment;
+  async addEnvironment(args, context) {
+    const doc = await context.models.environment.add(args.environmentData);
+    return doc;
   },
-  async deleteEnvironment(args, req) {
-    const environment = await environmentRepository.remove(args.id);
-    return environment;
+  async deleteEnvironment(args, context) {
+    const doc = await context.models.environment.delete(args.id);
+    return doc;
   },
-  async fetchEnvironments(args, req) {
-    const environments = await environmentRepository.findAll();
-    return environments;
+  async fetchEnvironments(args, context) {
+    const doc = await context.models.environment.fetchAll();
+    return doc;
   },
-  async getEnvironment(args, req) {
-    const environment = await environmentRepository.find(args.id);
-    return environment;
+  async getEnvironment(args, context) {
+    const doc = await context.models.environment.get(args.id);
+    return doc;
   },
-  async updateEnvironment(args, req) {
-    const doc = await environmentValidator.validate(
-      args.environmentData,
-      false
-    );
-    const environment = await environmentRepository.update(doc);
-    return environment;
+  async updateEnvironment(args, context) {
+    const doc = await context.models.environment.update(args.environmentData);
+    return doc;
   }
 };
 

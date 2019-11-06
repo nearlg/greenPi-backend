@@ -7,11 +7,15 @@ type Measure {
 }
 
 input MeasureFilter {
-  by: String!
-  id: ID!
   gte: String
   lte: String
   sortBy: String
+}
+
+input MeasureArgs {
+  by: String!
+  id: ID!
+  filter: MeasureFilter
 }
 
 input AddMeasureData {
@@ -21,7 +25,7 @@ input AddMeasureData {
 }
 `;
 const query = `
-fetchMeasure(filter: MeasureFilter): [Measure!]!
+fetchMeasure(args: MeasureArgs): [Measure!]!
 getMeasure(id: ID!): Measure!
 `;
 const mutation = `

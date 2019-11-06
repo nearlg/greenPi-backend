@@ -11,6 +11,8 @@ import googleQueries from "./queries/google";
 import environmentQueries from "./queries/environment";
 import { GraphqlQuery } from "./helpers/graphql-query";
 import { Server } from "../config";
+import { getModels } from "../models";
+import { getAuthenticationField } from "../services/auth.service";
 
 const graphqlQueries: GraphqlQuery[] = [
   userQueries,
@@ -29,10 +31,17 @@ const resolvers = extractResolvers(graphqlQueries);
 export function setApiRoute(server: restify.Server, mainPath: string = "") {
   server.post(
     mainPath,
-    graphqlHTTP({
-      schema: schemas,
-      rootValue: resolvers,
-      customFormatErrorFn
+    graphqlHTTP(req => {
+      const authData = getAuthenticationField(<restify.Request>req);
+      return {
+        schema: schemas,
+        rootValue: resolvers,
+        customFormatErrorFn,
+        context: {
+          req,
+          models: getModels(authData)
+        }
+      };
     })
   );
   if (Server.ENVIRONMENT === "production") {

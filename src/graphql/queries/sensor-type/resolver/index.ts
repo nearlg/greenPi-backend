@@ -1,47 +1,25 @@
-import * as sensorTypeValidator from "../../../../validation/sensor-type";
 import { SensorTypeResolver } from "./sensor-type-resolver";
-import { sensorTypeRepository } from "../../../../models/repositories";
 
 const resolver: SensorTypeResolver = {
-  async addSensorType(args, req) {
-    const unit = {
-      name: args.sensorTypeData.unit.name
-        ? args.sensorTypeData.unit.name
-        : null,
-      description: args.sensorTypeData.unit.description
-        ? args.sensorTypeData.unit.description
-        : null
-    };
-    const sensorTypeData = { ...args.sensorTypeData, unit };
-    const doc = await sensorTypeValidator.validate(sensorTypeData, false);
-    const sensorType = await sensorTypeRepository.create(doc);
-    return sensorType;
+  async addSensorType(args, context) {
+    const doc = context.models.sensorType.add(args.sensorTypeData);
+    return doc;
   },
-  async deleteSensorType(args, req) {
-    const sensorType = await sensorTypeRepository.remove(args.id);
-    return sensorType;
+  async deleteSensorType(args, context) {
+    const doc = await context.models.sensorType.delete(args.id);
+    return doc;
   },
-  async fetchSensorTypes(args, req) {
-    const sensorTypes = await sensorTypeRepository.findAll();
-    return sensorTypes;
+  async fetchSensorTypes(args, context) {
+    const docs = await context.models.sensorType.fetchAll();
+    return docs;
   },
-  async getSensorType(args, req) {
-    const sensorType = await sensorTypeRepository.find(args.id);
-    return sensorType;
+  async getSensorType(args, context) {
+    const doc = await context.models.sensorType.get(args.id);
+    return doc;
   },
-  async updateSensorType(args, req) {
-    const unit = {
-      name: args.sensorTypeData.unit.name
-        ? args.sensorTypeData.unit.name
-        : null,
-      description: args.sensorTypeData.unit.description
-        ? args.sensorTypeData.unit.description
-        : null
-    };
-    const sensorTypeData = { ...args.sensorTypeData, unit };
-    const doc = await sensorTypeValidator.validate(sensorTypeData);
-    const sensorType = await sensorTypeRepository.update(doc);
-    return sensorType;
+  async updateSensorType(args, context) {
+    const doc = await context.models.sensorType.update(args.sensorTypeData);
+    return doc;
   }
 };
 

@@ -1,11 +1,8 @@
 import { FilterBy } from "../filter-by";
+import { FetchFilter } from "../../../../../models/pump-historical-model";
 
 export interface FetchPumpHistoricalArgs {
-  filter?: {
-    by: FilterBy;
-    id: string;
-    gte?: Date;
-    lte?: Date;
-    sortBy?: string;
-  };
+  by: FilterBy;
+  id: string;
+  filter?: FetchFilter;
 }

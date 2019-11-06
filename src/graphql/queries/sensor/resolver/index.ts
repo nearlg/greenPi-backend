@@ -1,32 +1,25 @@
-import * as sensorValidator from "../../../../validation/sensor";
 import { SensorResolver } from "./sensor-resolver";
-import { sensorRepository } from "../../../../models/repositories";
-import { validateDependencies } from "./helpers";
 
 const resolver: SensorResolver = {
-  async addSensor(args, req) {
-    const doc = await sensorValidator.validate(args.sensorData, false);
-    await validateDependencies(doc);
-    const sensor = await sensorRepository.create(doc);
-    return sensor;
+  async addSensor(args, context) {
+    const doc = await context.models.sensor.add(args.sensorData);
+    return doc;
   },
-  async deleteSensor(args, req) {
-    const sensor = sensorRepository.remove(args.id);
-    return sensor;
+  async deleteSensor(args, context) {
+    const doc = context.models.sensor.delete(args.id);
+    return doc;
   },
-  async fetchSensors(args, req) {
-    const sensors = await sensorRepository.findAll();
-    return sensors;
+  async fetchSensors(args, context) {
+    const doc = await context.models.sensor.fetchAll();
+    return doc;
   },
-  async getSensor(args, req) {
-    const sensor = await sensorRepository.find(args.id);
-    return sensor;
+  async getSensor(args, context) {
+    const doc = await context.models.sensor.get(args.id);
+    return doc;
   },
-  async updateSensor(args, req) {
-    const doc = await sensorValidator.validate(args.sensorData);
-    await validateDependencies(doc);
-    const sensor = await sensorRepository.update(doc);
-    return sensor;
+  async updateSensor(args, context) {
+    const doc = await context.models.sensor.update(args.sensorData);
+    return doc;
   }
 };
 

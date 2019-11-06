@@ -1,18 +1,24 @@
-import { Request } from "restify";
 import { SensorType } from "../../../../models/entities/sensor-type";
 import { AddSensorTypeArgs } from "./args/add-sensor-type-args";
 import { UpdateSensorTypeArgs } from "./args/update-sensor-type-args";
+import { GraphqlContext } from "../../../graphql-context";
 
 export interface SensorTypeResolver {
   addSensorType(
     args: { sensorTypeData: AddSensorTypeArgs },
-    req: Request
+    context: GraphqlContext
   ): Promise<SensorType>;
   updateSensorType(
     args: { sensorTypeData: UpdateSensorTypeArgs },
-    req: Request
+    context: GraphqlContext
   ): Promise<SensorType>;
-  deleteSensorType(args: { id: string }, req: Request): Promise<SensorType>;
-  fetchSensorTypes(args: {}, req: Request): Promise<SensorType[]>;
-  getSensorType(args: { id: string }, req: Request): Promise<SensorType>;
+  deleteSensorType(
+    args: { id: string },
+    context: GraphqlContext
+  ): Promise<SensorType>;
+  fetchSensorTypes(args: {}, context: GraphqlContext): Promise<SensorType[]>;
+  getSensorType(
+    args: { id: string },
+    context: GraphqlContext
+  ): Promise<SensorType>;
 }

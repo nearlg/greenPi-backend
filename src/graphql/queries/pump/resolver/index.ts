@@ -1,37 +1,25 @@
-import { Request } from "restify";
-import * as pumpValidator from "../../../../validation/pump";
 import { PumpResolver } from "./pump-resolver";
-import { pumpRepository } from "../../../../models/repositories";
-import { rejectIfNotAuthorized } from "../../../helpers";
-import rules from "../authoriation-rules";
 
 const resolver: PumpResolver = {
-  async addPump(args, req) {
-    await rejectIfNotAuthorized(req, rules, "addPump");
-    const pump = await pumpValidator.validate(args.pumpData, false);
-    await pumpRepository.create(pump);
-    return pump;
+  async addPump(args, context) {
+    const doc = await context.models.pump.add(args.pumpData);
+    return doc;
   },
-  async deletePump(args, req) {
-    await rejectIfNotAuthorized(req, rules, "deletePump");
-    const pump = await pumpRepository.remove(args.id);
-    return pump;
+  async deletePump(args, context) {
+    const doc = await context.models.pump.delete(args.id);
+    return doc;
   },
-  async fetchPumps(args, req) {
-    await rejectIfNotAuthorized(req, rules, "fetchPumps");
-    const pumps = await pumpRepository.findAll();
-    return pumps;
+  async fetchPumps(args, context) {
+    const docs = context.models.pump.fetchAll();
+    return docs;
   },
-  async getPump(args, req) {
-    await rejectIfNotAuthorized(req, rules, "getPump");
-    const pump = await pumpRepository.find(req.params.id);
-    return pump;
+  async getPump(args, context) {
+    const doc = await context.models.pump.get(args.id);
+    return doc;
   },
-  async updatePump(args, req) {
-    await rejectIfNotAuthorized(req, rules, "updatePump");
-    const pump = await pumpValidator.validate(args.pumpData);
-    await pumpRepository.update(pump);
-    return pump;
+  async updatePump(args, context) {
+    const doc = context.models.pump.update(args.pumpData);
+    return doc;
   }
 };
 

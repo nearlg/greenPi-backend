@@ -1,6 +1,6 @@
-import { Request } from "restify";
+import { GraphqlContext } from "../../../graphql-context";
 
 export interface GoogleResolver {
-  authUrl(args: {}, req: Request): Promise<string>;
-  signInGoogle(args: { code: any }, req: Request): Promise<string>;
+  authUrl(args: {}, context: GraphqlContext): Promise<string>;
+  signInGoogle(args: { code: any }, context: GraphqlContext): Promise<string>;
 }

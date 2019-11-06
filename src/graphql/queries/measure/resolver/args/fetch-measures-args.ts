@@ -1,11 +1,8 @@
 import { FilterBy } from "../filter-by";
+import { FetchFilter } from "../../../../../models/measure-model";
 
 export interface FetchMeasuresArgs {
-  filter?: {
-    by: FilterBy;
-    id: string;
-    gte?: Date;
-    lte?: Date;
-    sortBy?: string;
-  };
+  by: FilterBy;
+  id: string;
+  filter?: FetchFilter;
 }

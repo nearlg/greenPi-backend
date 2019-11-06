@@ -1,88 +1,31 @@
-import * as measureValidator from "../../../../validation/measure";
 import { MeasureResolver } from "./measure-resolver";
-import { validateDependencies } from "./helpers";
-import {
-  measureRepository,
-  sensorRepository,
-  environmentRepository
-} from "../../../../models/repositories";
-// import { socketIOService } from "../../../services/socket-io.service";
 import { FilterBy } from "./filter-by";
-import { Sensor } from "../../../../models/entities/sensor";
-
-async function fetchBySensorId(
-  id: string,
-  lte: Date = null,
-  gte: Date = null,
-  sortBy?: string
-) {
-  await sensorRepository.find(id);
-  const measures = await measureRepository.findAllBySensorId(
-    id,
-    sortBy,
-    gte,
-    lte
-  );
-  return measures;
-}
-
-async function fetchByEnvironmentId(
-  id: string,
-  lte: Date = null,
-  gte: Date = null,
-  sortBy?: string
-) {
-  const environment = await environmentRepository.find(id);
-  const sensorIds: string[] = (<Array<Sensor>>environment.sensors).map(
-    s => s.id
-  );
-  const measures = await measureRepository.findAllBySensorIds(
-    sensorIds,
-    sortBy,
-    gte,
-    lte
-  );
-  return measures;
-}
+// import { socketIOService } from "../../../services/socket-io.service";
 
 const resolver: MeasureResolver = {
-  async addMeasure(args, req) {
-    const date = args.measureData.date ? args.measureData.date : new Date();
-    const measureData = { ...args.measureData, date };
-    const doc = await measureValidator.validate(measureData, false);
-    await validateDependencies(doc);
-    const measure = await measureRepository.create(doc);
-    return measure;
+  async addMeasure(args, context) {
+    const date = args.measureData.date || new Date();
+    const data = { ...args.measureData, date };
+    const doc = await context.models.measure.add(data);
+    return doc;
     // TODO: implement socketIO
     // await socketIOService.sensorsSIOService.emitLastMeasure(measure);
   },
-  async deleteMeasure(args, req) {
-    const measure = await measureRepository.remove(args.id);
-    return measure;
+  async deleteMeasure(args, context) {
+    const doc = await context.models.measure.delete(args.id);
+    return doc;
   },
-  async fetchMeasures(args, req) {
-    const filter = args.filter;
-    if (!filter || !(filter.by in FilterBy)) {
-      const measures = measureRepository.findAll();
-      return measures;
+  async fetchMeasures(args, context) {
+    if (args.by === FilterBy.SensorId) {
+      return context.models.measure.FetchBySensorId(args.id, args.filter);
     }
-
-    const id = args.filter.id;
-    const lte = filter.lte ? new Date(filter.lte) : null;
-    const gte = filter.gte ? new Date(filter.gte) : null;
-    const sortBy = args.filter.sortBy;
-
-    if (filter.by === FilterBy.SensorId) {
-      return fetchBySensorId(id, lte, gte, sortBy);
-    }
-
-    if (filter.by === FilterBy.EnvironmentId) {
-      return fetchByEnvironmentId(id, lte, gte, sortBy);
+    if (args.by === FilterBy.EnvironmentId) {
+      return context.models.measure.FetchByEnvironmentId(args.id, args.filter);
     }
   },
-  async getMeasure(args, req) {
-    const measure = await measureRepository.find(args.id);
-    return measure;
+  async getMeasure(args, context) {
+    const doc = await context.models.measure.get(args.id);
+    return doc;
   }
 };
 

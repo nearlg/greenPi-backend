@@ -4,10 +4,6 @@ import { GraphqlCustomError } from "./graphql-custom-error";
 import { GraphqlCustomErrorName } from "./graphql-custom-error-name";
 import buildGraphqlSchema from "./build-graphql-schema";
 import { GraphqlQuery } from "./graphql-query";
-import { GraphqlAuthz } from "./graphql-authz";
-import { AuthErrorName } from "../../lib/errors/auth-error/auth-error-name";
-import { Request } from "restify";
-import { getAuthenticationField } from "../../services/auth.service";
 
 export function customFormatErrorFn(err: GraphQLError) {
   if (!err.originalError) {
@@ -38,19 +34,4 @@ export function extractResolvers(graphQueries: GraphqlQuery[]) {
     .map(q => q.resolver)
     .reduce((r1, r2) => ({ ...r1, ...r2 }));
   return resolvers;
-}
-
-export async function rejectIfNotAuthorized(
-  req: Request,
-  authz: GraphqlAuthz,
-  functionName: string
-) {
-  // Get the role name depending on the authorization request field
-  const authentication = getAuthenticationField(req);
-  const roleName = authentication.roleName;
-  if (!authz.isAuthorized(functionName, roleName)) {
-    const err = new Error("Query not authorized");
-    err.name = AuthErrorName.NotAuthorizedError;
-    throw err;
-  }
 }

@@ -1,7 +1,7 @@
 import { Request, Next, Response } from "restify";
 import { setAuthRequestField } from "../services/auth.service";
 import { verifyTokenFromRequest } from "../services/jwt.service";
-import { handleErrors } from "../services/restify-error-handler";
+import { handleErrors } from "../services/restify-error-handler.service";
 
 export async function requestAuth(req: Request, res: Response, next: Next) {
   try {
