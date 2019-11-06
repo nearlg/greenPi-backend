@@ -1,3 +1,5 @@
+import { DataErrorName } from "../../../lib/errors/data-error";
+
 function toObjectDocument(document: any) {
   return document.toObject();
 }
@@ -42,7 +44,7 @@ export function normalizeData(data: any) {
 export function rejectIfNull(errorMsg: string, document: any) {
   if (!document) {
     const err = new Error(errorMsg);
-    err.name = "DataNotFoundError";
+    err.name = DataErrorName.DataNotFoundError;
     throw err;
   }
 }

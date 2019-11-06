@@ -1,3 +1,5 @@
+import { DataErrorName } from "../lib/errors/data-error";
+
 export async function regexValidation<T>(
   param: T,
   regex: RegExp,
@@ -30,6 +32,6 @@ export async function rejectIfNull(document: any, errorMsg: string) {
  */
 export function createError(msg: string): Error {
   const err: Error = new Error(msg);
-  err.name = "DataValidationError";
+  err.name = DataErrorName.DataValidationError;
   return err;
 }
