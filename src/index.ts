@@ -7,10 +7,20 @@ import { socketIOService } from "./services/sio/socket-io.service";
 import { setApiRoute } from "./graphql";
 import { requestAuth } from "./plugins/authentication";
 
-// Configure database
-mongoose.Promise = Promise;
+// // Configure database
+// mongoose.Promise = Promise;
+// // const options    = {promiseLibrary: Promise};
+// mongoose.connect(Config.Database.URI, { useMongoClient: true });
+
+// mongoose.Promise = Promise;
 // const options    = {promiseLibrary: Promise};
-mongoose.connect(Config.Database.URI, { useMongoClient: true });
+const mongooseOptions = <mongoose.ConnectionOptions>{
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  promiseLibrary: Promise
+};
+mongoose.connect(Config.Database.URI, mongooseOptions);
 
 // Create server
 const server = restify.createServer({

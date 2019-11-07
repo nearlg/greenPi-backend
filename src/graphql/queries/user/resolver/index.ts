@@ -39,7 +39,7 @@ const resolver: UserResolver = {
   async signInLocal(args, context) {
     const email: string = args.credentialsData.email;
     const password: string = args.credentialsData.password;
-    const token = context.models.user.signInLocal(email, password);
+    const token = await context.models.user.signInLocal(email, password);
     return token;
   },
   async updateUser(args, context) {

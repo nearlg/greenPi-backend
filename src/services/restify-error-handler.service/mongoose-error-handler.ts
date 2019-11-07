@@ -1,9 +1,11 @@
 import { ErrorHandler } from "./interface/error-handler";
 import { MongoError } from "mongodb";
-import { ValidationError, CastError } from "mongoose";
+import { Error as MongooseError, CastError } from "mongoose";
 import { Next } from "restify";
 import { BadRequestError, InvalidArgumentError } from "restify-errors";
 import { MongooseErrorName } from "../../lib/errors/mongoose-error";
+
+type ValidationError = MongooseError.ValidationError;
 
 class MongooseErrorHandler implements ErrorHandler {
   canBeHandled(err: Error) {

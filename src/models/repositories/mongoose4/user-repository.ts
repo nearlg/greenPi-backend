@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
 
 // Encrypt user's password before saving it to the database
 userSchema.pre("save", async function(next) {
-  const user: UserModel = this;
+  const user: UserModel = <UserModel>this;
   if (!user.password || !user.isModified("password")) {
     return next();
   }
@@ -90,7 +90,7 @@ export class UserMongooseRepository implements UserRepository {
   }
 
   async findByEmail(email: string): Promise<User> {
-    const doc = await UserModel.findOne({ email: email }).exec();
+    const doc = await UserModel.findOne({ email }).exec();
     rejectIfNull("User not found", doc);
     return normalizeData(doc);
   }
