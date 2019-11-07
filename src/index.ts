@@ -3,7 +3,7 @@ import * as restify from "restify";
 
 import mongoose = require("mongoose");
 
-import { socketIOService } from "./services/socket-io.service";
+import { socketIOService } from "./services/sio/socket-io.service";
 import { setApiRoute } from "./graphql";
 import { requestAuth } from "./plugins/authentication";
 
