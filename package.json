@@ -30,7 +30,7 @@
     "google-auth-library": "^2.0.1",
     "graphql": "^14.5.8",
     "jsonwebtoken": "^8.4.0",
-    "mongoose": "^4.13.17",
+    "mongoose": "^5.7.5",
     "restify": "^7.2.1",
     "restify-errors": "^6.1.1",
     "rxjs": "^6.3.3",
