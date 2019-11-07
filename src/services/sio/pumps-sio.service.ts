@@ -1,9 +1,7 @@
 import { Subscriber } from "rxjs";
-
 import { PumpHistorical } from "../../models/entities/pump-historical";
-
 import { pumpHistoricalRepository } from "../../models/repositories";
-import { SIOService } from "../sio.service";
+import { SIOService } from "./sio.service";
 
 const enum NamespaceNames {
   LastPumpHistoricals = "/pumps/last-historicals"

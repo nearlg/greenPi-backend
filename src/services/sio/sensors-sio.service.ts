@@ -1,7 +1,6 @@
 import { Subscriber } from "rxjs";
-
 import { measureRepository } from "../../models/repositories";
-import { SIOService } from "../sio.service";
+import { SIOService } from "./sio.service";
 import { Measure } from "../../models/entities/measure";
 
 const enum NamespaceNames {

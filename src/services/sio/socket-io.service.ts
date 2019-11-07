@@ -1,7 +1,7 @@
 import SocketIO = require("socket.io");
 import { Server } from "http";
-import { PumpsSIOService } from "../pumps-sio.service";
-import { SensorsSIOService } from "../sensors-sio.service";
+import { PumpsSIOService } from "./pumps-sio.service";
+import { SensorsSIOService } from "./sensors-sio.service";
 
 class SocketIOService {
   pumpsSIOService: PumpsSIOService;
