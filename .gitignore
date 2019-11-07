@@ -3,3 +3,4 @@ dist
 *.js
 *.js.map
 nodemon.json
+.vscode/launch.json
