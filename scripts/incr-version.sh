@@ -8,8 +8,8 @@ fi
 
 YARN_CONF=$(yarn config get version-git-tag)
 yarn config set version-git-tag false
-if [[ "$HEAD_BRANCH" =~ feature\/major\/.+ ]]; then yarn version --major;
-elif [[ "$HEAD_BRANCH" =~ feature\/minor\/.+ ]]; then yarn version --minor;
+if [[ "$HEAD_BRANCH" =~ feature(s)?\/major\/.+ ]]; then yarn version --major;
+elif [[ "$HEAD_BRANCH" =~ features(s)?\/minor\/.+ ]]; then yarn version --minor;
 else yarn version --patch; fi
 yarn config set version-git-tag $YARN_CONF
 
