@@ -14,7 +14,7 @@ function normalizeDocument(document: any) {
   }
   // Normalize fields
   if (document._id) {
-    document.id = document._id;
+    document.id = document._id + "";
     delete document._id;
   }
   // Check all the fields
