@@ -9,10 +9,7 @@ import { GraphqlContext } from "../../../graphql-context";
 
 export interface UserResolver extends Resolver {
   // User profile
-  signInLocal(
-    args: { credentialsData: SignInLocalArgs },
-    context: GraphqlContext
-  ): Promise<string>;
+  signInLocal(args: SignInLocalArgs, context: GraphqlContext): Promise<string>;
   signUp(
     args: { userData: SignUpArgs },
     context: GraphqlContext

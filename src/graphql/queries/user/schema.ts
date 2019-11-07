@@ -1,9 +1,4 @@
 const body = `
-input SignInLocalData {
-  email: String!
-  password: String!
-}
-
 input SignUpData {
   name: String!
   email: String!
@@ -37,7 +32,7 @@ input UpdateUserData {
 }
 `;
 const query = `
-signInLocal(credentialsData: SignInLocalData!): String!
+signInLocal(email: String!, password: String!): String!
 getProfile: User!
 fetchUsers: [User!]
 getUser: User!

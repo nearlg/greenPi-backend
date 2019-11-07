@@ -12,12 +12,6 @@ input MeasureFilter {
   sortBy: String
 }
 
-input MeasureArgs {
-  by: String!
-  id: ID!
-  filter: MeasureFilter
-}
-
 input AddMeasureData {
   date: String!
   sensor: ID!
@@ -25,7 +19,7 @@ input AddMeasureData {
 }
 `;
 const query = `
-fetchMeasure(args: MeasureArgs): [Measure!]!
+fetchMeasures(by: String!, id: ID!, filter: MeasureFilter): [Measure!]!
 getMeasure(id: ID!): Measure!
 `;
 const mutation = `

@@ -12,12 +12,6 @@ input PumpHistoricalFilter {
   sortBy: String
 }
 
-input PumpHistoricalArgs {
-  by: String!
-  id: ID!
-  filter: PumpHistoricalFilter
-}
-
 input AddPumpHistoricalData {
   date: String!
   pump: ID!
@@ -25,7 +19,7 @@ input AddPumpHistoricalData {
 }
 `;
 const query = `
-fetchPumpHistorical(args: PumpHistoricalArgs): [PumpHistorical!]!
+fetchPumpHistoricals(by: String!, id: ID!, filter: PumpHistoricalFilter): [PumpHistorical!]!
 getPumpHistorical(id: ID!): PumpHistorical!
 `;
 const mutation = `
