@@ -6,6 +6,7 @@ import mongoose = require("mongoose");
 import { socketIOService } from "./services/sio/socket-io.service";
 import { setApiRoute } from "./graphql";
 import { requestAuth } from "./plugins/authentication";
+import { allowCrossOrigin } from "./plugins/allow-cross-origin";
 
 // // Configure database
 // mongoose.Promise = Promise;
@@ -36,6 +37,15 @@ server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 server.use(requestAuth);
+if(Config.Server.ALLOW_CROSS_ORIGIN) {
+  server.use(allowCrossOrigin);
+}
+
+// Allow OPTION requests
+server.opts('/graphql', (req, res, next) => {
+  res.send(200);
+  return next();
+});
 
 // GraphQL
 setApiRoute(server, "/graphql");
