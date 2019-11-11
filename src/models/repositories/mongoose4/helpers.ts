@@ -1,4 +1,6 @@
+import { DocumentQuery, Document, Query } from "mongoose";
 import { DataErrorName } from "../../../lib/errors/data-error";
+import { PaginatedData } from "../interface/paginated-data";
 
 function toObjectDocument(document: any) {
   return document.toObject();
@@ -36,7 +38,7 @@ function normalizeFieldNames(document: any) {
     : normalizeDocument(document);
 }
 
-export function normalizeData(data: any) {
+export function normalizeData<T>(data: T): T  {
   data = toObject(data);
   return normalizeFieldNames(data);
 }
@@ -61,4 +63,29 @@ export function getSearchingObject(gte?: Date, lte?: Date): Object {
     }
   }
   return searchingObject;
+}
+
+export async function paginateQuery<T extends Document>(
+  fetchQuery: DocumentQuery<T[], T>,
+  countQuery: Query<number>,
+  limit: number,
+  page: number = 1
+) {
+    const pageNumber = !page || page < 1 ? 1 : page;
+    const skip = (pageNumber - 1) * limit;
+    fetchQuery = fetchQuery.skip(skip);
+    if(limit) {
+      fetchQuery = fetchQuery.limit(limit);
+    }
+    const total = await countQuery.exec();
+    const pages = Math.ceil(total/limit);
+    const docs = await fetchQuery.exec();
+    const paginatedData: PaginatedData<T> = {
+      data: normalizeData(docs),
+      limit,
+      page,
+      total,
+      pages
+    };
+    return paginatedData;
 }
