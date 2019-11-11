@@ -29,6 +29,11 @@ const schemas = buildSchemas(graphqlQueries);
 const resolvers = extractResolvers(graphqlQueries);
 
 export function setApiRoute(server: restify.Server, mainPath: string = "") {
+  // Allow OPTION requests
+  server.opts(mainPath, (req, res, next) => {
+    res.send(200);
+    return next();
+  });
   server.post(
     mainPath,
     graphqlHTTP(req => {

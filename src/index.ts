@@ -41,12 +41,6 @@ if(Config.Server.ALLOW_CROSS_ORIGIN) {
   server.use(allowCrossOrigin);
 }
 
-// Allow OPTION requests
-server.opts('/graphql', (req, res, next) => {
-  res.send(200);
-  return next();
-});
-
 // GraphQL
 setApiRoute(server, "/graphql");
 
