@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-import { rejectIfNull, normalizeData, getSearchingObject } from "./helpers";
+import { rejectIfNull, normalizeData, getSearchingObject, paginateQuery } from "./helpers";
 import { PumpHistoricalRepository } from "../interface/pump-historical-repository";
 import { PumpHistorical } from "../../entities/pump-historical";
 
@@ -30,8 +30,8 @@ const PumpHistoricalModel = mongoose.model<PumpHistoricalModel>(
 export class PumpHistoricalMongooseRepository
   implements PumpHistoricalRepository {
   async findLastsByPumpIds(pumpIds: string[]): Promise<PumpHistoricalModel[]> {
-    // If it can not find a measure,
-    // it will be undefined in the 'measures' array
+    // If it can not find a pumpHistorical,
+    // it will be undefined in the 'pumpHistoricals' array
     const pumpHistoricalsPromises = pumpIds.map(pumpId =>
       this.findLastByPumpId(pumpId).catch(error => undefined)
     );
@@ -46,36 +46,50 @@ export class PumpHistoricalMongooseRepository
       .sort({ date: -1 })
       .limit(1)
       .populate("pump");
-    rejectIfNull("Measure not found", doc);
+    rejectIfNull("Pump not found", doc);
     return normalizeData(doc[0]);
   }
 
   async findAllByPumpIds(
     pumpIds: string[],
+    limit: number,
+    page: number = 1,
     sortBy?: string,
     gte?: Date,
     lte?: Date
-  ): Promise<PumpHistorical[]> {
+  ) {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["pump"] = { $in: pumpIds };
-    const doc = await PumpHistoricalModel.find(searchingObject)
+    const query = PumpHistoricalModel
+      .find(searchingObject)
       .populate("pump")
       .sort(sortBy);
-    return normalizeData(doc);
+    const countQuery = PumpHistoricalModel
+      .find(searchingObject)
+      .estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async findAllByPumpId(
     pumpId: string,
+    limit: number,
+    page: number = 1,
     sortBy: string = "date",
     gte?: Date,
     lte?: Date
-  ): Promise<null | PumpHistorical[]> {
+  ) {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["pump"] = pumpId;
-    const doc = await PumpHistoricalModel.find(searchingObject)
+    const query = PumpHistoricalModel
+      .find(searchingObject)
       .populate("pump")
       .sort(sortBy);
-    return normalizeData(doc);
+    const countQuery = PumpHistoricalModel
+      .find(searchingObject)
+      .estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async create(document: PumpHistorical): Promise<PumpHistorical> {
@@ -107,11 +121,12 @@ export class PumpHistoricalMongooseRepository
     return normalizeData(doc);
   }
 
-  async findAll(): Promise<PumpHistorical[]> {
-    const docs = await PumpHistoricalModel.find()
-      .populate("pump")
-      .exec();
-    return normalizeData(docs);
+  async findAll(limit: number, page: number = 1) {
+    const query = PumpHistoricalModel.find()
+      .populate("pump");
+    const countQuery = PumpHistoricalModel.estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async find(id: string): Promise<PumpHistorical> {

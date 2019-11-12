@@ -1,6 +1,6 @@
 import mongoose = require("mongoose");
 import bcrypt = require("bcrypt");
-import { rejectIfNull, normalizeData } from "./helpers";
+import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
 import { User } from "../../entities/user";
 import { UserRepository } from "../interface/user-repository";
 import { Security } from "../../../config";
@@ -78,9 +78,11 @@ export class UserMongooseRepository implements UserRepository {
     return normalizeData(doc);
   }
 
-  async findAll(): Promise<User[]> {
-    const docs = await UserModel.find().exec();
-    return normalizeData(docs);
+  async findAll(limit: number, page: number = 1) {
+    const query = UserModel.find();
+    const countQuery = UserModel.estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async find(id: string): Promise<User> {

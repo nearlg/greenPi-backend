@@ -1,5 +1,6 @@
 import { Repository } from "./repository";
 import { PumpHistorical } from "../../entities/pump-historical";
+import { PaginatedData } from "./paginated-data";
 
 export interface PumpHistoricalRepository extends Repository<PumpHistorical> {
   find(id: string): Promise<PumpHistorical>;
@@ -10,15 +11,19 @@ export interface PumpHistoricalRepository extends Repository<PumpHistorical> {
 
   findAllByPumpId(
     pumpId: string,
+    limit: number,
+    page: number,
     sortBy: string,
     gte?: Date,
     lte?: Date
-  ): Promise<null | PumpHistorical[]>;
+  ): Promise<PaginatedData<PumpHistorical>>;
 
   findAllByPumpIds(
     pumpIds: string[],
+    limit: number,
+    page: number,
     sortBy?: string,
     gte?: Date,
     lte?: Date
-  ): Promise<null | PumpHistorical[]>;
+  ): Promise<PaginatedData<PumpHistorical>>;
 }

@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-import { rejectIfNull, normalizeData } from "./helpers";
+import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
 import { EnvironmentRepository } from "../interface/environment-repository";
 import { Environment } from "../../entities/environment";
 
@@ -69,17 +69,18 @@ export class EnvironmentMongooseRepository implements EnvironmentRepository {
     return normalizeData(doc);
   }
 
-  async findAll(): Promise<Environment[]> {
-    const docs = await EnvironmentModel.find()
-      .populate("pumps")
-      .populate({
-        path: "sensors",
-        populate: {
-          path: "type"
-        }
-      })
-      .exec();
-    return normalizeData(docs);
+  async findAll(limit: number, page: number = 1) {
+    const query = EnvironmentModel.find()
+    .populate("pumps")
+    .populate({
+      path: "sensors",
+      populate: {
+        path: "type"
+      }
+    });
+    const countQuery = EnvironmentModel.estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async find(id: string): Promise<Environment> {

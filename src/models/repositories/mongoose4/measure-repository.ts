@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-import { rejectIfNull, normalizeData, getSearchingObject } from "./helpers";
+import { rejectIfNull, normalizeData, getSearchingObject, paginateQuery } from "./helpers";
 import { MeasureRepository } from "../interface/measure-repository";
 import { Measure } from "../../entities/measure";
 
@@ -53,13 +53,16 @@ export class MeasureMongooseRepository implements MeasureRepository {
 
   async findAllByTypeIds(
     sensorTypeIds: string[],
+    limit: number,
+    page: number = 1,
     sortBy?: string,
     gte?: Date,
     lte?: Date
-  ): Promise<Measure[]> {
+  ) {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor.type"] = { $in: sensorTypeIds };
-    const docs = await MeasureModel.find(searchingObject)
+    const query = MeasureModel
+      .find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -67,18 +70,25 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    return normalizeData(docs);
+    const countQuery = MeasureModel
+      .find(searchingObject)
+      .estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async findAllByTypeId(
     sensorTypeId: string,
+    limit: number,
+    page: number = 1,
     sortBy?: string,
     gte?: Date,
     lte?: Date
-  ): Promise<Measure[]> {
+  ) {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor.type"] = sensorTypeId;
-    const docs = await MeasureModel.find(searchingObject)
+    const query = MeasureModel
+      .find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -86,18 +96,25 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    return normalizeData(docs);
+    const countQuery = MeasureModel
+      .find(searchingObject)
+      .estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async findAllBySensorIds(
     sensorIds: string[],
+    limit: number,
+    page: number = 1,
     sortBy?: string,
     gte?: Date,
     lte?: Date
-  ): Promise<Measure[]> {
+  ) {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor"] = { $in: sensorIds };
-    const docs = await MeasureModel.find(searchingObject)
+    const query = MeasureModel
+      .find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -105,18 +122,25 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    return normalizeData(docs);
+    const countQuery = MeasureModel
+      .find(searchingObject)
+      .estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async findAllBySensorId(
     sensorId: string,
+    limit: number,
+    page: number = 1,
     sortBy: string = "date",
-    gte: Date,
-    lte: Date
-  ): Promise<null | Measure[]> {
+    gte?: Date,
+    lte?: Date
+  ) {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor"] = sensorId;
-    const docs = await MeasureModel.find(searchingObject)
+    const query = MeasureModel
+      .find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -124,7 +148,11 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    return normalizeData(docs);
+    const countQuery = MeasureModel
+      .find(searchingObject)
+      .estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async create(document: Measure): Promise<Measure> {
@@ -165,21 +193,22 @@ export class MeasureMongooseRepository implements MeasureRepository {
     return normalizeData(doc);
   }
 
-  async findAll(): Promise<Measure[]> {
-    const docs = await MeasureModel.find()
+  async findAll(limit: number, page: number = 1) {
+    const query = MeasureModel.find()
       .sort({ date: 1 })
       .populate({
         path: "sensor",
         populate: {
           path: "type"
         }
-      })
-      .exec();
-    return normalizeData(docs);
+      });
+    const countQuery = MeasureModel.estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
-  async findAllDistinct(): Promise<Measure[]> {
-    const docs = await MeasureModel.find()
+  async findAllDistinct(limit: number, page: number = 1) {
+    const query = MeasureModel.find()
       .sort({ date: -1 })
       .distinct("sensor")
       .populate({
@@ -187,9 +216,12 @@ export class MeasureMongooseRepository implements MeasureRepository {
         populate: {
           path: "type"
         }
-      })
-      .exec();
-    return normalizeData(docs);
+      });
+    const countQuery = MeasureModel
+      .distinct("sensor")
+      .estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async find(id: string): Promise<Measure> {

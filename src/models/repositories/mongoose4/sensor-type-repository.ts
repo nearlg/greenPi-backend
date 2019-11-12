@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-import { rejectIfNull, normalizeData } from "./helpers";
+import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
 import { SensorTypeRepository } from "../interface/sensor-type-repository";
 import { SensorType } from "../../entities/sensor-type";
 
@@ -46,9 +46,11 @@ export class SensorTypeMongooseRepository implements SensorTypeRepository {
     return normalizeData(doc);
   }
 
-  async findAll(): Promise<SensorType[]> {
-    const docs = await SensorTypeModel.find().exec();
-    return normalizeData(docs);
+  async findAll(limit: number, page: number = 1) {
+    const query = SensorTypeModel.find();
+    const countQuery = SensorTypeModel.estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    return paginatedData;
   }
 
   async find(id: string): Promise<SensorType> {
