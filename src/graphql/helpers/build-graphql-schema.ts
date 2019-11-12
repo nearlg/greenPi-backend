@@ -1,3 +1,5 @@
+import { genericTypes } from '../generics/generic-types';
+
 function buildBodySquema(preSchema: PreGraphqlSchema[]) {
   const body = preSchema
     .map(s => s.body)
@@ -27,6 +29,7 @@ export default function buildGraphqlSchema(preSchema: PreGraphqlSchema[]) {
   const query = buildQuerySchema(preSchema);
   const mutation = buildMutationSchema(preSchema);
   const schema = `
+    ${genericTypes}
     ${body}
     type RootQuery {
       ${query}
