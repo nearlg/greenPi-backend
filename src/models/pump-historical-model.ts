@@ -10,6 +10,8 @@ import { rejectIfNotAuthorized } from "./helpers";
 import { AuthData } from "../lib/auth-data";
 import * as pumpHistoricalValidator from "../validation/pump-historical";
 import { Pump } from "./entities/pump";
+import { PaginationRequest } from "../lib/pagination/request";
+import { FindAllFilter } from "./repositories/interfaces/pump-historical-repository";
 
 enum RuleName {
   Add = "pumpHistorical.add",
@@ -19,11 +21,7 @@ enum RuleName {
   Get = "pumpHistorical.getSensor"
 }
 
-export interface FetchFilter {
-  gte?: Date;
-  lte?: Date;
-  sortBy?: string;
-}
+export interface FetchFilter extends FindAllFilter {}
 
 export class PumpHistoricalModel implements Model {
   rules: Map<string, Set<RoleName>>;
@@ -50,33 +48,33 @@ export class PumpHistoricalModel implements Model {
     return pumpHistorical;
   }
 
-  async FetchByEnvironmentId(id: string, filter?: FetchFilter) {
+  async FetchByEnvironmentId(
+    id: string,
+    pagination?: PaginationRequest,
+    filter?: FetchFilter
+  ) {
     rejectIfNotAuthorized(this, RuleName.FetchByEnvironmentId);
-    const gte = filter && filter.gte ? new Date(filter.gte) : null;
-    const lte = filter && filter.lte ? new Date(filter.lte) : null;
-    const sortBy: string = filter ? filter.sortBy : null;
     const environment = await environmentRepository.find(id);
     const pumpIds = (<Pump[]>environment.pumps).map(p => <string>p.id);
     const docs = pumpHistoricalRepository.findAllByPumpIds(
       pumpIds,
-      sortBy,
-      gte,
-      lte
+      pagination,
+      filter
     );
     return docs;
   }
 
-  async FetchByPumpId(id: string, filter?: FetchFilter) {
+  async FetchByPumpId(
+    id: string,
+    pagination?: PaginationRequest,
+    filter?: FetchFilter
+  ) {
     rejectIfNotAuthorized(this, RuleName.FetchByPumpId);
-    const gte = filter && filter.gte ? new Date(filter.gte) : null;
-    const lte = filter && filter.lte ? new Date(filter.lte) : null;
-    const sortBy: string = filter ? filter.sortBy : null;
     await pumpRepository.find(id);
     const docs = await pumpHistoricalRepository.findAllByPumpId(
       id,
-      sortBy,
-      gte,
-      lte
+      pagination,
+      filter
     );
     return docs;
   }

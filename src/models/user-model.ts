@@ -7,6 +7,7 @@ import * as userValidator from "../validation/user";
 import { User } from "./entities/user";
 import { checkCredentials } from "../services/auth.service";
 import { createToken } from "../services/jwt.service";
+import { PaginationRequest } from "../lib/pagination/request";
 
 enum RuleName {
   Add = "user.add",
@@ -60,9 +61,9 @@ export class UserModel implements Model {
     return doc;
   }
 
-  async fetchAll() {
+  async fetchAll(pagination?: PaginationRequest) {
     rejectIfNotAuthorized(this, RuleName.FetchAll);
-    const docs = await userRepository.findAll();
+    const docs = await userRepository.findAll(pagination);
     return docs;
   }
 

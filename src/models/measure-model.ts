@@ -10,6 +10,8 @@ import { rejectIfNotAuthorized } from "./helpers";
 import { AuthData } from "../lib/auth-data";
 import * as measureValidator from "../validation/measure";
 import { Sensor } from "./entities/sensor";
+import { PaginationRequest } from "../lib/pagination/request";
+import { FindAllFilter } from "./repositories/interfaces/measure-repository";
 
 enum RuleName {
   Add = "measure.addSensor",
@@ -19,11 +21,7 @@ enum RuleName {
   Get = "measure.get"
 }
 
-export interface FetchFilter {
-  gte?: Date;
-  lte?: Date;
-  sortBy?: string;
-}
+export interface FetchFilter extends FindAllFilter {}
 
 export class MeasureModel implements Model {
   rules: Map<string, Set<RoleName>>;
@@ -50,33 +48,33 @@ export class MeasureModel implements Model {
     return measure;
   }
 
-  async FetchByEnvironmentId(id: string, filter?: FetchFilter) {
+  async FetchByEnvironmentId(
+    id: string,
+    pagination?: PaginationRequest,
+    filter?: FetchFilter
+  ) {
     rejectIfNotAuthorized(this, RuleName.FetchByEnvironmentId);
-    const gte = filter && filter.gte ? new Date(filter.gte) : null;
-    const lte = filter && filter.lte ? new Date(filter.lte) : null;
-    const sortBy: string = filter ? filter.sortBy : null;
     const environment = await environmentRepository.find(id);
     const sensorIds = (<Sensor[]>environment.sensors).map(s => <string>s.id);
     const docs = await measureRepository.findAllBySensorIds(
       sensorIds,
-      sortBy,
-      gte,
-      lte
+      pagination,
+      filter
     );
     return docs;
   }
 
-  async FetchBySensorId(id: string, filter?: FetchFilter) {
+  async FetchBySensorId(
+    id: string,
+    pagination?: PaginationRequest,
+    filter?: FetchFilter
+  ) {
     rejectIfNotAuthorized(this, RuleName.FetchBySensorId);
-    const gte = filter && filter.gte ? new Date(filter.gte) : null;
-    const lte = filter && filter.lte ? new Date(filter.lte) : null;
-    const sortBy: string = filter ? filter.sortBy : null;
     await sensorRepository.find(id);
     const docs = await measureRepository.findAllBySensorId(
       id,
-      sortBy,
-      gte,
-      lte
+      pagination,
+      filter
     );
     return docs;
   }

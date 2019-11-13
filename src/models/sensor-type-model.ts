@@ -5,6 +5,7 @@ import { sensorTypeRepository } from "./repositories";
 import { rejectIfNotAuthorized } from "./helpers";
 import { AuthData } from "../lib/auth-data";
 import * as sensorTypeValidator from "../validation/sensor-type";
+import { PaginationRequest } from "../lib/pagination/request";
 
 enum RuleName {
   Add = "pump.add",
@@ -49,9 +50,9 @@ export class SensorTypeModel implements Model {
     return doc;
   }
 
-  async fetchAll() {
+  async fetchAll(pagination?: PaginationRequest) {
     rejectIfNotAuthorized(this, RuleName.FetchAll);
-    const docs = await sensorTypeRepository.findAll();
+    const docs = await sensorTypeRepository.findAll(pagination);
     return docs;
   }
 

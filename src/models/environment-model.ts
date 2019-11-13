@@ -5,6 +5,7 @@ import { environmentRepository } from "./repositories";
 import { rejectIfNotAuthorized } from "./helpers";
 import { AuthData } from "../lib/auth-data";
 import * as environmentValidator from "../validation/environment";
+import { PaginationRequest } from "../lib/pagination/request";
 
 enum RuleName {
   Add = "environment.add",
@@ -49,9 +50,9 @@ export class EnvironmentModel implements Model {
     return doc;
   }
 
-  async fetchAll() {
+  async fetchAll(pagination: PaginationRequest) {
     rejectIfNotAuthorized(this, RuleName.FetchAll);
-    const docs = await environmentRepository.findAll();
+    const docs = await environmentRepository.findAll(pagination);
     return docs;
   }
 

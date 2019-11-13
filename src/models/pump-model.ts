@@ -5,6 +5,7 @@ import { rejectIfNotAuthorized } from "./helpers";
 import { Pump } from "./entities/pump";
 import { AuthData } from "../lib/auth-data";
 import * as pumpValidator from "../validation/pump";
+import { PaginationRequest } from "../lib/pagination/request";
 
 enum RuleName {
   AddPump = "pump.add",
@@ -45,9 +46,9 @@ export class PumpModel implements Model {
     const doc = await pumpRepository.remove(id);
     return doc;
   }
-  async fetchAll(): Promise<Pump[]> {
-    rejectIfNotAuthorized(this, RuleName.FetchAll);
-    const docs = await pumpRepository.findAll();
+  async fetchAll(pagination?: PaginationRequest) {
+    // rejectIfNotAuthorized(this, RuleName.FetchAll); // TODO: remove this
+    const docs = await pumpRepository.findAll(pagination);
     return docs;
   }
   async get(id: string) {
