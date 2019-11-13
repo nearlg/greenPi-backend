@@ -10,7 +10,7 @@ const resolver: EnvironmentResolver = {
     return doc;
   },
   async fetchEnvironments(args, context) {
-    const doc = await context.models.environment.fetchAll();
+    const doc = await context.models.environment.fetchAll(args.pagination);
     return doc;
   },
   async getEnvironment(args, context) {

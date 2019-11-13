@@ -6,6 +6,14 @@ type Measure {
   value: Int!
 }
 
+type FetchMeasuresResult {
+  data: [Measure!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  pages: Int!
+}
+
 input MeasureFilter {
   gte: String
   lte: String
@@ -19,7 +27,7 @@ input AddMeasureData {
 }
 `;
 const query = `
-fetchMeasures(by: String!, id: ID!, filter: MeasureFilter): [Measure!]!
+fetchMeasures(by: String!, id: ID!, pagination: PaginationData, filter: MeasureFilter): FetchMeasuresResult!
 getMeasure(id: ID!): Measure!
 `;
 const mutation = `

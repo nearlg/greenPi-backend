@@ -6,6 +6,8 @@ import { SignUpArgs } from "./args/sign-up-args";
 import { UpdateUserArgs } from "./args/update-user-args";
 import { Resolver } from "../../../helpers/resolvers";
 import { GraphqlContext } from "../../../graphql-context";
+import { FetchUsersArgs } from "./args/fetch-users-args";
+import { PaginationData } from "../../../../lib/pagination/data";
 
 export interface UserResolver extends Resolver {
   // User profile
@@ -30,6 +32,6 @@ export interface UserResolver extends Resolver {
     context: GraphqlContext
   ): Promise<User>;
   deleteUser(args: { id: string }, context: GraphqlContext): Promise<User>;
-  fetchUsers(args: {}, context: GraphqlContext): Promise<User[]>;
+  fetchUsers(args: FetchUsersArgs, context: GraphqlContext): Promise<PaginationData<User>>;
   getUser(args: { id: string }, context: GraphqlContext): Promise<User>;
 }

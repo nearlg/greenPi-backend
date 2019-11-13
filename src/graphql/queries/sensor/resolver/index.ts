@@ -10,7 +10,7 @@ const resolver: SensorResolver = {
     return doc;
   },
   async fetchSensors(args, context) {
-    const doc = await context.models.sensor.fetchAll();
+    const doc = await context.models.sensor.fetchAll(args.pagination);
     return doc;
   },
   async getSensor(args, context) {

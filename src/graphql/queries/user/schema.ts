@@ -17,6 +17,14 @@ type User {
   roleName: String!
 }
 
+type FetchUsersResult {
+  data: [User!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  pages: Int!
+}
+
 input AddUserData {
   name: String!
   email: String!
@@ -34,7 +42,7 @@ input UpdateUserData {
 const query = `
 signInLocal(email: String!, password: String!): String!
 getProfile: User!
-fetchUsers: [User!]
+fetchUsers(pagination: PaginationData): FetchUsersResult!
 getUser: User!
 `;
 const mutation = `

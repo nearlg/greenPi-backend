@@ -29,7 +29,7 @@ const resolver: UserResolver = {
     return doc;
   },
   async fetchUsers(args, context) {
-    const docs = await context.models.user.fetchAll();
+    const docs = await context.models.user.fetchAll(args.pagination);
     return docs;
   },
   async getProfile(args, context) {

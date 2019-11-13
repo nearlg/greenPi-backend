@@ -6,6 +6,14 @@ type Pump {
   connectionPorts: [Int!]!
 }
 
+type FetchPumpsResult {
+  data: [Pump!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  pages: Int!
+}
+
 input AddPumpData {
   name: String!
   description: String!
@@ -21,7 +29,7 @@ input UpdatePumpData {
 `;
 
 const query = `
-fetchPumps: [Pump!]!
+fetchPumps(pagination: PaginationData): FetchPumpsResult!
 getPump(id: ID!): Pump!
 `;
 const mutation = `

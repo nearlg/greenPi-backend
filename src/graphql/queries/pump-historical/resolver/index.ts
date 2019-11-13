@@ -1,6 +1,4 @@
-import * as pumpHistoricalValidator from "../../../../validation/pump-historical";
 import { PumpHistoricalResolver } from "./pump-historical-resolver";
-import { validateDependencies } from "./helpers";
 import { FilterBy } from "./filter-by";
 // import { socketIOService } from "../../../services/socket-io.service";
 
@@ -21,11 +19,16 @@ const resolver: PumpHistoricalResolver = {
   },
   async fetchPumpHistorical(args, context) {
     if (args.by === FilterBy.PumpId) {
-      return context.models.pumpHistorical.FetchByPumpId(args.id, args.filter);
+      return context.models.pumpHistorical.FetchByPumpId(
+        args.id,
+        args.pagination,
+        args.filter
+      );
     }
     if (args.by === FilterBy.EnvironmentId) {
       return context.models.pumpHistorical.FetchByEnvironmentId(
         args.id,
+        args.pagination,
         args.filter
       );
     }

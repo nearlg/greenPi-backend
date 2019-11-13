@@ -7,6 +7,14 @@ type Sensor {
   connectionPorts: [Int!]!
 }
 
+type FetchSensorsResult {
+  data: [Sensor!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  pages: Int!
+}
+
 input AddSensorData {
   name: String!
   description: String!
@@ -24,7 +32,7 @@ input UpdateSensorData {
 `;
 
 const query = `
-fetchSensors: [Sensor!]!
+fetchSensors(pagination: PaginationData): FetchSensorsResult!
 getSensor(id: ID!): Sensor!
 `;
 const mutation = `

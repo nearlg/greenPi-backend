@@ -19,7 +19,7 @@ input AddPumpHistoricalData {
 }
 `;
 const query = `
-fetchPumpHistoricals(by: String!, id: ID!, filter: PumpHistoricalFilter): [PumpHistorical!]!
+fetchPumpHistoricals(by: String!, id: ID!, pagination: PaginationData, filter: PumpHistoricalFilter): [PumpHistorical!]!
 getPumpHistorical(id: ID!): PumpHistorical!
 `;
 const mutation = `

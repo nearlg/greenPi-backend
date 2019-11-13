@@ -7,6 +7,14 @@ type Environment {
   pumps: [ID!]!
 }
 
+type FetchEnvironmentsResult {
+  data: [Environment!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  pages: Int!
+}
+
 input AddEnvironmentData {
   name: String!
   description: String!
@@ -23,7 +31,7 @@ input UpdateEnvironmentData {
 }
 `;
 const query = `
-fetchEnvironments: [Environment!]!
+fetchEnvironments(pagination: PaginationData): FetchEnvironmentsResult!
 getEnvironment(id: ID!): Environment!
 `;
 const mutation = `

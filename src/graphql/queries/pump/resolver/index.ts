@@ -10,7 +10,7 @@ const resolver: PumpResolver = {
     return doc;
   },
   async fetchPumps(args, context) {
-    const docs = context.models.pump.fetchAll();
+    const docs = await context.models.pump.fetchAll(args.pagination);
     return docs;
   },
   async getPump(args, context) {
