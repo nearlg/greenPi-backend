@@ -2,9 +2,10 @@ import mongoose = require("mongoose");
 import bcrypt = require("bcrypt");
 import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
 import { User } from "../../entities/user";
-import { UserRepository } from "../interface/user-repository";
+import { UserRepository } from "../interfaces/user-repository";
 import { Security } from "../../../config";
 import { RoleName } from "../../role-name";
+import { PaginationRequest } from "../../../lib/pagination/request";
 
 interface UserModel extends User, mongoose.Document {}
 
@@ -57,6 +58,10 @@ userSchema.pre("save", async function(next) {
 
 const UserModel = mongoose.model<UserModel>("User", userSchema);
 
+const defaultPagination: PaginationRequest = {
+  limit: 10
+};
+
 export class UserMongooseRepository implements UserRepository {
   async create(document: User): Promise<User> {
     const doc = await UserModel.create(document);
@@ -78,10 +83,10 @@ export class UserMongooseRepository implements UserRepository {
     return normalizeData(doc);
   }
 
-  async findAll(limit: number, page: number = 1) {
+  async findAll(pagination: PaginationRequest = defaultPagination) {
     const query = UserModel.find();
     const countQuery = UserModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 

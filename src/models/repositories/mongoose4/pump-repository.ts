@@ -1,8 +1,8 @@
 import mongoose = require("mongoose");
 import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
-import { PumpRepository } from "../interface/pump-repository";
+import { PumpRepository } from "../interfaces/pump-repository";
 import { Pump } from "../../entities/pump";
-import { PaginatedData } from "../interface/paginated-data";
+import { PaginationRequest } from "../../../lib/pagination/request";
 
 interface PumpModel extends Pump, mongoose.Document {}
 
@@ -17,8 +17,12 @@ const pumpSchema = new mongoose.Schema({
 
 const PumpModel = mongoose.model<PumpModel>("Pump", pumpSchema);
 
+const defaultPagination: PaginationRequest = {
+  limit: 10
+};
+
 // export class PumpMongooseRepository implements PumpRepository {
-  export class PumpMongooseRepository implements PumpRepository {
+export class PumpMongooseRepository implements PumpRepository {
   async create(document: Pump): Promise<Pump> {
     const doc = await PumpModel.create(document);
     return normalizeData(doc);
@@ -38,10 +42,10 @@ const PumpModel = mongoose.model<PumpModel>("Pump", pumpSchema);
     return normalizeData(doc);
   }
 
-  async findAll(limit: number, page: number = 1) {
+  async findAll(pagination: PaginationRequest = defaultPagination) {
     const query = PumpModel.find();
     const countQuery = PumpModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 

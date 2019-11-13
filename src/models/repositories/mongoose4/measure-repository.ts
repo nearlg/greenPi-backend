@@ -1,7 +1,16 @@
 import mongoose = require("mongoose");
-import { rejectIfNull, normalizeData, getSearchingObject, paginateQuery } from "./helpers";
-import { MeasureRepository } from "../interface/measure-repository";
+import {
+  rejectIfNull,
+  normalizeData,
+  getSearchingObject,
+  paginateQuery
+} from "./helpers";
+import {
+  MeasureRepository,
+  FindAllFilter
+} from "../interfaces/measure-repository";
 import { Measure } from "../../entities/measure";
+import { PaginationRequest } from "../../../lib/pagination/request";
 
 interface MeasureModel extends Measure, mongoose.Document {}
 
@@ -23,6 +32,10 @@ const measureSchema = new mongoose.Schema({
 });
 
 const MeasureModel = mongoose.model<MeasureModel>("Measure", measureSchema);
+
+const defaultPagination: PaginationRequest = {
+  limit: 20
+};
 
 export class MeasureMongooseRepository implements MeasureRepository {
   async findLastsBySensorIds(sensorIds: string[]): Promise<Measure[]> {
@@ -53,16 +66,15 @@ export class MeasureMongooseRepository implements MeasureRepository {
 
   async findAllByTypeIds(
     sensorTypeIds: string[],
-    limit: number,
-    page: number = 1,
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
+    pagination: PaginationRequest = defaultPagination,
+    filter?: FindAllFilter
   ) {
+    const gte = filter && filter.gte ? new Date(filter.gte) : null;
+    const lte = filter && filter.lte ? new Date(filter.lte) : null;
+    const sortBy: string = filter ? filter.sortBy : null;
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor.type"] = { $in: sensorTypeIds };
-    const query = MeasureModel
-      .find(searchingObject)
+    const query = MeasureModel.find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -70,25 +82,24 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    const countQuery = MeasureModel
-      .find(searchingObject)
-      .estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const countQuery = MeasureModel.find(
+      searchingObject
+    ).estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
   async findAllByTypeId(
     sensorTypeId: string,
-    limit: number,
-    page: number = 1,
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
+    pagination: PaginationRequest = defaultPagination,
+    filter?: FindAllFilter
   ) {
+    const gte = filter && filter.gte ? new Date(filter.gte) : null;
+    const lte = filter && filter.lte ? new Date(filter.lte) : null;
+    const sortBy: string = filter ? filter.sortBy : null;
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor.type"] = sensorTypeId;
-    const query = MeasureModel
-      .find(searchingObject)
+    const query = MeasureModel.find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -96,25 +107,24 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    const countQuery = MeasureModel
-      .find(searchingObject)
-      .estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const countQuery = MeasureModel.find(
+      searchingObject
+    ).estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
   async findAllBySensorIds(
     sensorIds: string[],
-    limit: number,
-    page: number = 1,
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
+    pagination: PaginationRequest = defaultPagination,
+    filter?: FindAllFilter
   ) {
+    const gte = filter && filter.gte ? new Date(filter.gte) : null;
+    const lte = filter && filter.lte ? new Date(filter.lte) : null;
+    const sortBy: string = filter ? filter.sortBy : null;
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor"] = { $in: sensorIds };
-    const query = MeasureModel
-      .find(searchingObject)
+    const query = MeasureModel.find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -122,25 +132,24 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    const countQuery = MeasureModel
-      .find(searchingObject)
-      .estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const countQuery = MeasureModel.find(
+      searchingObject
+    ).estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
   async findAllBySensorId(
     sensorId: string,
-    limit: number,
-    page: number = 1,
-    sortBy: string = "date",
-    gte?: Date,
-    lte?: Date
+    pagination: PaginationRequest = defaultPagination,
+    filter?: FindAllFilter
   ) {
+    const gte = filter && filter.gte ? new Date(filter.gte) : null;
+    const lte = filter && filter.lte ? new Date(filter.lte) : null;
+    const sortBy: string = filter ? filter.sortBy : "date";
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor"] = sensorId;
-    const query = MeasureModel
-      .find(searchingObject)
+    const query = MeasureModel.find(searchingObject)
       .populate({
         path: "sensor",
         populate: {
@@ -148,10 +157,10 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       })
       .sort(sortBy);
-    const countQuery = MeasureModel
-      .find(searchingObject)
-      .estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const countQuery = MeasureModel.find(
+      searchingObject
+    ).estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
@@ -193,7 +202,7 @@ export class MeasureMongooseRepository implements MeasureRepository {
     return normalizeData(doc);
   }
 
-  async findAll(limit: number, page: number = 1) {
+  async findAll(pagination: PaginationRequest = defaultPagination) {
     const query = MeasureModel.find()
       .sort({ date: 1 })
       .populate({
@@ -203,11 +212,11 @@ export class MeasureMongooseRepository implements MeasureRepository {
         }
       });
     const countQuery = MeasureModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
-  async findAllDistinct(limit: number, page: number = 1) {
+  async findAllDistinct(pagination: PaginationRequest = defaultPagination) {
     const query = MeasureModel.find()
       .sort({ date: -1 })
       .distinct("sensor")
@@ -217,10 +226,8 @@ export class MeasureMongooseRepository implements MeasureRepository {
           path: "type"
         }
       });
-    const countQuery = MeasureModel
-      .distinct("sensor")
-      .estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const countQuery = MeasureModel.distinct("sensor").estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 

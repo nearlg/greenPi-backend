@@ -1,7 +1,8 @@
 import mongoose = require("mongoose");
 import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
-import { SensorRepository } from "../interface/sensor-repository";
+import { SensorRepository } from "../interfaces/sensor-repository";
 import { Sensor } from "../../entities/sensor";
+import { PaginationRequest } from "../../../lib/pagination/request";
 
 interface SensorModel extends Sensor, mongoose.Document {}
 
@@ -20,6 +21,10 @@ const sensorSchema = new mongoose.Schema({
 });
 
 const SensorModel = mongoose.model<SensorModel>("Sensor", sensorSchema);
+
+const defaultPagination: PaginationRequest = {
+  limit: 10
+};
 
 export class SensorMongooseRepository implements SensorRepository {
   async create(document: Sensor): Promise<Sensor> {
@@ -44,10 +49,10 @@ export class SensorMongooseRepository implements SensorRepository {
     return normalizeData(doc);
   }
 
-  async findAll(limit: number, page: number = 1) {
+  async findAll(pagination: PaginationRequest = defaultPagination) {
     const query = SensorModel.find();
     const countQuery = SensorModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 

@@ -1,7 +1,16 @@
 import mongoose = require("mongoose");
-import { rejectIfNull, normalizeData, getSearchingObject, paginateQuery } from "./helpers";
-import { PumpHistoricalRepository } from "../interface/pump-historical-repository";
+import {
+  rejectIfNull,
+  normalizeData,
+  getSearchingObject,
+  paginateQuery
+} from "./helpers";
+import {
+  PumpHistoricalRepository,
+  FindAllFilter
+} from "../interfaces/pump-historical-repository";
 import { PumpHistorical } from "../../entities/pump-historical";
+import { PaginationRequest } from "../../../lib/pagination/request";
 
 interface PumpHistoricalModel extends PumpHistorical, mongoose.Document {}
 
@@ -26,6 +35,10 @@ const PumpHistoricalModel = mongoose.model<PumpHistoricalModel>(
   "PumpHistorical",
   pumpHistoricalSchema
 );
+
+const defaultPagination: PaginationRequest = {
+  limit: 20
+};
 
 export class PumpHistoricalMongooseRepository
   implements PumpHistoricalRepository {
@@ -52,43 +65,41 @@ export class PumpHistoricalMongooseRepository
 
   async findAllByPumpIds(
     pumpIds: string[],
-    limit: number,
-    page: number = 1,
-    sortBy?: string,
-    gte?: Date,
-    lte?: Date
+    pagination: PaginationRequest = defaultPagination,
+    filter?: FindAllFilter
   ) {
+    const gte = filter && filter.gte ? new Date(filter.gte) : null;
+    const lte = filter && filter.lte ? new Date(filter.lte) : null;
+    const sortBy: string = filter ? filter.sortBy : null;
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["pump"] = { $in: pumpIds };
-    const query = PumpHistoricalModel
-      .find(searchingObject)
+    const query = PumpHistoricalModel.find(searchingObject)
       .populate("pump")
       .sort(sortBy);
-    const countQuery = PumpHistoricalModel
-      .find(searchingObject)
-      .estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const countQuery = PumpHistoricalModel.find(
+      searchingObject
+    ).estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
   async findAllByPumpId(
     pumpId: string,
-    limit: number,
-    page: number = 1,
-    sortBy: string = "date",
-    gte?: Date,
-    lte?: Date
+    pagination: PaginationRequest = defaultPagination,
+    filter?: FindAllFilter
   ) {
+    const gte = filter && filter.gte ? new Date(filter.gte) : null;
+    const lte = filter && filter.lte ? new Date(filter.lte) : null;
+    const sortBy: string = filter ? filter.sortBy : "date";
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["pump"] = pumpId;
-    const query = PumpHistoricalModel
-      .find(searchingObject)
+    const query = PumpHistoricalModel.find(searchingObject)
       .populate("pump")
       .sort(sortBy);
-    const countQuery = PumpHistoricalModel
-      .find(searchingObject)
-      .estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const countQuery = PumpHistoricalModel.find(
+      searchingObject
+    ).estimatedDocumentCount();
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
@@ -121,11 +132,10 @@ export class PumpHistoricalMongooseRepository
     return normalizeData(doc);
   }
 
-  async findAll(limit: number, page: number = 1) {
-    const query = PumpHistoricalModel.find()
-      .populate("pump");
+  async findAll(pagination: PaginationRequest = defaultPagination) {
+    const query = PumpHistoricalModel.find().populate("pump");
     const countQuery = PumpHistoricalModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 

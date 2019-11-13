@@ -1,6 +1,7 @@
 import { DocumentQuery, Document, Query } from "mongoose";
 import { DataErrorName } from "../../../lib/errors/data-error";
-import { PaginatedData } from "../interface/paginated-data";
+import { PaginationData } from "../../../lib/pagination/data";
+import { PaginationRequest } from "../../../lib/pagination/request";
 
 function toObjectDocument(document: any) {
   return document.toObject();
@@ -38,7 +39,7 @@ function normalizeFieldNames(document: any) {
     : normalizeDocument(document);
 }
 
-export function normalizeData<T>(data: T): T  {
+export function normalizeData<T>(data: T): T {
   data = toObject(data);
   return normalizeFieldNames(data);
 }
@@ -68,24 +69,24 @@ export function getSearchingObject(gte?: Date, lte?: Date): Object {
 export async function paginateQuery<T extends Document>(
   fetchQuery: DocumentQuery<T[], T>,
   countQuery: Query<number>,
-  limit: number,
-  page: number = 1
+  pagination: PaginationRequest
 ) {
-    const pageNumber = !page || page < 1 ? 1 : page;
-    const skip = (pageNumber - 1) * limit;
-    fetchQuery = fetchQuery.skip(skip);
-    if(limit) {
-      fetchQuery = fetchQuery.limit(limit);
-    }
-    const total = await countQuery.exec();
-    const pages = Math.ceil(total/limit);
-    const docs = await fetchQuery.exec();
-    const paginatedData: PaginatedData<T> = {
-      data: normalizeData(docs),
-      limit,
-      page,
-      total,
-      pages
-    };
-    return paginatedData;
+  const page = !pagination.page || pagination.page < 1 ? 1 : pagination.page;
+  const limit = Math.max(1, pagination.limit);
+  const skip = (page - 1) * limit;
+  fetchQuery = fetchQuery.skip(skip);
+  if (limit) {
+    fetchQuery = fetchQuery.limit(limit);
+  }
+  const total = await countQuery.exec();
+  const pages = Math.ceil(total / limit);
+  const docs = await fetchQuery.exec();
+  const paginatedData: PaginationData<T> = {
+    data: normalizeData(docs),
+    limit,
+    page,
+    total,
+    pages
+  };
+  return paginatedData;
 }

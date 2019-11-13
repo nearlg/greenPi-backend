@@ -1,7 +1,8 @@
 import mongoose = require("mongoose");
 import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
-import { EnvironmentRepository } from "../interface/environment-repository";
+import { EnvironmentRepository } from "../interfaces/environment-repository";
 import { Environment } from "../../entities/environment";
+import { PaginationRequest } from "../../../lib/pagination/request";
 
 interface EnvironmentModel extends Environment, mongoose.Document {}
 
@@ -29,6 +30,10 @@ const EnvironmentModel = mongoose.model<EnvironmentModel>(
   "Environment",
   EnvironmentSchema
 );
+
+const defaultPagination: PaginationRequest = {
+  limit: 5
+};
 
 export class EnvironmentMongooseRepository implements EnvironmentRepository {
   async create(document: Environment): Promise<Environment> {
@@ -69,17 +74,17 @@ export class EnvironmentMongooseRepository implements EnvironmentRepository {
     return normalizeData(doc);
   }
 
-  async findAll(limit: number, page: number = 1) {
+  async findAll(pagination: PaginationRequest = defaultPagination) {
     const query = EnvironmentModel.find()
-    .populate("pumps")
-    .populate({
-      path: "sensors",
-      populate: {
-        path: "type"
-      }
-    });
+      .populate("pumps")
+      .populate({
+        path: "sensors",
+        populate: {
+          path: "type"
+        }
+      });
     const countQuery = EnvironmentModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, limit, page);
+    const paginatedData = await paginateQuery(query, countQuery, pagination);
     return paginatedData;
   }
 
