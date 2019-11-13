@@ -47,7 +47,7 @@ export class PumpModel implements Model {
     return doc;
   }
   async fetchAll(pagination?: PaginationRequest) {
-    // rejectIfNotAuthorized(this, RuleName.FetchAll); // TODO: remove this
+    rejectIfNotAuthorized(this, RuleName.FetchAll);
     const docs = await pumpRepository.findAll(pagination);
     return docs;
   }
