@@ -25,10 +25,6 @@ type FetchUsersResult {
   pages: Int!
 }
 
-type SignInResponse {
-  token: String!
-}
-
 input AddUserData {
   name: String!
   email: String!
