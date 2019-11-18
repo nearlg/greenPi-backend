@@ -1,24 +1,25 @@
-import { Model } from "./model";
-import { RoleName } from "./role-name";
-import { userRepository } from "./repositories";
-import { rejectIfNotAuthorized } from "./helpers";
-import { AuthData } from "../lib/auth-data";
-import * as userValidator from "../validation/user";
-import { User } from "./entities/user";
-import { checkCredentials } from "../services/auth.service";
-import { createToken } from "../services/jwt.service";
-import { PaginationRequest } from "../lib/pagination/request";
+import { Model } from './model';
+import { RoleName } from './role-name';
+import { userRepository } from './repositories';
+import { rejectIfNotAuthorized } from './helpers';
+import { AuthData } from '../lib/auth-data';
+import * as userValidator from '../validation/user';
+import { User } from './entities/user';
+import { checkCredentials } from '../services/auth.service';
+import { createToken } from '../services/jwt.service';
+import { PaginationRequest } from '../lib/pagination/request';
+import { SignInResponse } from '../lib/sign-in-response';
 
 enum RuleName {
-  Add = "user.add",
-  Update = "user.update",
-  Delete = "user.delete",
-  FetchAll = "user.fetchAll",
-  Get = "user.get",
-  SignUp = "user.signUp",
-  SignInLocal = "user.signInLocal",
-  GetProfile = "user.getProfile",
-  EditProfile = "user.editProfile"
+  Add = 'user.add',
+  Update = 'user.update',
+  Delete = 'user.delete',
+  FetchAll = 'user.fetchAll',
+  Get = 'user.get',
+  SignUp = 'user.signUp',
+  SignInLocal = 'user.signInLocal',
+  GetProfile = 'user.getProfile',
+  EditProfile = 'user.editProfile'
 }
 
 export class UserModel implements Model {
@@ -90,7 +91,10 @@ export class UserModel implements Model {
     const doc = await userRepository.findByEmail(email);
     await checkCredentials(password, doc.password);
     const token = createToken(doc);
-    return token;
+    const signInResponse: SignInResponse = {
+      token
+    };
+    return signInResponse;
   }
 
   async getProfile() {
