@@ -1,19 +1,19 @@
-import { Model } from "./model";
-import { Sensor } from "./entities/sensor";
-import { RoleName } from "./role-name";
-import { sensorRepository, sensorTypeRepository } from "./repositories";
-import { rejectIfNotAuthorized } from "./helpers";
-import { AuthData } from "../lib/auth-data";
-import * as sensorValidator from "../validation/sensor";
-import { SensorType } from "./entities/sensor-type";
-import { PaginationRequest } from "../lib/pagination/request";
+import { Model } from './model';
+import { Sensor } from './entities/sensor';
+import { RoleName } from './role-name';
+import { sensorRepository, sensorTypeRepository } from './repositories';
+import { rejectIfNotAuthorized } from './helpers';
+import { AuthData } from '../lib/auth-data';
+import * as sensorValidator from '../validation/sensor';
+import { SensorType } from './entities/sensor-type';
+import { PaginationRequest } from '../lib/pagination/request';
 
 enum RuleName {
-  Add = "pump.add",
-  Update = "pump.update",
-  Delete = "pump.delete",
-  FetchAll = "pump.fetchAll",
-  Get = "pump.get"
+  Add = 'pump.add',
+  Update = 'pump.update',
+  Delete = 'pump.delete',
+  FetchAll = 'pump.fetchAll',
+  Get = 'pump.get'
 }
 
 export class SensorModel implements Model {

@@ -1,5 +1,5 @@
 export const enum RoleName {
-    Admin = 'Admin',
-    Observer = 'Observer',
-    NonRegistered = 'NonRegistered'
-};
+  Admin = 'Admin',
+  Observer = 'Observer',
+  NonRegistered = 'NonRegistered'
+}

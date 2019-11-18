@@ -1,18 +1,18 @@
-import { Model } from "./model";
-import { RoleName } from "./role-name";
-import { pumpRepository } from "./repositories";
-import { rejectIfNotAuthorized } from "./helpers";
-import { Pump } from "./entities/pump";
-import { AuthData } from "../lib/auth-data";
-import * as pumpValidator from "../validation/pump";
-import { PaginationRequest } from "../lib/pagination/request";
+import { Model } from './model';
+import { RoleName } from './role-name';
+import { pumpRepository } from './repositories';
+import { rejectIfNotAuthorized } from './helpers';
+import { Pump } from './entities/pump';
+import { AuthData } from '../lib/auth-data';
+import * as pumpValidator from '../validation/pump';
+import { PaginationRequest } from '../lib/pagination/request';
 
 enum RuleName {
-  AddPump = "pump.add",
-  Update = "pump.update",
-  Delete = "pump.delete",
-  FetchAll = "pump.fetchAll",
-  Get = "pump.get"
+  AddPump = 'pump.add',
+  Update = 'pump.update',
+  Delete = 'pump.delete',
+  FetchAll = 'pump.fetchAll',
+  Get = 'pump.get'
 }
 
 export class PumpModel implements Model {

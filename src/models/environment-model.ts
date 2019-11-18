@@ -1,18 +1,18 @@
-import { Model } from "./model";
-import { Environment } from "./entities/environment";
-import { RoleName } from "./role-name";
-import { environmentRepository } from "./repositories";
-import { rejectIfNotAuthorized } from "./helpers";
-import { AuthData } from "../lib/auth-data";
-import * as environmentValidator from "../validation/environment";
-import { PaginationRequest } from "../lib/pagination/request";
+import { Model } from './model';
+import { Environment } from './entities/environment';
+import { RoleName } from './role-name';
+import { environmentRepository } from './repositories';
+import { rejectIfNotAuthorized } from './helpers';
+import { AuthData } from '../lib/auth-data';
+import * as environmentValidator from '../validation/environment';
+import { PaginationRequest } from '../lib/pagination/request';
 
 enum RuleName {
-  Add = "environment.add",
-  Update = "environment.update",
-  Delete = "environment.delete",
-  FetchAll = "environment.fetchAll",
-  Get = "environment.get"
+  Add = 'environment.add',
+  Update = 'environment.update',
+  Delete = 'environment.delete',
+  FetchAll = 'environment.fetchAll',
+  Get = 'environment.get'
 }
 
 export class EnvironmentModel implements Model {

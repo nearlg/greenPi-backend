@@ -1,7 +1,7 @@
-import { DocumentQuery, Document, Query } from "mongoose";
-import { DataErrorName } from "../../../lib/errors/data-error";
-import { PaginationData } from "../../../lib/pagination/data";
-import { PaginationRequest } from "../../../lib/pagination/request";
+import { DocumentQuery, Document, Query } from 'mongoose';
+import { DataErrorName } from '../../../lib/errors/data-error';
+import { PaginationData } from '../../../lib/pagination/data';
+import { PaginationRequest } from '../../../lib/pagination/request';
 
 function toObjectDocument(document: any) {
   return document.toObject();
@@ -12,12 +12,12 @@ function normalizeDocuments(documents: any[]): any[] {
 }
 
 function normalizeDocument(document: any) {
-  if (typeof document !== "object") {
+  if (typeof document !== 'object') {
     return document;
   }
   // Normalize fields
   if (document._id) {
-    document.id = document._id + "";
+    document.id = document._id + '';
     delete document._id;
   }
   // Check all the fields
@@ -55,12 +55,12 @@ export function rejectIfNull(errorMsg: string, document: any) {
 export function getSearchingObject(gte?: Date, lte?: Date): Object {
   const searchingObject = {};
   if (gte || lte) {
-    searchingObject["date"] = {};
+    searchingObject['date'] = {};
     if (gte) {
-      searchingObject["date"]["$gte"] = gte;
+      searchingObject['date']['$gte'] = gte;
     }
     if (lte) {
-      searchingObject["date"]["$lte"] = lte;
+      searchingObject['date']['$lte'] = lte;
     }
   }
   return searchingObject;
@@ -82,7 +82,7 @@ export async function paginateQuery<T extends Document>(
   const pages = Math.ceil(total / limit);
   const docs = await fetchQuery.exec();
   const paginatedData: PaginationData<T> = {
-    data: normalizeData(docs),
+    items: normalizeData(docs),
     limit,
     page,
     total,
