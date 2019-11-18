@@ -18,11 +18,15 @@ type User {
 }
 
 type FetchUsersResult {
-  data: [User!]!
+  items: [User!]!
   limit: Int!
   page: Int!
   total: Int!
   pages: Int!
+}
+
+type SignInResponse {
+  token: String!
 }
 
 input AddUserData {
@@ -40,9 +44,9 @@ input UpdateUserData {
 }
 `;
 const query = `
-signInLocal(email: String!, password: String!): String!
+signInLocal(email: String!, password: String!): SignInResponse!
 getProfile: User!
-fetchUsers(pagination: PaginationData): FetchUsersResult!
+fetchUsers(pagination: PaginationRequest): FetchUsersResult!
 getUser: User!
 `;
 const mutation = `

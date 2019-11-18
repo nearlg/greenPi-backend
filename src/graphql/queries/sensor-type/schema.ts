@@ -12,7 +12,7 @@ type SensorType {
 }
 
 type FetchSensorTypesResult {
-  data: [SensorType!]!
+  items: [SensorType!]!
   limit: Int!
   page: Int!
   total: Int!
@@ -38,7 +38,7 @@ input UpdateSensorTypeData {
 }
 `;
 const query = `
-fetchSensorTypes(pagination: PaginationData): FetchSensorTypesResult!
+fetchSensorTypes(pagination: PaginationRequest): FetchSensorTypesResult!
 getSensorType(id: ID!): SensorType!
 `;
 const mutation = `

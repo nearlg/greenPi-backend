@@ -3,12 +3,12 @@ type Environment {
   id: ID!
   name: String!
   description: String!
-  sensors: [ID!]!
-  pumps: [ID!]!
+  sensors: [Sensor!]!
+  pumps: [Pump!]!
 }
 
 type FetchEnvironmentsResult {
-  data: [Environment!]!
+  items: [Environment!]!
   limit: Int!
   page: Int!
   total: Int!
@@ -31,12 +31,12 @@ input UpdateEnvironmentData {
 }
 `;
 const query = `
-fetchEnvironments(pagination: PaginationData): FetchEnvironmentsResult!
+fetchEnvironments(pagination: PaginationRequest): FetchEnvironmentsResult!
 getEnvironment(id: ID!): Environment!
 `;
 const mutation = `
-addEnvironment(EnvironmentData: AddEnvironmentData!): Environment!
-updateEnvironment(EnvironmentData: UpdateEnvironmentData!): Environment!
+addEnvironment(environmentData: AddEnvironmentData!): Environment!
+updateEnvironment(environmentData: UpdateEnvironmentData!): Environment!
 deleteEnvironment(id: ID!): Environment!
 `;
 

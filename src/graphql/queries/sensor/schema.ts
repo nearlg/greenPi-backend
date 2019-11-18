@@ -3,12 +3,12 @@ type Sensor {
   id: ID!
   name: String!
   description: String!
-  type: String!
+  type: SensorType!
   connectionPorts: [Int!]!
 }
 
 type FetchSensorsResult {
-  data: [Sensor!]!
+  items: [Sensor!]!
   limit: Int!
   page: Int!
   total: Int!
@@ -32,7 +32,7 @@ input UpdateSensorData {
 `;
 
 const query = `
-fetchSensors(pagination: PaginationData): FetchSensorsResult!
+fetchSensors(pagination: PaginationRequest): FetchSensorsResult!
 getSensor(id: ID!): Sensor!
 `;
 const mutation = `

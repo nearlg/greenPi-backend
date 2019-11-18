@@ -1,17 +1,21 @@
-import { User } from "../../../../models/entities/user";
-import { SignInLocalArgs } from "./args/sign-in-local-args";
-import { EditProfileArgs } from "./args/edit-profile-args";
-import { AddUserArgs } from "./args/add-user-args";
-import { SignUpArgs } from "./args/sign-up-args";
-import { UpdateUserArgs } from "./args/update-user-args";
-import { Resolver } from "../../../helpers/resolvers";
-import { GraphqlContext } from "../../../graphql-context";
-import { FetchUsersArgs } from "./args/fetch-users-args";
-import { PaginationData } from "../../../../lib/pagination/data";
+import { User } from '../../../../models/entities/user';
+import { SignInLocalArgs } from './args/sign-in-local-args';
+import { EditProfileArgs } from './args/edit-profile-args';
+import { AddUserArgs } from './args/add-user-args';
+import { SignUpArgs } from './args/sign-up-args';
+import { UpdateUserArgs } from './args/update-user-args';
+import { Resolver } from '../../../helpers/resolvers';
+import { GraphqlContext } from '../../../graphql-context';
+import { FetchUsersArgs } from './args/fetch-users-args';
+import { PaginationData } from '../../../../lib/pagination/data';
+import { SignInResponse } from '../../../../lib/sign-in-response';
 
 export interface UserResolver extends Resolver {
   // User profile
-  signInLocal(args: SignInLocalArgs, context: GraphqlContext): Promise<string>;
+  signInLocal(
+    args: SignInLocalArgs,
+    context: GraphqlContext
+  ): Promise<SignInResponse>;
   signUp(
     args: { userData: SignUpArgs },
     context: GraphqlContext
@@ -32,6 +36,9 @@ export interface UserResolver extends Resolver {
     context: GraphqlContext
   ): Promise<User>;
   deleteUser(args: { id: string }, context: GraphqlContext): Promise<User>;
-  fetchUsers(args: FetchUsersArgs, context: GraphqlContext): Promise<PaginationData<User>>;
+  fetchUsers(
+    args: FetchUsersArgs,
+    context: GraphqlContext
+  ): Promise<PaginationData<User>>;
   getUser(args: { id: string }, context: GraphqlContext): Promise<User>;
 }

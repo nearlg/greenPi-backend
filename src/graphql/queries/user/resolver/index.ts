@@ -1,5 +1,5 @@
-import { UserResolver } from "./user-resolver";
-import { RoleName } from "../../../../models/role-name";
+import { UserResolver } from './user-resolver';
+import { RoleName } from '../../../../models/role-name';
 
 const resolver: UserResolver = {
   async getUser(args, context) {
@@ -37,11 +37,11 @@ const resolver: UserResolver = {
     return doc;
   },
   async signInLocal(args, context) {
-    const token = await context.models.user.signInLocal(
+    const signInResponse = await context.models.user.signInLocal(
       args.email,
       args.password
     );
-    return token;
+    return signInResponse;
   },
   async updateUser(args, context) {
     const doc = await context.models.user.update(args.userData);

@@ -7,7 +7,7 @@ type Measure {
 }
 
 type FetchMeasuresResult {
-  data: [Measure!]!
+  items: [Measure!]!
   limit: Int!
   page: Int!
   total: Int!
@@ -27,11 +27,11 @@ input AddMeasureData {
 }
 `;
 const query = `
-fetchMeasures(by: String!, id: ID!, pagination: PaginationData, filter: MeasureFilter): FetchMeasuresResult!
+fetchMeasures(by: String!, id: ID!, pagination: PaginationRequest, filter: MeasureFilter): FetchMeasuresResult!
 getMeasure(id: ID!): Measure!
 `;
 const mutation = `
-addMeasure(MeasureData: AddMeasureData!): Measure!
+addMeasure(measureData: AddMeasureData!): Measure!
 deleteMeasure(id: ID!): Measure!
 `;
 

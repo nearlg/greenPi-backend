@@ -1,5 +1,5 @@
 export const genericTypes = `
-input PaginationData {
+input PaginationRequest {
   limit: Int!
   page: Int
 }

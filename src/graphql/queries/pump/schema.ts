@@ -7,7 +7,7 @@ type Pump {
 }
 
 type FetchPumpsResult {
-  data: [Pump!]!
+  items: [Pump!]!
   limit: Int!
   page: Int!
   total: Int!
@@ -29,7 +29,7 @@ input UpdatePumpData {
 `;
 
 const query = `
-fetchPumps(pagination: PaginationData): FetchPumpsResult!
+fetchPumps(pagination: PaginationRequest): FetchPumpsResult!
 getPump(id: ID!): Pump!
 `;
 const mutation = `
