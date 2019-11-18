@@ -1,6 +1,6 @@
 const query = `
 authUrl: String!
-signInGoogle(code: String!): String!
+signInGoogle(code: String!): SignInResponse!
 `;
 
 const schema: PreGraphqlSchema = {

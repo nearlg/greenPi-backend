@@ -1,4 +1,5 @@
-import { GoogleResolver } from "./google-resolver";
+import { GoogleResolver } from './google-resolver';
+import { SignInResponse } from '../../../../lib/sign-in-response';
 
 const resolver: GoogleResolver = {
   async authUrl(args, context) {
@@ -7,7 +8,10 @@ const resolver: GoogleResolver = {
   },
   async signInGoogle(args, context) {
     const token = await context.models.google.signIn(args.code);
-    return token;
+    const signInResponse: SignInResponse = {
+      token
+    };
+    return signInResponse;
   }
 };
 
