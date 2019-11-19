@@ -1,5 +1,5 @@
 const query = `
-authUrl: String!
+googleAuthUrl: String!
 signInGoogle(code: String!): SignInResponse!
 `;
 
