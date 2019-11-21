@@ -1,6 +1,6 @@
 {
   "name": "greenpi-backend",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Save measures and configuration of greenPi project",
   "main": "dist/src/index.js",
   "scripts": {
