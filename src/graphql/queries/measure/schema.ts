@@ -6,6 +6,13 @@ type Measure {
   value: Int!
 }
 
+type MeasurePopulated {
+  id: ID!
+  date: String!
+  sensor: Sensor!
+  value: Int!
+}
+
 type FetchMeasuresResult {
   items: [Measure!]!
   limit: Int!
@@ -28,7 +35,7 @@ input AddMeasureData {
 `;
 const query = `
 fetchMeasures(by: String!, id: ID!, pagination: PaginationRequest, filter: MeasureFilter): FetchMeasuresResult!
-getMeasure(id: ID!): Measure!
+getMeasure(id: ID!): MeasurePopulated!
 `;
 const mutation = `
 addMeasure(measureData: AddMeasureData!): Measure!

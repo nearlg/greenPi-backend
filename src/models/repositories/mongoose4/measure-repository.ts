@@ -53,13 +53,7 @@ export class MeasureMongooseRepository implements MeasureRepository {
     const searchingObject = { sensor: sensorId };
     const docs = await MeasureModel.find(searchingObject)
       .sort({ date: -1 })
-      .limit(1)
-      .populate({
-        path: "sensor",
-        populate: {
-          path: "type"
-        }
-      });
+      .limit(1);
     rejectIfNull("Sensor not found", docs);
     return normalizeData(docs[0]);
   }
@@ -125,12 +119,6 @@ export class MeasureMongooseRepository implements MeasureRepository {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor"] = { $in: sensorIds };
     const query = MeasureModel.find(searchingObject)
-      .populate({
-        path: "sensor",
-        populate: {
-          path: "type"
-        }
-      })
       .sort(sortBy);
     const countQuery = MeasureModel.find(
       searchingObject
@@ -150,12 +138,6 @@ export class MeasureMongooseRepository implements MeasureRepository {
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["sensor"] = sensorId;
     const query = MeasureModel.find(searchingObject)
-      .populate({
-        path: "sensor",
-        populate: {
-          path: "type"
-        }
-      })
       .sort(sortBy);
     const countQuery = MeasureModel.find(
       searchingObject
@@ -165,19 +147,7 @@ export class MeasureMongooseRepository implements MeasureRepository {
   }
 
   async create(document: Measure): Promise<Measure> {
-    let doc = await MeasureModel.create(document);
-    doc = await MeasureModel.populate(doc, {
-      path: "sensor",
-      populate: {
-        path: "type"
-      }
-    });
-    doc = await MeasureModel.populate(doc, {
-      path: "sensor",
-      populate: {
-        path: "type"
-      }
-    });
+    const doc = await MeasureModel.create(document);
     return normalizeData(doc);
   }
 
@@ -185,12 +155,6 @@ export class MeasureMongooseRepository implements MeasureRepository {
     const doc = await MeasureModel.findByIdAndUpdate(document.id, document, {
       new: true
     })
-      .populate({
-        path: "sensor",
-        populate: {
-          path: "type"
-        }
-      })
       .exec();
     rejectIfNull("Measure not found", doc);
     return normalizeData(doc);
