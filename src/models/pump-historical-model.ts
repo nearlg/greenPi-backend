@@ -48,7 +48,7 @@ export class PumpHistoricalModel implements Model {
     return pumpHistorical;
   }
 
-  async FetchByEnvironmentId(
+  async fetchByEnvironmentId(
     id: string,
     pagination?: PaginationRequest,
     filter?: FetchFilter
@@ -64,7 +64,7 @@ export class PumpHistoricalModel implements Model {
     return docs;
   }
 
-  async FetchByPumpId(
+  async fetchByPumpId(
     id: string,
     pagination?: PaginationRequest,
     filter?: FetchFilter

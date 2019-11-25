@@ -17,10 +17,10 @@ const resolver: MeasureResolver = {
   },
   async fetchMeasures(args, context) {
     if (args.by === FilterBy.SensorId) {
-      return context.models.measure.FetchBySensorId(args.id, args.pagination, args.filter);
+      return context.models.measure.fetchBySensorId(args.id, args.pagination, args.filter);
     }
     if (args.by === FilterBy.EnvironmentId) {
-      return context.models.measure.FetchByEnvironmentId(args.id, args.pagination, args.filter);
+      return context.models.measure.fetchByEnvironmentId(args.id, args.pagination, args.filter);
     }
   },
   async getMeasure(args, context) {

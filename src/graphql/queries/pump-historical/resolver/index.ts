@@ -17,16 +17,16 @@ const resolver: PumpHistoricalResolver = {
     const doc = await context.models.pumpHistorical.delete(args.id);
     return doc;
   },
-  async fetchPumpHistorical(args, context) {
+  async fetchPumpHistoricals(args, context) {
     if (args.by === FilterBy.PumpId) {
-      return context.models.pumpHistorical.FetchByPumpId(
+      return context.models.pumpHistorical.fetchByPumpId(
         args.id,
         args.pagination,
         args.filter
       );
     }
     if (args.by === FilterBy.EnvironmentId) {
-      return context.models.pumpHistorical.FetchByEnvironmentId(
+      return context.models.pumpHistorical.fetchByEnvironmentId(
         args.id,
         args.pagination,
         args.filter

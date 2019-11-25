@@ -13,7 +13,7 @@ export interface PumpHistoricalResolver {
     args: { id: string },
     context: GraphqlContext
   ): Promise<PumpHistorical>;
-  fetchPumpHistorical(
+  fetchPumpHistoricals(
     args: FetchPumpHistoricalArgs,
     context: GraphqlContext
   ): Promise<PaginationData<PumpHistorical>>;

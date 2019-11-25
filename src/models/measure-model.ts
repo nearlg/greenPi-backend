@@ -48,7 +48,7 @@ export class MeasureModel implements Model {
     return measure;
   }
 
-  async FetchByEnvironmentId(
+  async fetchByEnvironmentId(
     id: string,
     pagination?: PaginationRequest,
     filter?: FetchFilter
@@ -64,7 +64,7 @@ export class MeasureModel implements Model {
     return docs;
   }
 
-  async FetchBySensorId(
+  async fetchBySensorId(
     id: string,
     pagination?: PaginationRequest,
     filter?: FetchFilter
