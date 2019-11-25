@@ -57,8 +57,7 @@ export class PumpHistoricalMongooseRepository
     const searchingObject = { pump: pumpId };
     const doc = await PumpHistoricalModel.find(searchingObject)
       .sort({ date: -1 })
-      .limit(1)
-      .populate("pump");
+      .limit(1);
     rejectIfNull("Pump not found", doc);
     return normalizeData(doc[0]);
   }
@@ -74,7 +73,6 @@ export class PumpHistoricalMongooseRepository
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["pump"] = { $in: pumpIds };
     const query = PumpHistoricalModel.find(searchingObject)
-      .populate("pump")
       .sort(sortBy);
     const countQuery = PumpHistoricalModel.find(
       searchingObject
@@ -94,7 +92,6 @@ export class PumpHistoricalMongooseRepository
     const searchingObject = getSearchingObject(gte, lte);
     searchingObject["pump"] = pumpId;
     const query = PumpHistoricalModel.find(searchingObject)
-      .populate("pump")
       .sort(sortBy);
     const countQuery = PumpHistoricalModel.find(
       searchingObject
@@ -104,13 +101,7 @@ export class PumpHistoricalMongooseRepository
   }
 
   async create(document: PumpHistorical): Promise<PumpHistorical> {
-    let doc = await PumpHistoricalModel.create(document);
-    doc = await PumpHistoricalModel.populate(doc, {
-      path: "pump"
-    });
-    doc = await PumpHistoricalModel.populate(doc, {
-      path: "pump"
-    });
+    const doc = await PumpHistoricalModel.create(document);
     return normalizeData(doc);
   }
 
@@ -120,7 +111,6 @@ export class PumpHistoricalMongooseRepository
       document,
       { new: true }
     )
-      .populate("pump")
       .exec();
     rejectIfNull("Pump historical not found", doc);
     return normalizeData(doc);

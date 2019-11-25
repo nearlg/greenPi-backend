@@ -6,6 +6,13 @@ type PumpHistorical {
   state: Int!
 }
 
+type PumpHistoricalPopulated {
+  id: ID!
+  date: String!
+  pump: Pump!
+  state: Int!
+}
+
 type FetchPumpHistoricalsResult {
   items: [PumpHistorical!]!
   limit: Int!
@@ -28,7 +35,7 @@ input AddPumpHistoricalData {
 `;
 const query = `
 fetchPumpHistoricals(by: String!, id: ID!, pagination: PaginationRequest, filter: PumpHistoricalFilter): FetchPumpHistoricalsResult!
-getPumpHistorical(id: ID!): PumpHistorical!
+getPumpHistorical(id: ID!): PumpHistoricalPopulated!
 `;
 const mutation = `
 addPumpHistorical(pumpHistoricalData: AddPumpHistoricalData!): PumpHistorical!
