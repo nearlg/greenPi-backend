@@ -1,9 +1,9 @@
-import { SensorType } from "../../../../models/entities/sensor-type";
-import { AddSensorTypeArgs } from "./args/add-sensor-type-args";
-import { UpdateSensorTypeArgs } from "./args/update-sensor-type-args";
-import { GraphqlContext } from "../../../graphql-context";
-import { FetchSensorTypesArgs } from "./args/fetch-sensor-types-args";
-import { PaginationData } from "../../../../lib/pagination/data";
+import { SensorType } from '../../../../models/entities/sensor-type';
+import { AddSensorTypeArgs } from './args/add-sensor-type-args';
+import { UpdateSensorTypeArgs } from './args/update-sensor-type-args';
+import { GraphqlContext } from '../../../graphql-context';
+import { FetchSensorTypesArgs } from './args/fetch-sensor-types-args';
+import { PagedData } from '../../../../lib/pagination/paged-data';
 
 export interface SensorTypeResolver {
   addSensorType(
@@ -18,7 +18,10 @@ export interface SensorTypeResolver {
     args: { id: string },
     context: GraphqlContext
   ): Promise<SensorType>;
-  fetchSensorTypes(args: FetchSensorTypesArgs, context: GraphqlContext): Promise<PaginationData<SensorType>>;
+  fetchSensorTypes(
+    args: FetchSensorTypesArgs,
+    context: GraphqlContext
+  ): Promise<PagedData<SensorType>>;
   getSensorType(
     args: { id: string },
     context: GraphqlContext

@@ -1,5 +1,4 @@
-export interface PaginationData<T> {
-  items: T[];
+export interface Pagination {
   limit: number;
   page: number;
   total: number;

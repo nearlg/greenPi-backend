@@ -1,8 +1,8 @@
-import { Measure } from "../../../../models/entities/measure";
-import { AddMeasureArgs } from "./args/add-measure-args";
-import { FetchMeasuresArgs } from "./args/fetch-measures-args";
-import { GraphqlContext } from "../../../graphql-context";
-import { PaginationData } from "../../../../lib/pagination/data";
+import { Measure } from '../../../../models/entities/measure';
+import { AddMeasureArgs } from './args/add-measure-args';
+import { FetchMeasuresArgs } from './args/fetch-measures-args';
+import { GraphqlContext } from '../../../graphql-context';
+import { PagedData } from '../../../../lib/pagination/paged-data';
 
 export interface MeasureResolver {
   addMeasure(
@@ -16,6 +16,6 @@ export interface MeasureResolver {
   fetchMeasures(
     args: FetchMeasuresArgs,
     context: GraphqlContext
-  ): Promise<PaginationData<Measure>>;
+  ): Promise<PagedData<Measure>>;
   getMeasure(args: { id: string }, context: GraphqlContext): Promise<Measure>;
 }

@@ -1,5 +1,5 @@
 export interface AddMeasureArgs {
-  date?: Date;
+  date?: string;
   sensor: string;
   value: number;
 }

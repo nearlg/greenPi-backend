@@ -1,8 +1,8 @@
-import { PumpHistorical } from "../../../../models/entities/pump-historical";
-import { AddPumpHistoricalArgs } from "./args/add-pump-historical-args";
-import { FetchPumpHistoricalArgs } from "./args/fetch-pump-historical-args";
-import { GraphqlContext } from "../../../graphql-context";
-import { PaginationData } from "../../../../lib/pagination/data";
+import { PumpHistorical } from '../../../../models/entities/pump-historical';
+import { AddPumpHistoricalArgs } from './args/add-pump-historical-args';
+import { FetchPumpHistoricalArgs } from './args/fetch-pump-historical-args';
+import { GraphqlContext } from '../../../graphql-context';
+import { PagedData } from '../../../../lib/pagination/paged-data';
 
 export interface PumpHistoricalResolver {
   addPumpHistorical(
@@ -16,7 +16,7 @@ export interface PumpHistoricalResolver {
   fetchPumpHistoricals(
     args: FetchPumpHistoricalArgs,
     context: GraphqlContext
-  ): Promise<PaginationData<PumpHistorical>>;
+  ): Promise<PagedData<PumpHistorical>>;
   getPumpHistorical(
     args: { id: string },
     context: GraphqlContext

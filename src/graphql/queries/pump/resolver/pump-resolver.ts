@@ -1,9 +1,9 @@
-import { Pump } from "../../../../models/entities/pump";
-import { AddPumpArgs } from "./args/add-pump-args";
-import { UpdatePumpArgs } from "./args/update-pump-args";
-import { GraphqlContext } from "../../../graphql-context";
-import { FetchPumpsArgs } from "./args/fetch-pumps-args";
-import { PaginationData } from "../../../../lib/pagination/data";
+import { Pump } from '../../../../models/entities/pump';
+import { AddPumpArgs } from './args/add-pump-args';
+import { UpdatePumpArgs } from './args/update-pump-args';
+import { GraphqlContext } from '../../../graphql-context';
+import { FetchPumpsArgs } from './args/fetch-pumps-args';
+import { PagedData } from '../../../../lib/pagination/paged-data';
 
 export interface PumpResolver {
   addPump(
@@ -15,6 +15,9 @@ export interface PumpResolver {
     context: GraphqlContext
   ): Promise<Pump>;
   deletePump(args: { id: string }, context: GraphqlContext): Promise<Pump>;
-  fetchPumps(args: FetchPumpsArgs, context: GraphqlContext): Promise<PaginationData<Pump>>;
+  fetchPumps(
+    args: FetchPumpsArgs,
+    context: GraphqlContext
+  ): Promise<PagedData<Pump>>;
   getPump(args: { id: string }, context: GraphqlContext): Promise<Pump>;
 }

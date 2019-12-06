@@ -7,7 +7,7 @@ import { UpdateUserArgs } from './args/update-user-args';
 import { Resolver } from '../../../helpers/resolvers';
 import { GraphqlContext } from '../../../graphql-context';
 import { FetchUsersArgs } from './args/fetch-users-args';
-import { PaginationData } from '../../../../lib/pagination/data';
+import { PagedData } from '../../../../lib/pagination/paged-data';
 import { SignInResponse } from '../../../../lib/sign-in-response';
 
 export interface UserResolver extends Resolver {
@@ -39,6 +39,6 @@ export interface UserResolver extends Resolver {
   fetchUsers(
     args: FetchUsersArgs,
     context: GraphqlContext
-  ): Promise<PaginationData<User>>;
+  ): Promise<PagedData<User>>;
   getUser(args: { id: string }, context: GraphqlContext): Promise<User>;
 }
