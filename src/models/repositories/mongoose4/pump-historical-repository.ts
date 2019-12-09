@@ -1,16 +1,15 @@
-import mongoose = require("mongoose");
+import mongoose = require('mongoose');
 import {
   rejectIfNull,
   normalizeData,
   getSearchingObject,
   paginateQuery
-} from "./helpers";
-import {
-  PumpHistoricalRepository,
-  FindAllFilter
-} from "../interfaces/pump-historical-repository";
-import { PumpHistorical } from "../../entities/pump-historical";
-import { PaginationRequest } from "../../../lib/pagination/request";
+} from './helpers';
+import { PumpHistoricalRepository } from '../interfaces/pump-historical-repository';
+import { PumpHistorical } from '../../entities/pump-historical';
+import { PaginationRequest } from '../../../lib/pagination/request';
+import { FindAllFilter } from '../interfaces/pump-historical-repository/find-all-filter';
+import { FindAllOptions } from '../interfaces/pump-historical-repository/find-all-options';
 
 interface PumpHistoricalModel extends PumpHistorical, mongoose.Document {}
 
@@ -18,21 +17,21 @@ const pumpHistoricalSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now(),
-    required: [true, "A pump historical must have a date"]
+    required: [true, 'A pump historical must have a date']
   },
   pump: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Pump",
-    required: [true, "A pump historical must have a pump"]
+    ref: 'Pump',
+    required: [true, 'A pump historical must have a pump']
   },
   state: {
     type: Number,
-    required: [true, "A pump historical must have the state"]
+    required: [true, 'A pump historical must have the state']
   }
 });
 
 const PumpHistoricalModel = mongoose.model<PumpHistoricalModel>(
-  "PumpHistorical",
+  'PumpHistorical',
   pumpHistoricalSchema
 );
 
@@ -42,62 +41,46 @@ const defaultPagination: PaginationRequest = {
 
 export class PumpHistoricalMongooseRepository
   implements PumpHistoricalRepository {
-  async findLastsByPumpIds(pumpIds: string[]): Promise<PumpHistoricalModel[]> {
+  async findLastsByPumpIds(
+    pumpIds: string[],
+    limit: number = 1
+  ): Promise<PumpHistoricalModel[]> {
     // If it can not find a pumpHistorical,
     // it will be undefined in the 'pumpHistoricals' array
     const pumpHistoricalsPromises = pumpIds.map(pumpId =>
-      this.findLastByPumpId(pumpId).catch(error => undefined)
+      this.findLastsByPumpId(pumpId, limit).catch(error => undefined)
     );
     // Remove all the undefined elements from the array
     const pumpHistoricals = await Promise.all(pumpHistoricalsPromises);
     return pumpHistoricals.filter(p => p != undefined);
   }
 
-  async findLastByPumpId(pumpId: string): Promise<PumpHistoricalModel> {
+  async findLastsByPumpId(
+    pumpId: string,
+    limit: number = 1
+  ): Promise<PumpHistoricalModel[]> {
     const searchingObject = { pump: pumpId };
     const doc = await PumpHistoricalModel.find(searchingObject)
       .sort({ date: -1 })
-      .limit(1);
-    rejectIfNull("Pump not found", doc);
-    return normalizeData(doc[0]);
+      .limit(limit);
+    rejectIfNull('Pump not found', doc);
+    return normalizeData(doc);
   }
 
-  async findAllByPumpIds(
-    pumpIds: string[],
-    pagination: PaginationRequest = defaultPagination,
-    filter?: FindAllFilter
-  ) {
-    const gte = filter && filter.gte ? new Date(filter.gte) : null;
-    const lte = filter && filter.lte ? new Date(filter.lte) : null;
-    const sortBy: string = filter ? filter.sortBy : null;
+  async findAllByPumpIds(pumpIds: string[], options: FindAllOptions = {}) {
+    const paginationReq = options.paginationRequest;
+    const filter = options.filter;
+    const gte = filter && filter.gte ? filter.gte : null;
+    const lte = filter && filter.lte ? filter.lte : null;
+    const sortBy: string = filter && filter.sortBy ? filter.sortBy : null;
     const searchingObject = getSearchingObject(gte, lte);
-    searchingObject["pump"] = { $in: pumpIds };
-    const query = PumpHistoricalModel.find(searchingObject)
-      .sort(sortBy);
+    searchingObject['pump'] = { $in: pumpIds };
+    const query = PumpHistoricalModel.find(searchingObject).sort(sortBy);
     const countQuery = PumpHistoricalModel.find(
       searchingObject
     ).estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, pagination);
-    return paginatedData;
-  }
-
-  async findAllByPumpId(
-    pumpId: string,
-    pagination: PaginationRequest = defaultPagination,
-    filter?: FindAllFilter
-  ) {
-    const gte = filter && filter.gte ? new Date(filter.gte) : null;
-    const lte = filter && filter.lte ? new Date(filter.lte) : null;
-    const sortBy: string = filter ? filter.sortBy : "date";
-    const searchingObject = getSearchingObject(gte, lte);
-    searchingObject["pump"] = pumpId;
-    const query = PumpHistoricalModel.find(searchingObject)
-      .sort(sortBy);
-    const countQuery = PumpHistoricalModel.find(
-      searchingObject
-    ).estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, pagination);
-    return paginatedData;
+    const pagedData = await paginateQuery(query, countQuery, paginationReq);
+    return pagedData;
   }
 
   async create(document: PumpHistorical): Promise<PumpHistorical> {
@@ -110,30 +93,29 @@ export class PumpHistoricalMongooseRepository
       document.id,
       document,
       { new: true }
-    )
-      .exec();
-    rejectIfNull("Pump historical not found", doc);
+    ).exec();
+    rejectIfNull('Pump historical not found', doc);
     return normalizeData(doc);
   }
 
   async remove(id: string): Promise<PumpHistorical> {
     const doc = await PumpHistoricalModel.findByIdAndRemove(id).exec();
-    rejectIfNull("Pump historical not found", doc);
+    rejectIfNull('Pump historical not found', doc);
     return normalizeData(doc);
   }
 
   async findAll(pagination: PaginationRequest = defaultPagination) {
-    const query = PumpHistoricalModel.find().populate("pump");
+    const query = PumpHistoricalModel.find().populate('pump');
     const countQuery = PumpHistoricalModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, pagination);
-    return paginatedData;
+    const pagedData = await paginateQuery(query, countQuery, pagination);
+    return pagedData;
   }
 
   async find(id: string): Promise<PumpHistorical> {
     const doc = await PumpHistoricalModel.findById(id)
-      .populate("pump")
+      .populate('pump')
       .exec();
-    rejectIfNull("Pump historical not found", doc);
+    rejectIfNull('Pump historical not found', doc);
     return normalizeData(doc);
   }
 }

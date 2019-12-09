@@ -1,7 +1,8 @@
 import { DocumentQuery, Document, Query } from 'mongoose';
 import { DataErrorName } from '../../../lib/errors/data-error';
-import { PaginationData } from '../../../lib/pagination/data';
+import { PagedData } from '../../../lib/pagination/paged-data';
 import { PaginationRequest } from '../../../lib/pagination/request';
+import { Pagination } from '../../../lib/pagination';
 
 function toObjectDocument(document: any) {
   return document.toObject();
@@ -69,10 +70,11 @@ export function getSearchingObject(gte?: Date, lte?: Date): Object {
 export async function paginateQuery<T extends Document>(
   fetchQuery: DocumentQuery<T[], T>,
   countQuery: Query<number>,
-  pagination: PaginationRequest
+  paginationReq: PaginationRequest
 ) {
-  const page = !pagination.page || pagination.page < 1 ? 1 : pagination.page;
-  const limit = Math.max(1, pagination.limit);
+  const page =
+    !paginationReq.page || paginationReq.page < 1 ? 1 : paginationReq.page;
+  const limit = Math.max(1, paginationReq.limit);
   const skip = (page - 1) * limit;
   fetchQuery = fetchQuery.skip(skip);
   if (limit) {
@@ -81,12 +83,15 @@ export async function paginateQuery<T extends Document>(
   const total = await countQuery.exec();
   const pages = Math.ceil(total / limit);
   const docs = await fetchQuery.exec();
-  const paginatedData: PaginationData<T> = {
-    items: normalizeData(docs),
+  const pagination: Pagination = {
     limit,
     page,
-    total,
-    pages
+    pages,
+    total
+  };
+  const paginatedData: PagedData<T> = {
+    items: normalizeData(docs),
+    pagination
   };
   return paginatedData;
 }

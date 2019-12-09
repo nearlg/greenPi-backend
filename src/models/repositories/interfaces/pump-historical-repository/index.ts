@@ -12,7 +12,6 @@ export interface PumpHistoricalRepository extends Repository<PumpHistorical> {
     limit?: number
   ): Promise<PumpHistorical[]>;
   findLastsByPumpId(pumpId: string, limit?: number): Promise<PumpHistorical[]>;
-
   findAllByPumpIds(
     pumpIds: string[],
     options?: FindAllOptions

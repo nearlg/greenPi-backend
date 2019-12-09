@@ -1,33 +1,33 @@
-import mongoose = require("mongoose");
-import { rejectIfNull, normalizeData, paginateQuery } from "./helpers";
-import { EnvironmentRepository } from "../interfaces/environment-repository";
-import { Environment } from "../../entities/environment";
-import { PaginationRequest } from "../../../lib/pagination/request";
+import mongoose = require('mongoose');
+import { rejectIfNull, normalizeData, paginateQuery } from './helpers';
+import { EnvironmentRepository } from '../interfaces/environment-repository';
+import { Environment } from '../../entities/environment';
+import { PaginationRequest } from '../../../lib/pagination/request';
 
 interface EnvironmentModel extends Environment, mongoose.Document {}
 
 const EnvironmentSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "An environment must have a name"]
+    required: [true, 'An environment must have a name']
   },
   description: String,
   sensors: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Sensor"
+      ref: 'Sensor'
     }
   ],
   pumps: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Pump"
+      ref: 'Pump'
     }
   ]
 });
 
 const EnvironmentModel = mongoose.model<EnvironmentModel>(
-  "Environment",
+  'Environment',
   EnvironmentSchema
 );
 
@@ -38,14 +38,14 @@ const defaultPagination: PaginationRequest = {
 export class EnvironmentMongooseRepository implements EnvironmentRepository {
   async create(document: Environment): Promise<Environment> {
     let doc = await EnvironmentModel.create(document);
-    rejectIfNull("Environment not found", doc);
+    rejectIfNull('Environment not found', doc);
     doc = await EnvironmentModel.populate(doc, {
-      path: "pumps"
+      path: 'pumps'
     });
     doc = await EnvironmentModel.populate(doc, {
-      path: "sensors",
+      path: 'sensors',
       populate: {
-        path: "type"
+        path: 'type'
       }
     });
     return normalizeData(doc);
@@ -57,15 +57,15 @@ export class EnvironmentMongooseRepository implements EnvironmentRepository {
       document,
       { new: true }
     )
-      .populate("pumps")
+      .populate('pumps')
       .populate({
-        path: "sensors",
+        path: 'sensors',
         populate: {
-          path: "type"
+          path: 'type'
         }
       })
       .exec();
-    rejectIfNull("Environment not found", doc);
+    rejectIfNull('Environment not found', doc);
     return normalizeData(doc);
   }
 
@@ -76,29 +76,29 @@ export class EnvironmentMongooseRepository implements EnvironmentRepository {
 
   async findAll(pagination: PaginationRequest = defaultPagination) {
     const query = EnvironmentModel.find()
-      .populate("pumps")
+      .populate('pumps')
       .populate({
-        path: "sensors",
+        path: 'sensors',
         populate: {
-          path: "type"
+          path: 'type'
         }
       });
     const countQuery = EnvironmentModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, pagination);
-    return paginatedData;
+    const pagedData = await paginateQuery(query, countQuery, pagination);
+    return pagedData;
   }
 
   async find(id: string): Promise<Environment> {
     const doc = await EnvironmentModel.findById(id)
-      .populate("pumps")
+      .populate('pumps')
       .populate({
-        path: "sensors",
+        path: 'sensors',
         populate: {
-          path: "type"
+          path: 'type'
         }
       })
       .exec();
-    rejectIfNull("Environment not found", doc);
+    rejectIfNull('Environment not found', doc);
     return normalizeData(doc);
   }
 }

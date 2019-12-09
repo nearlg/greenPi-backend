@@ -52,8 +52,8 @@ export class SensorMongooseRepository implements SensorRepository {
   async findAll(pagination: PaginationRequest = defaultPagination) {
     const query = SensorModel.find().populate('type');
     const countQuery = SensorModel.estimatedDocumentCount();
-    const paginatedData = await paginateQuery(query, countQuery, pagination);
-    return paginatedData;
+    const pagedData = await paginateQuery(query, countQuery, pagination);
+    return pagedData;
   }
 
   async find(id: string): Promise<Sensor> {
