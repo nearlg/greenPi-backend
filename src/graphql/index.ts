@@ -1,18 +1,19 @@
-import * as restify from "restify";
-import graphqlHTTP = require("express-graphql");
-import { customFormatErrorFn, buildSchemas, extractResolvers } from "./helpers";
-import userQueries from "./queries/user";
-import sensorTypeQueries from "./queries/sensor-type";
-import sensorQueries from "./queries/sensor";
-import pumpHistoricalQueries from "./queries/pump-historical";
-import pumpQueries from "./queries/pump";
-import measureQueries from "./queries/measure";
-import googleQueries from "./queries/google";
-import environmentQueries from "./queries/environment";
-import { GraphqlQuery } from "./helpers/graphql-query";
-import { Server } from "../config";
-import { getModels } from "../models";
-import { getAuthenticationField } from "../services/auth.service";
+import * as restify from 'restify';
+import graphqlHTTP = require('express-graphql');
+import { customFormatErrorFn, buildSchemas, extractResolvers } from './helpers';
+import userQueries from './queries/user';
+import sensorTypeQueries from './queries/sensor-type';
+import sensorQueries from './queries/sensor';
+import pumpHistoricalQueries from './queries/pump-historical';
+import pumpQueries from './queries/pump';
+import measureQueries from './queries/measure';
+import googleQueries from './queries/google';
+import environmentQueries from './queries/environment';
+import { GraphqlQuery } from './helpers/graphql-query';
+import { Server } from '../config';
+import { getModels } from '../models';
+import { getAuthenticationField } from '../services/auth.service';
+import { dateTypeResolver } from './generics/date-type';
 
 const graphqlQueries: GraphqlQuery[] = [
   userQueries,
@@ -26,9 +27,12 @@ const graphqlQueries: GraphqlQuery[] = [
 ];
 
 const schemas = buildSchemas(graphqlQueries);
-const resolvers = extractResolvers(graphqlQueries);
+const resolvers = {
+  ...extractResolvers(graphqlQueries),
+  ...dateTypeResolver
+};
 
-export function setApiRoute(server: restify.Server, mainPath: string = "") {
+export function setApiRoute(server: restify.Server, mainPath: string = '') {
   // Allow OPTION requests
   server.opts(mainPath, (req, res, next) => {
     res.send(200);
@@ -49,7 +53,7 @@ export function setApiRoute(server: restify.Server, mainPath: string = "") {
       };
     })
   );
-  if (Server.ENVIRONMENT === "production") {
+  if (Server.ENVIRONMENT === 'production') {
     return;
   }
   server.get(
