@@ -1,9 +1,9 @@
-import { GraphQLError } from "graphql/error/GraphQLError";
-import { buildSchema } from "graphql";
-import { GraphqlCustomError } from "./graphql-custom-error";
-import { GraphqlCustomErrorName } from "./graphql-custom-error-name";
-import buildGraphqlSchema from "./build-graphql-schema";
-import { GraphqlQuery } from "./graphql-query";
+import { GraphQLError } from 'graphql/error/GraphQLError';
+import { buildSchema } from 'graphql';
+import { GraphqlCustomError } from './graphql-custom-error';
+import { GraphqlCustomErrorName } from './graphql-custom-error-name';
+import buildGraphqlSchema from './build-graphql-schema';
+import { GraphqlQuery } from './graphql-query';
 
 export function customFormatErrorFn(err: GraphQLError) {
   if (!err.originalError) {
