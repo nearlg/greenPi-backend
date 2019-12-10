@@ -1,19 +1,21 @@
-export const genericTypes = `
-scalar Date
+import gql from 'graphql-tag';
 
-input PaginationRequest {
-  limit: Int!
-  page: Int
-}
+export const genericTypes = gql`
+  scalar Date
 
-type Pagination {
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
-}
+  input PaginationRequest {
+    limit: Int!
+    page: Int
+  }
 
-type SignInResponse {
-  token: String!
-}
+  type Pagination {
+    limit: Int!
+    page: Int!
+    total: Int!
+    pages: Int!
+  }
+
+  type SignInResponse {
+    token: String!
+  }
 `;

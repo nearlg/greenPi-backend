@@ -1,4 +1,6 @@
-const body = `
+import gql from 'graphql-tag';
+
+const body = gql`
 type PumpHistorical {
   id: ID!
   date: Date!
@@ -43,11 +45,11 @@ input AddPumpHistoricalData {
   state: Int!
 }
 `;
-const query = `
+const query = gql`
 fetchPumpHistoricals(by: String!, id: ID!, pagination: PaginationRequest, filter: PumpHistoricalFilter): FetchPumpHistoricalsResult!
 getPumpHistorical(id: ID!): PumpHistoricalPopulated!
 `;
-const mutation = `
+const mutation = gql`
 addPumpHistorical(pumpHistoricalData: AddPumpHistoricalData!): PumpHistorical!
 deletePumpHistorical(id: ID!): PumpHistorical!
 `;

@@ -1,4 +1,6 @@
-const body = `
+import gql from 'graphql-tag';
+
+const body = gql`
 type Measure {
   id: ID!
   date: Date!
@@ -43,11 +45,11 @@ input AddMeasureData {
   value: Int!
 }
 `;
-const query = `
+const query = gql`
 fetchMeasures(by: String!, id: ID!, pagination: PaginationRequest, filter: MeasureFilter): FetchMeasuresResult!
 getMeasure(id: ID!): MeasurePopulated!
 `;
-const mutation = `
+const mutation = gql`
 addMeasure(measureData: AddMeasureData!): Measure!
 deleteMeasure(id: ID!): Measure!
 `;

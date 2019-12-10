@@ -1,48 +1,50 @@
-const body = `
-input SignUpData {
-  name: String!
-  email: String!
-  roleName: String!
-}
+import gql from 'graphql-tag';
 
-input EditProfileData {
-  name: String!
-  password: String!
-}
+const body = gql`
+  input SignUpData {
+    name: String!
+    email: String!
+    roleName: String!
+  }
 
-type User {
-  id: ID!
-  name: String!
-  email: String!
-  roleName: String!
-}
+  input EditProfileData {
+    name: String!
+    password: String!
+  }
 
-type FetchUsersResult {
-  items: [User!]!
-  pagination: Pagination!
-}
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+    roleName: String!
+  }
 
-input AddUserData {
-  name: String!
-  email: String!
-  password: String!
-}
+  type FetchUsersResult {
+    items: [User!]!
+    pagination: Pagination!
+  }
 
-input UpdateUserData {
-  id: ID!
-  name: String!
-  email: String!
-  password: String
-  roleName: String!
-}
+  input AddUserData {
+    name: String!
+    email: String!
+    password: String!
+  }
+
+  input UpdateUserData {
+    id: ID!
+    name: String!
+    email: String!
+    password: String
+    roleName: String!
+  }
 `;
-const query = `
+const query = gql`
 signInLocal(email: String!, password: String!): SignInResponse!
 getProfile: User!
 fetchUsers(pagination: PaginationRequest): FetchUsersResult!
 getUser: User!
 `;
-const mutation = `
+const mutation = gql`
 signUp(userData: SignUpData!): User!
 editProfile(userData: EditProfileData!): User!
 addUser(userData: AddUserData!): User!

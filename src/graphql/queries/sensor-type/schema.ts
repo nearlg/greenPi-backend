@@ -1,44 +1,46 @@
-const body = `
-type Unit {
-  name: String!
-  description: String!
-}
+import gql from 'graphql-tag';
 
-type SensorType {
-  id: ID!
-  name: String!
-  description: String!
-  unit: Unit!
-}
+const body = gql`
+  type Unit {
+    name: String!
+    description: String!
+  }
 
-type FetchSensorTypesResult {
-  items: [SensorType!]!
-  pagination: Pagination!
-}
+  type SensorType {
+    id: ID!
+    name: String!
+    description: String!
+    unit: Unit!
+  }
 
-input InputUnit {
-  name: String!
-  description: String!
-}
+  type FetchSensorTypesResult {
+    items: [SensorType!]!
+    pagination: Pagination!
+  }
 
-input AddSensorTypeData {
-  name: String!
-  description: String!
-  unit: InputUnit!
-}
+  input InputUnit {
+    name: String!
+    description: String!
+  }
 
-input UpdateSensorTypeData {
-  id: ID!
-  name: String!
-  description: String!
-  unit: InputUnit!
-}
+  input AddSensorTypeData {
+    name: String!
+    description: String!
+    unit: InputUnit!
+  }
+
+  input UpdateSensorTypeData {
+    id: ID!
+    name: String!
+    description: String!
+    unit: InputUnit!
+  }
 `;
-const query = `
+const query = gql`
 fetchSensorTypes(pagination: PaginationRequest): FetchSensorTypesResult!
 getSensorType(id: ID!): SensorType!
 `;
-const mutation = `
+const mutation = gql`
 addSensorType(sensorTypeData: AddSensorTypeData!): SensorType!
 updateSensorType(sensorTypeData: UpdateSensorTypeData!): SensorType!
 deleteSensorType(id: ID!): SensorType!

@@ -1,4 +1,6 @@
-const query = `
+import gql from 'graphql-tag';
+
+const query = gql`
 googleAuthUrl: String!
 signInGoogle(code: String!): SignInResponse!
 `;

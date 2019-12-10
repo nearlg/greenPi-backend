@@ -1,37 +1,39 @@
-const body = `
-type Environment {
-  id: ID!
-  name: String!
-  description: String!
-  sensors: [Sensor!]!
-  pumps: [Pump!]!
-}
+import gql from 'graphql-tag';
 
-type FetchEnvironmentsResult {
-  items: [Environment!]!
-  pagination: Pagination!
-}
+const body = gql`
+  type Environment {
+    id: ID!
+    name: String!
+    description: String!
+    sensors: [Sensor!]!
+    pumps: [Pump!]!
+  }
 
-input AddEnvironmentData {
-  name: String!
-  description: String!
-  sensors: [ID!]!
-  pumps: [ID!]!
-}
+  type FetchEnvironmentsResult {
+    items: [Environment!]!
+    pagination: Pagination!
+  }
 
-input UpdateEnvironmentData {
-  id: ID!
-  name: String!
-  description: String!
-  sensors: [ID!]!
-  pumps: [ID!]!
-}
+  input AddEnvironmentData {
+    name: String!
+    description: String!
+    sensors: [ID!]!
+    pumps: [ID!]!
+  }
+
+  input UpdateEnvironmentData {
+    id: ID!
+    name: String!
+    description: String!
+    sensors: [ID!]!
+    pumps: [ID!]!
+  }
 `;
-const query = `
+const query = gql`
 fetchEnvironments(pagination: PaginationRequest): FetchEnvironmentsResult!
 getEnvironment(id: ID!): Environment!
 `;
-const mutation = `
+const mutation = gql`
 addEnvironment(environmentData: AddEnvironmentData!): Environment!
 updateEnvironment(environmentData: UpdateEnvironmentData!): Environment!
 deleteEnvironment(id: ID!): Environment!
