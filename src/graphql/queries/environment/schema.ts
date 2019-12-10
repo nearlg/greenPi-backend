@@ -9,10 +9,7 @@ type Environment {
 
 type FetchEnvironmentsResult {
   items: [Environment!]!
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
+  pagination: Pagination!
 }
 
 input AddEnvironmentData {

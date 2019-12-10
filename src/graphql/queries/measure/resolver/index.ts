@@ -1,10 +1,10 @@
-import { MeasureResolver } from "./measure-resolver";
-import { FilterBy } from "./filter-by";
+import { MeasureResolver } from './measure-resolver';
+import { FilterBy } from './filter-by';
 // import { socketIOService } from "../../../services/socket-io.service";
 
 const resolver: MeasureResolver = {
   async addMeasure(args, context) {
-    const date = args.measureData.date || new Date();
+    const date = new Date(args.measureData.date) || new Date();
     const data = { ...args.measureData, date };
     const doc = await context.models.measure.add(data);
     return doc;
@@ -16,12 +16,10 @@ const resolver: MeasureResolver = {
     return doc;
   },
   async fetchMeasures(args, context) {
-    if (args.by === FilterBy.SensorId) {
-      return context.models.measure.fetchBySensorId(args.id, args.pagination, args.filter);
-    }
-    if (args.by === FilterBy.EnvironmentId) {
-      return context.models.measure.fetchByEnvironmentId(args.id, args.pagination, args.filter);
-    }
+    return context.models.measure.fetchBy(
+      args.criteria,
+      args.paginationRequest
+    );
   },
   async getMeasure(args, context) {
     const doc = await context.models.measure.get(args.id);

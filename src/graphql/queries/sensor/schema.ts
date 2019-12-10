@@ -9,10 +9,7 @@ type Sensor {
 
 type FetchSensorsResult {
   items: [Sensor!]!
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
+  pagination: Pagination!
 }
 
 input AddSensorData {

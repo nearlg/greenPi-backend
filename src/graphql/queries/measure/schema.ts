@@ -1,34 +1,44 @@
 const body = `
 type Measure {
   id: ID!
-  date: String!
+  date: Date!
   sensor: ID!
   value: Int!
 }
 
 type MeasurePopulated {
   id: ID!
-  date: String!
+  date: Date!
   sensor: Sensor!
   value: Int!
 }
 
+type MeasureCriteriaFilter {
+  gte: Date
+  lte: Date
+  sortBy: String
+}
+
+type FetchMeasureCriteria {
+  by: String!;
+  id: ID!;
+  filter: MeasureCriteriaFilter;
+}
+
 type FetchMeasuresResult {
   items: [Measure!]!
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
+  pagination: Pagination!
+  criteria: MeasureCriteriaFilter
 }
 
 input MeasureFilter {
-  gte: String
-  lte: String
+  gte: Date
+  lte: Date
   sortBy: String
 }
 
 input AddMeasureData {
-  date: String!
+  date: Date!
   sensor: ID!
   value: Int!
 }

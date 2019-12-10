@@ -1,10 +1,9 @@
-import { PumpHistoricalResolver } from "./pump-historical-resolver";
-import { FilterBy } from "./filter-by";
+import { PumpHistoricalResolver } from './pump-historical-resolver';
 // import { socketIOService } from "../../../services/socket-io.service";
 
 const resolver: PumpHistoricalResolver = {
   async addPumpHistorical(args, context) {
-    const date = args.pumpHistoricalData.date || new Date();
+    const date = new Date(args.pumpHistoricalData.date) || new Date();
     const data = { ...args.pumpHistoricalData, date };
     const doc = await context.models.pumpHistorical.add(data);
     return doc;
@@ -18,20 +17,10 @@ const resolver: PumpHistoricalResolver = {
     return doc;
   },
   async fetchPumpHistoricals(args, context) {
-    if (args.by === FilterBy.PumpId) {
-      return context.models.pumpHistorical.fetchByPumpId(
-        args.id,
-        args.pagination,
-        args.filter
-      );
-    }
-    if (args.by === FilterBy.EnvironmentId) {
-      return context.models.pumpHistorical.fetchByEnvironmentId(
-        args.id,
-        args.pagination,
-        args.filter
-      );
-    }
+    return context.models.pumpHistorical.fetchBy(
+      args.criteria,
+      args.paginationRequest
+    );
   },
   async getPumpHistorical(args, context) {
     const doc = await context.models.pumpHistorical.get(args.id);

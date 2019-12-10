@@ -8,10 +8,7 @@ type Pump {
 
 type FetchPumpsResult {
   items: [Pump!]!
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
+  pagination: Pagination!
 }
 
 input AddPumpData {

@@ -13,10 +13,7 @@ type SensorType {
 
 type FetchSensorTypesResult {
   items: [SensorType!]!
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
+  pagination: Pagination!
 }
 
 input InputUnit {

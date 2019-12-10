@@ -1,34 +1,44 @@
 const body = `
 type PumpHistorical {
   id: ID!
-  date: String!
+  date: Date!
   pump: ID!
   state: Int!
 }
 
 type PumpHistoricalPopulated {
   id: ID!
-  date: String!
+  date: Date!
   pump: Pump!
   state: Int!
 }
 
+type PumpHistoricalsCriteriaFilter {
+  gte: Date
+  lte: Date
+  sortBy: String
+}
+
+type FetchPumpHistoricalsCriteria {
+  by: String!;
+  id: ID!;
+  filter: PumpHistoricalsCriteriaFilter;
+}
+
 type FetchPumpHistoricalsResult {
   items: [PumpHistorical!]!
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
+  pagination: Pagination!
+  criteria: FetchPumpHistoricalsCriteria
 }
 
 input PumpHistoricalFilter {
-  gte: String
-  lte: String
+  gte: Date
+  lte: Date
   sortBy: String
 }
 
 input AddPumpHistoricalData {
-  date: String!
+  date: Date!
   pump: ID!
   state: Int!
 }

@@ -19,10 +19,7 @@ type User {
 
 type FetchUsersResult {
   items: [User!]!
-  limit: Int!
-  page: Int!
-  total: Int!
-  pages: Int!
+  pagination: Pagination!
 }
 
 input AddUserData {
