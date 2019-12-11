@@ -7,10 +7,7 @@ const resolver: GoogleResolver = {
     return authUrl;
   },
   async signInGoogle(args, context) {
-    const token = await context.models.google.signIn(args.code);
-    const signInResponse: SignInResponse = {
-      token
-    };
+    const signInResponse = await context.models.google.signIn(args.code);
     return signInResponse;
   }
 };

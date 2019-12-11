@@ -92,7 +92,8 @@ export class UserModel implements Model {
     await checkCredentials(password, doc.password);
     const token = createToken(doc);
     const signInResponse: SignInResponse = {
-      token
+      token,
+      profile: doc
     };
     return signInResponse;
   }

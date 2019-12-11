@@ -15,5 +15,6 @@ export const genericTypes = `
 
   type SignInResponse {
     token: String!
+    profile: User!
   }
 `;

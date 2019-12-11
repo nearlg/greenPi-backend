@@ -12,6 +12,7 @@ import { signInUpGoogle } from '../../graphql/queries/google/resolver/helpers';
 import { createToken } from '../../services/jwt.service';
 import * as userValidator from '../../validation/user';
 import { userRepository } from '../user/repository';
+import { SignInResponse } from '../../lib/sign-in-response';
 
 enum RuleName {
   SignInUp = 'google.signInUp',
@@ -63,6 +64,10 @@ export class GoogleModel implements Model {
     const payload = await verify(idToken);
     const user = await signInUpGoogle(payload);
     const token = await createToken(user);
-    return token;
+    const signInResponse: SignInResponse = {
+      token,
+      profile: user
+    };
+    return signInResponse;
   }
 }
