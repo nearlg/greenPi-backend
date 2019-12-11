@@ -31,8 +31,6 @@ const resolvers = {
   ...extractResolvers(graphqlQueries),
   ...dateTypeResolver
 };
-// const resolvers = extractResolvers(graphqlQueries);
-console.log(schemas);
 
 export function setApiRoute(server: restify.Server, mainPath: string = '') {
   // Allow OPTION requests
