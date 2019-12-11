@@ -23,6 +23,11 @@ function normalizeDocument(document: any) {
   }
   // Check all the fields
   for (const field in document) {
+    // The field could be an ObjectID
+    if (document[field]._bsontype === 'ObjectID') {
+      document[field] = document[field] + '';
+      continue;
+    }
     normalizeFieldNames(document[field]);
   }
   return document;
