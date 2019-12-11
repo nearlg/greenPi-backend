@@ -1,4 +1,4 @@
-import { Unit } from "../../../../../models/entities/unit";
+import { Unit } from '../../../../../interfaces/entities/unit';
 
 export interface UpdateSensorTypeArgs {
   id: string;

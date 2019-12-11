@@ -1,7 +1,7 @@
-import { userRepository } from "../../../../models/repositories";
-import { User } from "../../../../models/entities/user";
-import { RoleName } from "../../../../models/role-name";
-import * as userValidator from "../../../../validation/user";
+import * as userValidator from '../../../../validation/user';
+import { userRepository } from '../../../../models/user/repository';
+import { User } from '../../../../interfaces/entities/user';
+import { RoleName } from '../../../../interfaces/entities/role-name';
 
 export async function signInUpGoogle(payload: any) {
   const userId = payload.sub;

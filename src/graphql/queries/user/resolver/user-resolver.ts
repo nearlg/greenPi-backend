@@ -1,4 +1,3 @@
-import { User } from '../../../../models/entities/user';
 import { SignInLocalArgs } from './args/sign-in-local-args';
 import { EditProfileArgs } from './args/edit-profile-args';
 import { AddUserArgs } from './args/add-user-args';
@@ -9,6 +8,7 @@ import { GraphqlContext } from '../../../graphql-context';
 import { FetchUsersArgs } from './args/fetch-users-args';
 import { PagedData } from '../../../../lib/pagination/paged-data';
 import { SignInResponse } from '../../../../lib/sign-in-response';
+import { User } from '../../../../interfaces/entities/user';
 
 export interface UserResolver extends Resolver {
   // User profile

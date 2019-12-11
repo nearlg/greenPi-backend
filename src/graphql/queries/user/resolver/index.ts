@@ -1,5 +1,5 @@
 import { UserResolver } from './user-resolver';
-import { RoleName } from '../../../../models/role-name';
+import { RoleName } from '../../../../interfaces/entities/role-name';
 
 const resolver: UserResolver = {
   async getUser(args, context) {

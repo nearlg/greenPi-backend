@@ -1,11 +1,11 @@
-import { ErrorHandler } from "./interface/error-handler";
-import { Next } from "restify";
+import { ErrorHandler } from './interface/error-handler';
+import { Next } from 'restify';
 import {
   InvalidCredentialsError,
   UnauthorizedError,
   NotAuthorizedError
-} from "restify-errors";
-import { AuthErrorName } from "../../lib/errors/auth-error";
+} from 'restify-errors';
+import { AuthErrorName } from '../../lib/errors/auth-error/auth-error-name';
 
 class AuthErrorHandler implements ErrorHandler {
   canBeHandled(err: Error) {

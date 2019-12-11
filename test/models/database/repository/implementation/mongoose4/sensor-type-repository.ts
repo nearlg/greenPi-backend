@@ -1,17 +1,16 @@
-import chai = require("chai");
-import chaiAsPromised = require("chai-as-promised");
-import { ObjectID } from "mongodb";
-import mongoose = require("mongoose");
-import * as Config from "../../../../../../src/config";
-import { SensorType } from "../../../../../../src/models/entities/sensor-type";
-import { Unit } from "../../../../../../src/models/entities/unit";
-import { sensorTypeRepository } from "../../../../../../src/models/repositories";
+import chai = require('chai');
+import chaiAsPromised = require('chai-as-promised');
+import { ObjectID } from 'mongodb';
+import mongoose = require('mongoose');
+import * as Config from '../../../../../../src/config';
+import { SensorType } from '../../../../../../src/interfaces/entities/sensor-type';
+import { Unit } from '../../../../../../src/interfaces/entities/unit';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 // const mockgoose: Mockgoose;
 
-describe("Sensor type repository validation", () => {
+describe('Sensor type repository validation', () => {
   let sensorType: SensorType;
   let unit: Unit;
 

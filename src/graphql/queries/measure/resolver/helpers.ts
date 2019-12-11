@@ -1,6 +1,6 @@
-import { Measure } from "../../../../models/entities/measure";
-import { Sensor } from "../../../../models/entities/sensor";
-import { sensorRepository } from "../../../../models/repositories";
+import { Measure } from '../../../../interfaces/entities/measure';
+import { Sensor } from '../../../../interfaces/entities/sensor';
+import { sensorRepository } from '../../../../models/sensor/repository';
 
 export async function validateDependencies(measure: Measure): Promise<Measure> {
   const sensorId: string =

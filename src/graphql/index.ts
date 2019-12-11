@@ -11,9 +11,9 @@ import googleQueries from './queries/google';
 import environmentQueries from './queries/environment';
 import { GraphqlQuery } from './helpers/graphql-query';
 import { Server } from '../config';
-import { getModels } from '../models';
 import { getAuthenticationField } from '../services/auth.service';
 import { dateTypeResolver } from './generics/date-type';
+import { getModels } from '../models';
 
 const graphqlQueries: GraphqlQuery[] = [
   userQueries,
@@ -31,6 +31,8 @@ const resolvers = {
   ...extractResolvers(graphqlQueries),
   ...dateTypeResolver
 };
+// const resolvers = extractResolvers(graphqlQueries);
+console.log(schemas);
 
 export function setApiRoute(server: restify.Server, mainPath: string = '') {
   // Allow OPTION requests

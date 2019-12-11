@@ -1,6 +1,4 @@
-import gql from 'graphql-tag';
-
-export const genericTypes = gql`
+export const genericTypes = `
   scalar Date
 
   input PaginationRequest {

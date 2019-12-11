@@ -1,9 +1,9 @@
-import { Sensor } from '../../../../models/entities/sensor';
 import { AddSensorArgs } from './args/add-sensor-args';
 import { UpdateSensorArgs } from './args/update-sensor-args';
 import { GraphqlContext } from '../../../graphql-context';
 import { FetchSensorsArgs } from './args/fetch-sensors-args';
 import { PagedData } from '../../../../lib/pagination/paged-data';
+import { Sensor } from '../../../../interfaces/entities/sensor';
 
 export interface SensorResolver {
   addSensor(

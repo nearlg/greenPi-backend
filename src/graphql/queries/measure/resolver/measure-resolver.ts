@@ -1,8 +1,8 @@
-import { Measure } from '../../../../models/entities/measure';
 import { AddMeasureArgs } from './args/add-measure-args';
 import { FetchMeasuresArgs } from './args/fetch-measures-args';
 import { GraphqlContext } from '../../../graphql-context';
 import { PagedData } from '../../../../lib/pagination/paged-data';
+import { Measure } from '../../../../interfaces/entities/measure';
 
 export interface MeasureResolver {
   addMeasure(

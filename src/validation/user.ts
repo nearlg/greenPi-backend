@@ -1,13 +1,13 @@
-import { User } from "../models/entities/user";
-import * as userRegex from "./rules/user";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { RoleName } from "../models/role-name";
+import * as userRegex from './rules/user';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { RoleName } from '../interfaces/entities/role-name';
+import { User } from '../interfaces/entities/user';
 
 export async function validateId(id: string) {
   if (id && userRegex.IdRegex.test(id)) {
     return id;
   }
-  const err = createError("Invalid user id");
+  const err = createError('Invalid user id');
   throw err;
 }
 
@@ -15,7 +15,7 @@ export function validateName(name: string) {
   return regexValidation(
     name,
     userRegex.NameRegex,
-    "The user must have a valid name"
+    'The user must have a valid name'
   );
 }
 
@@ -23,7 +23,7 @@ export function validateEmail(email: string) {
   return regexValidation(
     email,
     userRegex.EmailRegex,
-    "The user must have a valid email"
+    'The user must have a valid email'
   );
 }
 
@@ -31,7 +31,7 @@ export function validatePassword(password: string) {
   return regexValidation(
     password,
     userRegex.PasswordRegex,
-    "The user must have a valid password"
+    'The user must have a valid password'
   );
 }
 
@@ -42,7 +42,7 @@ export async function validateFacebook(facebookId: string) {
   return regexValidation(
     facebookId,
     userRegex.FacebookIdRegex,
-    "The Facebook Id must be a valid Id"
+    'The Facebook Id must be a valid Id'
   );
 }
 
@@ -53,13 +53,13 @@ export async function validateGoogle(googleId: string) {
   return regexValidation(
     googleId,
     userRegex.GoogleIdRegex,
-    "The Google Id must be a valid Id"
+    'The Google Id must be a valid Id'
   );
 }
 
 export async function validateRoleName(roleName: RoleName) {
   if (!roleName) {
-    const err = createError("The user must have a rol name");
+    const err = createError('The user must have a rol name');
     throw err;
   }
   return roleName;
@@ -67,7 +67,7 @@ export async function validateRoleName(roleName: RoleName) {
 
 export async function validate(user: User, checkId: boolean = true) {
   try {
-    await rejectIfNull(user, "User is null or undefined");
+    await rejectIfNull(user, 'User is null or undefined');
     if (!user.googleId && !user.facebookId) {
       await validatePassword(user.password);
       await validateName(user.name);
@@ -80,7 +80,7 @@ export async function validate(user: User, checkId: boolean = true) {
       await validateId(user.id);
     }
   } catch (err) {
-    err.message = "Invalid user: " + err.message;
+    err.message = 'Invalid user: ' + err.message;
     throw err;
   }
   return user;

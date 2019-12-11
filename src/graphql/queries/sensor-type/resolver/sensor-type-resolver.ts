@@ -1,9 +1,9 @@
-import { SensorType } from '../../../../models/entities/sensor-type';
 import { AddSensorTypeArgs } from './args/add-sensor-type-args';
 import { UpdateSensorTypeArgs } from './args/update-sensor-type-args';
 import { GraphqlContext } from '../../../graphql-context';
 import { FetchSensorTypesArgs } from './args/fetch-sensor-types-args';
 import { PagedData } from '../../../../lib/pagination/paged-data';
+import { SensorType } from '../../../../interfaces/entities/sensor-type';
 
 export interface SensorTypeResolver {
   addSensorType(

@@ -1,4 +1,4 @@
-import { DataErrorName } from "../lib/errors/data-error";
+import { DataErrorName } from '../lib/errors/data-error/data-error-name';
 
 export async function regexValidation<T>(
   param: T,
@@ -6,13 +6,13 @@ export async function regexValidation<T>(
   errorMsg?: string
 ) {
   const paramType: string = typeof param;
-  const err: Error = createError(errorMsg || "Error");
+  const err: Error = createError(errorMsg || 'Error');
   // If the type of param is not a string or number
   // return a reject
-  if (!["string", "number"].find(t => paramType === t)) {
+  if (!['string', 'number'].find(t => paramType === t)) {
     throw err;
   }
-  const toTest: string = typeof param === "string" ? param : param + "";
+  const toTest: string = typeof param === 'string' ? param : param + '';
   if (!regex.test(toTest)) {
     throw err;
   }

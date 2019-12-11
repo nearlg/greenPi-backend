@@ -1,5 +1,5 @@
-import { AuthData } from "../lib/auth-data";
-import { RoleName } from "./role-name";
+import { AuthData } from '../interfaces/auth-data';
+import { RoleName } from '../interfaces/entities/role-name';
 
 export interface Model {
   rules: Map<string, Set<RoleName>>;

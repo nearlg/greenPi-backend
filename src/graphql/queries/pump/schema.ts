@@ -1,6 +1,4 @@
-import gql from 'graphql-tag';
-
-const body = gql`
+const body = `
   type Pump {
     id: ID!
     name: String!
@@ -27,11 +25,11 @@ const body = gql`
   }
 `;
 
-const query = gql`
+const query = `
 fetchPumps(pagination: PaginationRequest): FetchPumpsResult!
 getPump(id: ID!): Pump!
 `;
-const mutation = gql`
+const mutation = `
 addPump(pumpData: AddPumpData!): Pump!
 updatePump(pumpData: UpdatePumpData!): Pump!
 deletePump(id: ID!): Pump!

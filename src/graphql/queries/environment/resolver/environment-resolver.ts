@@ -1,9 +1,9 @@
-import { Environment } from '../../../../models/entities/environment';
 import { AddEnvironmentArgs } from './args/add-environment-args';
 import { UpdateEnvironmentArgs } from './args/update-environment-args';
 import { GraphqlContext } from '../../../graphql-context';
 import { FetchEnvironmentsArgs } from './args/fetch-environments-args';
 import { PagedData } from '../../../../lib/pagination/paged-data';
+import { Environment } from '../../../../interfaces/entities/environment';
 
 export interface EnvironmentResolver {
   addEnvironment(

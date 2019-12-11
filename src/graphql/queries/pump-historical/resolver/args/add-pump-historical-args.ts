@@ -1,4 +1,4 @@
-import { PumpState } from '../../../../../models/entities/pump-state';
+import { PumpState } from '../../../../../interfaces/entities/pump-state';
 
 export interface AddPumpHistoricalArgs {
   date?: string;

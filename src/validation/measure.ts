@@ -1,18 +1,18 @@
-import { Measure } from "../models/entities/measure";
-import * as measureRegex from "./rules/measure";
-import { regexValidation, createError, rejectIfNull } from "./helpers";
-import { Sensor } from "../models/entities/sensor";
-import { validateId as sensorIdValidator } from "./sensor";
+import * as measureRegex from './rules/measure';
+import { regexValidation, createError, rejectIfNull } from './helpers';
+import { validateId as sensorIdValidator } from './sensor';
+import { Sensor } from '../interfaces/entities/sensor';
+import { Measure } from '../interfaces/entities/measure';
 
 export async function validateDate(date: Date) {
   const dateString: string =
-    date && typeof date.toISOString === "function"
+    date && typeof date.toISOString === 'function'
       ? date.toISOString()
-      : date + "";
+      : date + '';
   await regexValidation(
     dateString,
     measureRegex.DateRegex,
-    "The measure must have a valid date"
+    'The measure must have a valid date'
   );
   return date;
 }
@@ -21,16 +21,16 @@ export function validateValue(value: number) {
   return regexValidation(
     value,
     measureRegex.ValueRegex,
-    "The measure must have a valid value"
+    'The measure must have a valid value'
   );
 }
 
 export async function validateSensor(sensor: Sensor | string) {
   if (!sensor) {
-    const err = createError("The measure must have a valid sensor");
+    const err = createError('The measure must have a valid sensor');
     throw err;
   }
-  if ("object" === typeof sensor) {
+  if ('object' === typeof sensor) {
     return sensor;
   }
   return sensorIdValidator(sensor);
@@ -38,7 +38,7 @@ export async function validateSensor(sensor: Sensor | string) {
 
 export async function validateId(id: string) {
   if (!id || !measureRegex.IdRegex.test(id)) {
-    const err = createError("Invalid measure id");
+    const err = createError('Invalid measure id');
     throw err;
   }
   return id;
@@ -46,7 +46,7 @@ export async function validateId(id: string) {
 
 export async function validate(measure: Measure, checkId: boolean = true) {
   try {
-    await rejectIfNull(measure, "Measure is null or undefined");
+    await rejectIfNull(measure, 'Measure is null or undefined');
     await validateDate(measure.date);
     await validateValue(measure.value);
     await validateSensor(measure.sensor);
@@ -54,7 +54,7 @@ export async function validate(measure: Measure, checkId: boolean = true) {
       await validateId(measure.id);
     }
   } catch (err) {
-    err.message = "Invalid measure: " + err.message;
+    err.message = 'Invalid measure: ' + err.message;
     throw err;
   }
   return measure;

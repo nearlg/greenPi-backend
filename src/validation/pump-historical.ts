@@ -1,9 +1,9 @@
-import { PumpHistorical } from '../models/entities/pump-historical';
-import { Pump } from '../models/entities/pump';
 import * as pumpHistoricalRegex from './rules/pump-historical';
 import { regexValidation, createError, rejectIfNull } from './helpers';
 import { validateId as pumpIdValidator } from './pump';
-import { PumpState } from '../models/entities/pump-state';
+import { PumpState } from '../interfaces/entities/pump-state';
+import { Pump } from '../interfaces/entities/pump';
+import { PumpHistorical } from '../interfaces/entities/pump-historical';
 
 export async function validateDate(date: Date) {
   const dateString =

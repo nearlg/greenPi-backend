@@ -1,4 +1,4 @@
-import { RoleName } from "../../../../../models/role-name";
+import { RoleName } from '../../../../../interfaces/entities/role-name';
 
 export interface UpdateUserArgs {
   id: string;

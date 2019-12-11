@@ -1,55 +1,53 @@
-import gql from 'graphql-tag';
+const body = `
+  type Measure {
+    id: ID!
+    date: Date!
+    sensor: ID!
+    value: Int!
+  }
 
-const body = gql`
-type Measure {
-  id: ID!
-  date: Date!
-  sensor: ID!
-  value: Int!
-}
+  type MeasurePopulated {
+    id: ID!
+    date: Date!
+    sensor: Sensor!
+    value: Int!
+  }
 
-type MeasurePopulated {
-  id: ID!
-  date: Date!
-  sensor: Sensor!
-  value: Int!
-}
+  type MeasureCriteriaFilter {
+    gte: Date
+    lte: Date
+    sortBy: String
+  }
 
-type MeasureCriteriaFilter {
-  gte: Date
-  lte: Date
-  sortBy: String
-}
+  type FetchMeasureCriteria {
+    by: String!
+    id: ID!
+    filter: MeasureCriteriaFilter
+  }
 
-type FetchMeasureCriteria {
-  by: String!;
-  id: ID!;
-  filter: MeasureCriteriaFilter;
-}
+  type FetchMeasuresResult {
+    items: [Measure!]!
+    pagination: Pagination!
+    criteria: MeasureCriteriaFilter
+  }
 
-type FetchMeasuresResult {
-  items: [Measure!]!
-  pagination: Pagination!
-  criteria: MeasureCriteriaFilter
-}
+  input MeasureFilter {
+    gte: Date
+    lte: Date
+    sortBy: String
+  }
 
-input MeasureFilter {
-  gte: Date
-  lte: Date
-  sortBy: String
-}
-
-input AddMeasureData {
-  date: Date!
-  sensor: ID!
-  value: Int!
-}
+  input AddMeasureData {
+    date: Date!
+    sensor: ID!
+    value: Int!
+  }
 `;
-const query = gql`
+const query = `
 fetchMeasures(by: String!, id: ID!, pagination: PaginationRequest, filter: MeasureFilter): FetchMeasuresResult!
 getMeasure(id: ID!): MeasurePopulated!
 `;
-const mutation = gql`
+const mutation = `
 addMeasure(measureData: AddMeasureData!): Measure!
 deleteMeasure(id: ID!): Measure!
 `;

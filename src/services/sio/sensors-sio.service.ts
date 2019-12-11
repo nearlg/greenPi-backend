@@ -1,15 +1,15 @@
-import { Subscriber } from "rxjs";
-import { measureRepository } from "../../models/repositories";
-import { SIOService } from "./sio.service";
-import { Measure } from "../../models/entities/measure";
+import { Subscriber } from 'rxjs';
+import { SIOService } from './sio.service';
+import { Measure } from '../../interfaces/entities/measure';
+import { measureRepository } from '../../models/measure/repository';
 
 const enum NamespaceNames {
-  LastMeasures = "/sensors/last-measures"
+  LastMeasures = '/sensors/last-measures'
 }
 
 const enum EventNames {
-  LastMeasures = "last-measures",
-  GetLastMeasures = "get-last-measures"
+  LastMeasures = 'last-measures',
+  GetLastMeasures = 'get-last-measures'
 }
 
 export class SensorsSIOService implements SIOService {
@@ -43,7 +43,7 @@ export class SensorsSIOService implements SIOService {
     // Create the namespace
     const namespace = this.io.of(NamespaceNames.LastMeasures);
     // Listen any new connection for that namespace
-    namespace.on("connection", socket => {
+    namespace.on('connection', socket => {
       // Set the events here.
 
       // 'EventNames.GetLastMeasures' event gets all the

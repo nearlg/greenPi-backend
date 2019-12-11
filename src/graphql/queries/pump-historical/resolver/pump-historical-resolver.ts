@@ -1,8 +1,8 @@
-import { PumpHistorical } from '../../../../models/entities/pump-historical';
 import { AddPumpHistoricalArgs } from './args/add-pump-historical-args';
 import { FetchPumpHistoricalArgs } from './args/fetch-pump-historical-args';
 import { GraphqlContext } from '../../../graphql-context';
-import { PumpHistoricalPagedData } from '../../../../models/pump-historical-model/pump-historical-paged-data';
+import { PumpHistorical } from '../../../../interfaces/entities/pump-historical';
+import { PumpHistoricalPagedData } from '../../../../models/pump-historical/pump-historical-paged-data';
 
 export interface PumpHistoricalResolver {
   addPumpHistorical(

@@ -1,15 +1,15 @@
-import { Subscriber } from "rxjs";
-import { PumpHistorical } from "../../models/entities/pump-historical";
-import { pumpHistoricalRepository } from "../../models/repositories";
-import { SIOService } from "./sio.service";
+import { Subscriber } from 'rxjs';
+import { SIOService } from './sio.service';
+import { PumpHistorical } from '../../interfaces/entities/pump-historical';
+import { pumpHistoricalRepository } from '../../models/pump-historical/repository';
 
 const enum NamespaceNames {
-  LastPumpHistoricals = "/pumps/last-historicals"
+  LastPumpHistoricals = '/pumps/last-historicals'
 }
 
 const enum EventNames {
-  LastHistoricals = "last-historicals",
-  GetLastHistoricals = "get-last-historicals"
+  LastHistoricals = 'last-historicals',
+  GetLastHistoricals = 'get-last-historicals'
 }
 
 export class PumpsSIOService implements SIOService {
@@ -45,7 +45,7 @@ export class PumpsSIOService implements SIOService {
     // Create the namespace
     const namespace = this.io.of(NamespaceNames.LastPumpHistoricals);
     // Listen any new connection for that namespace
-    namespace.on("connection", socket => {
+    namespace.on('connection', socket => {
       // Set the events here.
 
       // 'EventNames.GetLastHistoricals' event gets all the

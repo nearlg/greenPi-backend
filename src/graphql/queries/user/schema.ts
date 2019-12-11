@@ -1,6 +1,4 @@
-import gql from 'graphql-tag';
-
-const body = gql`
+const body = `
   input SignUpData {
     name: String!
     email: String!
@@ -38,13 +36,13 @@ const body = gql`
     roleName: String!
   }
 `;
-const query = gql`
+const query = `
 signInLocal(email: String!, password: String!): SignInResponse!
 getProfile: User!
 fetchUsers(pagination: PaginationRequest): FetchUsersResult!
 getUser: User!
 `;
-const mutation = gql`
+const mutation = `
 signUp(userData: SignUpData!): User!
 editProfile(userData: EditProfileData!): User!
 addUser(userData: AddUserData!): User!

@@ -1,6 +1,4 @@
-import gql from 'graphql-tag';
-
-const body = gql`
+const body = `
   type Environment {
     id: ID!
     name: String!
@@ -29,11 +27,11 @@ const body = gql`
     pumps: [ID!]!
   }
 `;
-const query = gql`
+const query = `
 fetchEnvironments(pagination: PaginationRequest): FetchEnvironmentsResult!
 getEnvironment(id: ID!): Environment!
 `;
-const mutation = gql`
+const mutation = `
 addEnvironment(environmentData: AddEnvironmentData!): Environment!
 updateEnvironment(environmentData: UpdateEnvironmentData!): Environment!
 deleteEnvironment(id: ID!): Environment!

@@ -1,7 +1,7 @@
-import { ErrorHandler } from "./interface/error-handler";
-import { Next } from "restify";
-import { NotFoundError, BadRequestError } from "restify-errors";
-import { DataErrorName } from "../../lib/errors/data-error";
+import { ErrorHandler } from './interface/error-handler';
+import { Next } from 'restify';
+import { NotFoundError, BadRequestError } from 'restify-errors';
+import { DataErrorName } from '../../lib/errors/data-error/data-error-name';
 
 class DataErrorHandler implements ErrorHandler {
   canBeHandled(err: Error) {

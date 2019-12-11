@@ -1,9 +1,9 @@
-import { Request } from "restify";
-import * as bcrypt from "bcrypt";
-import { RoleName } from "../../models/role-name";
-import { userRepository } from "../../models/repositories";
-import { AuthData } from "../../lib/auth-data";
-import { AuthErrorName } from "../../lib/errors/auth-error";
+import { Request } from 'restify';
+import * as bcrypt from 'bcrypt';
+import { AuthData } from '../../interfaces/auth-data';
+import { AuthErrorName } from '../../lib/errors/auth-error/auth-error-name';
+import { RoleName } from '../../interfaces/entities/role-name';
+import { userRepository } from '../../models/user/repository';
 
 export async function setAuthRequestField(
   req: Request,
@@ -11,26 +11,26 @@ export async function setAuthRequestField(
 ) {
   const isAuthorization = req.headers.authorization ? true : false;
   if (!isAuthorization) {
-    req["authentication"] = {
+    req['authentication'] = {
       roleName: RoleName.NonRegistered
     };
     return;
   }
   const validToken = verifyTokenFromRequest(req);
-  const userId = validToken["sub"];
+  const userId = validToken['sub'];
   const user = await userRepository.find(userId);
-  req["authentication"] = {
+  req['authentication'] = {
     roleName: user.roleName,
     user
   };
 }
 
 export function getAuthenticationField(req: Request) {
-  if (!req["authentication"]) {
+  if (!req['authentication']) {
     const err = new Error('Request field "authentication" is missing');
     throw err;
   }
-  const authentication: AuthData = req["authentication"];
+  const authentication: AuthData = req['authentication'];
   return authentication;
 }
 

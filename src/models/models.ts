@@ -1,11 +1,11 @@
-import { UserModel } from './user-model';
-import { SensorModel } from './sensor-model';
-import { PumpModel } from './pump-model';
-import { EnvironmentModel } from './environment-model';
-import { SensorTypeModel } from './sensor-type-model';
-import { PumpHistoricalModel } from './pump-historical-model';
-import { MeasureModel } from './measure-model';
-import { GoogleModel } from './google-model';
+import { UserModel } from './user';
+import { SensorModel } from './sensor';
+import { PumpModel } from './pump';
+import { EnvironmentModel } from './environment';
+import { SensorTypeModel } from './sensor-type';
+import { PumpHistoricalModel } from './pump-historical';
+import { MeasureModel } from './measure';
+import { GoogleModel } from './google';
 
 export interface Models {
   user: UserModel;

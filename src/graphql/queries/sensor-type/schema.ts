@@ -1,6 +1,4 @@
-import gql from 'graphql-tag';
-
-const body = gql`
+const body = `
   type Unit {
     name: String!
     description: String!
@@ -36,11 +34,11 @@ const body = gql`
     unit: InputUnit!
   }
 `;
-const query = gql`
+const query = `
 fetchSensorTypes(pagination: PaginationRequest): FetchSensorTypesResult!
 getSensorType(id: ID!): SensorType!
 `;
-const mutation = gql`
+const mutation = `
 addSensorType(sensorTypeData: AddSensorTypeData!): SensorType!
 updateSensorType(sensorTypeData: UpdateSensorTypeData!): SensorType!
 deleteSensorType(id: ID!): SensorType!

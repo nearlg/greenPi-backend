@@ -1,55 +1,53 @@
-import gql from 'graphql-tag';
+const body = `
+  type PumpHistorical {
+    id: ID!
+    date: Date!
+    pump: ID!
+    state: Int!
+  }
 
-const body = gql`
-type PumpHistorical {
-  id: ID!
-  date: Date!
-  pump: ID!
-  state: Int!
-}
+  type PumpHistoricalPopulated {
+    id: ID!
+    date: Date!
+    pump: Pump!
+    state: Int!
+  }
 
-type PumpHistoricalPopulated {
-  id: ID!
-  date: Date!
-  pump: Pump!
-  state: Int!
-}
+  type PumpHistoricalsCriteriaFilter {
+    gte: Date
+    lte: Date
+    sortBy: String
+  }
 
-type PumpHistoricalsCriteriaFilter {
-  gte: Date
-  lte: Date
-  sortBy: String
-}
+  type FetchPumpHistoricalsCriteria {
+    by: String!
+    id: ID!
+    filter: PumpHistoricalsCriteriaFilter
+  }
 
-type FetchPumpHistoricalsCriteria {
-  by: String!;
-  id: ID!;
-  filter: PumpHistoricalsCriteriaFilter;
-}
+  type FetchPumpHistoricalsResult {
+    items: [PumpHistorical!]!
+    pagination: Pagination!
+    criteria: FetchPumpHistoricalsCriteria
+  }
 
-type FetchPumpHistoricalsResult {
-  items: [PumpHistorical!]!
-  pagination: Pagination!
-  criteria: FetchPumpHistoricalsCriteria
-}
+  input PumpHistoricalFilter {
+    gte: Date
+    lte: Date
+    sortBy: String
+  }
 
-input PumpHistoricalFilter {
-  gte: Date
-  lte: Date
-  sortBy: String
-}
-
-input AddPumpHistoricalData {
-  date: Date!
-  pump: ID!
-  state: Int!
-}
+  input AddPumpHistoricalData {
+    date: Date!
+    pump: ID!
+    state: Int!
+  }
 `;
-const query = gql`
+const query = `
 fetchPumpHistoricals(by: String!, id: ID!, pagination: PaginationRequest, filter: PumpHistoricalFilter): FetchPumpHistoricalsResult!
 getPumpHistorical(id: ID!): PumpHistoricalPopulated!
 `;
-const mutation = gql`
+const mutation = `
 addPumpHistorical(pumpHistoricalData: AddPumpHistoricalData!): PumpHistorical!
 deletePumpHistorical(id: ID!): PumpHistorical!
 `;

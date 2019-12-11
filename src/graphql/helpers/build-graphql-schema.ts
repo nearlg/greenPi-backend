@@ -1,4 +1,3 @@
-import gql from 'graphql-tag';
 import { genericTypes } from '../generics/generic-types';
 
 function buildBodySquema(preSchema: PreGraphqlSchema[]) {
@@ -29,7 +28,7 @@ export default function buildGraphqlSchema(preSchema: PreGraphqlSchema[]) {
   const body = buildBodySquema(preSchema);
   const query = buildQuerySchema(preSchema);
   const mutation = buildMutationSchema(preSchema);
-  const schema = gql`
+  const schema = `
     ${genericTypes}
     ${body}
     type RootQuery {
