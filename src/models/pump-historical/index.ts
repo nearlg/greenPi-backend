@@ -13,6 +13,7 @@ import { environmentRepository } from '../environment/repository';
 import { FindAllOptions } from './repository/find-all-options';
 import { pumpHistoricalRepository } from './repository';
 import { pumpRepository } from '../pump/repository';
+import { PagedData } from '../../lib/pagination/paged-data';
 
 enum RuleName {
   Add = 'pumpHistorical.add',
@@ -47,6 +48,25 @@ export class PumpHistoricalModel implements Model {
     return pumpHistorical;
   }
 
+  private static populateItems(
+    pumps: Pump[],
+    pagedData: PagedData<PumpHistorical>
+  ) {
+    // Obtein an object with all the items by id as a fieldName.
+    // this makes easier to get access to the item by its 'id'
+    const sensorsById = pumps.reduce((obj, pump) => {
+      return { ...obj, [pump.id]: pump };
+    }, {});
+    pagedData.items.map(item => {
+      const pumpId = item.pump + '';
+      const pump = sensorsById[pumpId];
+      if (pump) {
+        item.pump = pump;
+      }
+      return item;
+    });
+  }
+
   private async fetchByEnvironmentId(
     criteria: FetchCriteria,
     paginationRequest?: PaginationRequest
@@ -62,6 +82,7 @@ export class PumpHistoricalModel implements Model {
       pumpIds,
       options
     );
+    PumpHistoricalModel.populateItems(<Pump[]>environment.pumps, docs);
     const pagedData: PumpHistoricalPagedData = {
       ...docs,
       criteria
@@ -83,6 +104,9 @@ export class PumpHistoricalModel implements Model {
       [criteria.id],
       options
     );
+    // Because the items are fetched by sensorId, it is not necessary
+    // to populate the pump in all the items. It is suppose that the
+    // frontend has the pump already populated
     const pagedData: PumpHistoricalPagedData = {
       ...docs,
       criteria

@@ -13,6 +13,7 @@ import { rejectIfNotAuthorized } from '../../helpers/model';
 import { environmentRepository } from '../environment/repository';
 import { FindAllOptions } from '../pump-historical/repository/find-all-options';
 import { measureRepository } from './repository';
+import { PagedData } from '../../lib/pagination/paged-data';
 
 enum RuleName {
   Add = 'measure.addSensor',
@@ -47,6 +48,25 @@ export class MeasureModel implements Model {
     return measure;
   }
 
+  private static populateItems(
+    sensors: Sensor[],
+    pagedData: PagedData<Measure>
+  ) {
+    // Obtein an object with all the items by id as a fieldName.
+    // this makes easier to get access to the item by its 'id'
+    const sensorsById = sensors.reduce((obj, sensor) => {
+      return { ...obj, [sensor.id]: sensor };
+    }, {});
+    pagedData.items.map(item => {
+      const sensorId = item.sensor + '';
+      const sensor = sensorsById[sensorId];
+      if (sensor) {
+        item.sensor = sensor;
+      }
+      return item;
+    });
+  }
+
   private async fetchByEnvironmentId(
     criteria: FetchCriteria,
     paginationRequest?: PaginationRequest
@@ -59,6 +79,7 @@ export class MeasureModel implements Model {
       paginationRequest
     };
     const docs = await measureRepository.findAllBySensorIds(sensorIds, options);
+    MeasureModel.populateItems(<Sensor[]>environment.sensors, docs);
     const pagedData: MeasurePagedData = {
       ...docs,
       criteria
@@ -80,6 +101,9 @@ export class MeasureModel implements Model {
       criteria.id,
       options
     );
+    // Because the items are fetched by sensorId, it is not necessary
+    // to populate the sensor in all the items. It is suppose that the
+    // frontend has the sensor already populated
     const pagedData: MeasurePagedData = {
       ...docs,
       criteria
