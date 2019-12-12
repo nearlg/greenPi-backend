@@ -13,7 +13,8 @@ const mongooseOptions = <mongoose.ConnectionOptions>{
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
-  promiseLibrary: Promise
+  promiseLibrary: Promise,
+  useFindAndModify: false
 };
 mongoose.connect(Config.Database.URI, mongooseOptions);
 
