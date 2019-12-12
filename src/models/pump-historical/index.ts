@@ -95,7 +95,8 @@ export class PumpHistoricalModel implements Model {
     paginationRequest?: PaginationRequest
   ) {
     rejectIfNotAuthorized(this, RuleName.FetchByPumpId);
-    await pumpRepository.find(criteria.id);
+    // Check if the pump exists
+    const pump = await pumpRepository.find(criteria.id);
     const options: FindAllOptions = {
       filter: criteria.filter,
       paginationRequest
@@ -104,9 +105,7 @@ export class PumpHistoricalModel implements Model {
       [criteria.id],
       options
     );
-    // Because the items are fetched by sensorId, it is not necessary
-    // to populate the pump in all the items. It is suppose that the
-    // frontend has the pump already populated
+    PumpHistoricalModel.populateItems([pump], docs);
     const pagedData: PumpHistoricalPagedData = {
       ...docs,
       criteria

@@ -92,7 +92,8 @@ export class MeasureModel implements Model {
     paginationRequest?: PaginationRequest
   ) {
     rejectIfNotAuthorized(this, RuleName.FetchBySensorId);
-    await sensorRepository.find(criteria.id);
+    // Check if the sensor exists
+    const sensor = await sensorRepository.find(criteria.id);
     const options: FindAllOptions = {
       filter: criteria.filter,
       paginationRequest
@@ -101,9 +102,7 @@ export class MeasureModel implements Model {
       criteria.id,
       options
     );
-    // Because the items are fetched by sensorId, it is not necessary
-    // to populate the sensor in all the items. It is suppose that the
-    // frontend has the sensor already populated
+    MeasureModel.populateItems([sensor], docs);
     const pagedData: MeasurePagedData = {
       ...docs,
       criteria
