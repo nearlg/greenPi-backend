@@ -13,22 +13,34 @@ const body = `
     state: Int!
   }
 
-  type PumpHistoricalsCriteriaFilter {
+  input PumpHistoricalsCriteriaFilterIn {
     gte: Date
     lte: Date
     sortBy: String
   }
 
-  type FetchPumpHistoricalsCriteria {
+  type PumpHistoricalsCriteriaFilterOut {
+    gte: Date
+    lte: Date
+    sortBy: String
+  }
+
+  input FetchPumpHistoricalsCriteriaIn {
     by: String!
     id: ID!
-    filter: PumpHistoricalsCriteriaFilter
+    filter: PumpHistoricalsCriteriaFilterIn
+  }
+
+  type FetchPumpHistoricalsCriteriaOut {
+    by: String!
+    id: ID!
+    filter: PumpHistoricalsCriteriaFilterOut
   }
 
   type FetchPumpHistoricalsResult {
-    items: [PumpHistorical!]!
+    items: [PumpHistoricalPopulated!]!
     pagination: Pagination!
-    criteria: FetchPumpHistoricalsCriteria
+    criteria: FetchPumpHistoricalsCriteriaOut
   }
 
   input PumpHistoricalFilter {
@@ -44,7 +56,7 @@ const body = `
   }
 `;
 const query = `
-fetchPumpHistoricals(by: String!, id: ID!, pagination: PaginationRequest, filter: PumpHistoricalFilter): FetchPumpHistoricalsResult!
+fetchPumpHistoricals(criteria: FetchPumpHistoricalsCriteriaIn!, paginationRequest: PaginationRequest): FetchPumpHistoricalsResult!
 getPumpHistorical(id: ID!): PumpHistoricalPopulated!
 `;
 const mutation = `

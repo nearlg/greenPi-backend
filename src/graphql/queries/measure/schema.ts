@@ -13,22 +13,34 @@ const body = `
     value: Int!
   }
 
-  type MeasureCriteriaFilter {
+  type MeasureCriteriaFilterOut {
     gte: Date
     lte: Date
     sortBy: String
   }
 
-  type FetchMeasureCriteria {
+  input MeasureCriteriaFilterIn {
+    gte: Date
+    lte: Date
+    sortBy: String
+  }
+
+  input FetchMeasureCriteriaIn {
     by: String!
     id: ID!
-    filter: MeasureCriteriaFilter
+    filter: MeasureCriteriaFilterIn
+  }
+
+  type FetchMeasureCriteriaOut {
+    by: String!
+    id: ID!
+    filter: MeasureCriteriaFilterOut
   }
 
   type FetchMeasuresResult {
-    items: [Measure!]!
+    items: [MeasurePopulated!]!
     pagination: Pagination!
-    criteria: MeasureCriteriaFilter
+    criteria: FetchMeasureCriteriaOut
   }
 
   input MeasureFilter {
@@ -44,7 +56,7 @@ const body = `
   }
 `;
 const query = `
-fetchMeasures(by: String!, id: ID!, pagination: PaginationRequest, filter: MeasureFilter): FetchMeasuresResult!
+fetchMeasures(criteria: FetchMeasureCriteriaIn!, paginationRequest: PaginationRequest): FetchMeasuresResult!
 getMeasure(id: ID!): MeasurePopulated!
 `;
 const mutation = `
