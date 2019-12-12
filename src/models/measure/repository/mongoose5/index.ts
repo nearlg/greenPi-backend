@@ -112,7 +112,7 @@ export class MeasureMongooseRepository implements MeasureRepository {
   }
 
   async findAllBySensorIds(sensorIds: string[], options: FindAllOptions = {}) {
-    const paginationReq = options.paginationRequest;
+    const paginationReq = options.paginationRequest || defaultPagination;
     const filter = options.filter;
     const gte = filter && filter.gte ? filter.gte : null;
     const lte = filter && filter.lte ? filter.lte : null;
@@ -128,7 +128,7 @@ export class MeasureMongooseRepository implements MeasureRepository {
   }
 
   async findAllBySensorId(sensorId: string, options: FindAllOptions = {}) {
-    const paginationReq = options.paginationRequest;
+    const paginationReq = options.paginationRequest || defaultPagination;
     const filter = options.filter;
     const gte = filter && filter.gte ? filter.gte : null;
     const lte = filter && filter.lte ? filter.lte : null;

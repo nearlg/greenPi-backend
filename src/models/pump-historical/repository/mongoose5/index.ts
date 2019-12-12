@@ -67,7 +67,7 @@ export class PumpHistoricalMongooseRepository
   }
 
   async findAllByPumpIds(pumpIds: string[], options: FindAllOptions = {}) {
-    const paginationReq = options.paginationRequest;
+    const paginationReq = options.paginationRequest || defaultPagination;
     const filter = options.filter;
     const gte = filter && filter.gte ? filter.gte : null;
     const lte = filter && filter.lte ? filter.lte : null;
